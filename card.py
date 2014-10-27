@@ -12,24 +12,23 @@ class Suit(IntEnum):
     clubs = 3
     
     def __str__(self):
-        return {
-            "diamonds": "♦",
-            "hearts"  : "♥",
-            "spades"  : "♠",
-            "clubs"   : "♣"
-        }[self.name]
+        if platform.system() != "Windows"
+            return {
+                "diamonds": "♦",
+                "hearts"  : "♥",
+                "spades"  : "♠",
+                "clubs"   : "♣"
+            }[self.name]
+        else:
+            return {
+                "diamonds": "d",
+                "hearts"  : "h",
+                "spades"  : "s",
+                "clubs"   : "c"
+            }[self.name]
     
     def __repr__(self):
-        """
-        Workaround for Windows. cmd.exe apparently doesn't
-        support Unicode output. :(
-        """
-        return {
-            "diamonds": "d",
-            "hearts"  : "h",
-            "spades"  : "s",
-            "clubs"   : "c"
-        }[self.name]
+        return self.__str__().encode("cp437")
         
     @classmethod
     def from_str(cls, str):
