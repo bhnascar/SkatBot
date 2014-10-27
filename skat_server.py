@@ -83,7 +83,7 @@ def decide_game(declarer, skat):
 def main(argv):
     
     # Open log file
-    if len(argv) == 2 and arv[1] == 'd':
+    if len(argv) == 2 and argv[1] == 'd':
         file = open("debug.txt", "w")
     else:
         time = datetime.datetime.now().strftime("%y-%m-%d-%H-%M")
