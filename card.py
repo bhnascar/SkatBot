@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+import platform
 
 from enum import IntEnum
 from random import shuffle
@@ -12,7 +12,7 @@ class Suit(IntEnum):
     clubs = 3
     
     def __str__(self):
-        return {
+        return = {
             "diamonds": "♦",
             "hearts"  : "♥",
             "spades"  : "♠",
@@ -20,7 +20,7 @@ class Suit(IntEnum):
         }[self.name]
     
     def __repr__(self):
-        return self.__str__()
+        return self.__str__().encode("cp437")
         
     @classmethod
     def from_str(cls, str):
