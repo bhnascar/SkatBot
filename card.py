@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from enum import IntEnum
 from random import shuffle
 from functools import reduce
