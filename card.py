@@ -12,7 +12,7 @@ class Suit(IntEnum):
     clubs = 3
     
     def __str__(self):
-        return = {
+        return {
             "diamonds": "♦",
             "hearts"  : "♥",
             "spades"  : "♠",
@@ -20,7 +20,16 @@ class Suit(IntEnum):
         }[self.name]
     
     def __repr__(self):
-        return self.__str__().encode("cp437")
+        """
+        Workaround for Windows. cmd.exe apparently doesn't
+        support Unicode output. :(
+        """
+        return {
+            "diamonds": "d",
+            "hearts"  : "h",
+            "spades"  : "s",
+            "clubs"   : "c"
+        }[self.name]
         
     @classmethod
     def from_str(cls, str):
