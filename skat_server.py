@@ -5,7 +5,68 @@ import collections
 
 from card import *
 from rules import *
+from player import *
 from networking import *
+
+def accept_players(server_socket, hands):
+    """
+    Accepts three players for this game of Skat. Deals out
+    their hands. Returns a dictionary that maps player IDs
+    to Player objects.
+    """
+    players = {}
+    for i in range(0, 3):
+        # Create player
+        conn, addr = server_socket.accept()
+        name = recv_str(conn)
+        player = Player(i + 1, name, hands[i], conn)
+        players[i + 1] = player
+        
+        # Log connection
+        print(name + " connected")
+        
+        # Send hand to player client
+        send_msg(player.conn, pickle.dumps(player.hand))
+    return players
+    
+def decide_declarer(players):
+    """
+    Determine who will declare the game. Right now this has
+    to be decided verbally and each player will have to send
+    their response through the client program. The declarer
+    is simply whoever responds "y" (yes).
+    """
+    declarer = None
+    for player in players.values():
+        response = recv_str(player.conn)
+        declarer = player if response == "y" else declarer
+    return declarer
+
+def decide_game(declarer, skat):
+    """
+    Prompts the declarer to decide what game to play. Sends
+    the skat to the declarer and receives back the cards
+    to hide and the trump suit. Returns a Rules object
+    indicating the game to play.
+    """
+    # Send the skat
+    print("\nSending skat to " + declarer.name + "...")
+    send_msg(declarer.conn, pickle.dumps(skat))
+    
+    # Receive hidden cards from the person playing
+    hidden = pickle.loads(recv_msg(declarer.conn))
+    declarer.hand.extend(skat)
+    declarer.hand.remove(hidden[0])
+    declarer.hand.remove(hidden[1])
+    declarer.hand.sort()
+    
+    # Receive trumps from the person playing
+    trumps = recv_str(declarer.conn)
+    
+    # Create rules
+    rules = BaseRules(trumps)
+    return rules
+    
 
 # The game file format is as follows:
 #
@@ -25,85 +86,40 @@ def main(argv):
     
     # Generate hands
     deck = Card.shuffle_deck(Card.get_deck())
-    h1 = sorted(deck[0:10])
-    h2 = sorted(deck[10:20])
-    h3 = sorted(deck[20:30])
+    hands = [sorted(deck[0:10]), sorted(deck[10:20]), sorted(deck[20:30])]
     skat = deck[30:32]
-    player_to_hand = { 1 : h1, 2 : h2, 3 : h3 }
     
     # Wait for incoming connections from three players
     print("Waiting for players to connect...")
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    server_socket.bind(("", 50007))
-    server_socket.listen(1)
+    server_socket = open_socket(50007)
     
-    # Accept connections from players
-    conn1, addr1 = server_socket.accept()
-    p1 = recv_str(conn1) 
-    print(p1 + " connected")
-    
-    conn2, addr2 = server_socket.accept()
-    p2 = recv_str(conn2)
-    print(p2 + " connected")
-    
-    conn3, addr3 = server_socket.accept()
-    p3 = recv_str(conn3)
-    print(p3 + " connected")
-    
-    # Map player IDs to name and connetions
-    Player = collections.namedtuple("Player", ["name", "pid", "hand", "conn"], 
-                                    verbose = False, rename = False)
-    players = {1 : Player(name = p1, pid = 1, hand = h1, conn = conn1),
-               2 : Player(name = p2, pid = 2, hand = h2, conn = conn2),
-               3 : Player(name = p3, pid = 3, hand = h3, conn = conn3)}
+    # Accept players
+    players = accept_players(server_socket, hands)
+    conns = [player.conn for player in players.values()]
     for player in players.values():
         file.write("(%d, %s, %s)\n" % 
                     (player.pid, player.name, Card.hand_to_str(player.hand)))
     
-    # Deal hands
-    print("\nDealing hands...")
-    for player in players.values():
-        send_msg(player.conn, pickle.dumps(player.hand))
-    
     # Who's playing?
-    p1_response = recv_str(players[1].conn)
-    p2_response = recv_str(players[2].conn)
-    p3_response = recv_str(players[3].conn)
-    player = players[1] if p1_response == "y" else None
-    player = players[2] if p2_response == "y" else player
-    player = players[3] if p3_response == "y" else player
-    if not player:
+    declarer = decide_declarer(players)
+    if not declarer:
         file.close()
         server_socket.close()
         return 1
-    print(player.name + " is playing!")
+    announce = declarer.name + " is playing!"
+    broadcast_str(conns, announce)
+    print(announce)
     
-    # Send the skat
-    print("\nSending skat to " + player.name + "...")
-    send_msg(player.conn, pickle.dumps(skat))
-    
-    # Receive hidden cards from the person playing
-    hidden = pickle.loads(recv_msg(player.conn))
-    player.hand.extend(skat)
-    player.hand.remove(hidden[0])
-    player.hand.remove(hidden[1])
-    player.hand.sort()
-    
-    # Receive trumps from the person playing
-    trumps = recv_str(player.conn)
-    announce = "\n" + player.name + " is playing " + trumps + "\n"
+    # What are we playing?
+    rules = decide_game(declarer, skat)
+    announce = "\n" + declarer.name + " is playing " + str(rules) + "\n"
+    broadcast_str(conns, announce)
+    broadcast_msg(conns, pickle.dumps(rules))
     print(announce)
 
     # Log the game parameters
     file.write("(%d, %s, %s)\n" % 
-                (player.pid, trumps, Card.hand_to_str(player.hand)))
-
-    # Broadcast the rules
-    rules = BaseRules(trumps)
-    for player in players.values():
-        send_str(player.conn, announce)
-        send_msg(player.conn, pickle.dumps(rules))
+                (declarer.pid, str(rules), Card.hand_to_str(declarer.hand)))
         
     # Play 10 rounds
     pid = 1
@@ -128,30 +144,38 @@ def main(argv):
             plays.append((pid, card))
             
             # Broadcast state of round
-            announce = players[pid].name + " played " + str(card)
-            print(announce)
-            for player in players.values():
-                send_str(player.conn, announce)
+            broadcast_str(conns, players[pid].name + " played ")
+            broadcast_msg(conns, pickle.dumps(card))
+            print(players[pid].name + " played " + str(card))
             
             # Choose next player
-            pid += 1
-            pid = pid if pid < 4 else 1
+            pid = (pid + 1) if (pid + 1) < 4 else 1
 
-        # Next person to start is the winner of this round
+        # Who won the round?
+        winning_play = rules.winner(plays)
         pid = (rules.winner(plays))[0]
         announce = players[pid].name + " won the round!\n"
+        broadcast_str(conns, announce)
         print(announce)
-        for player in players.values():
-            send_str(player.conn, announce)
+        
+        # Next person to start is the winner of this round
+        players[pid].cards_won.extend([play[1] for play in plays])
+        pid = (rules.winner(plays))[0]
         
         # Log round
         file.write(str(plays) + "\n")
         file.flush()
 
+    # Print points won
+    for player in players.values():
+        if len(player.cards_won) == 0:
+            continue
+        points = reduce(lambda c1, c2: int(c1) + int(c2), player.cards_won)
+        print(player.name + " won " + str(points) + " points")
+
     # Finish
     file.close()
     server_socket.close()
-    
     return 0
 
 if __name__ == "__main__":

@@ -98,6 +98,7 @@ def main(argv):
     # Playing?
     playing = input("\nAre you playing? (y/n)\n")
     send_str(server_socket, playing)
+    print(recv_str(server_socket))
     
     # If playing...
     if playing == "y":
@@ -122,7 +123,8 @@ def main(argv):
                 play_card(hand, plays, rules, server_socket)
         
             # Receive message about play
-            print(recv_str(server_socket))
+            print(recv_str(server_socket), end = "")
+            print(str(pickle.loads(recv_msg(server_socket))))
         
         # Receive message about who won the round
         print("\n" + recv_str(server_socket))
@@ -132,5 +134,3 @@ def main(argv):
     
 if __name__ == "__main__":
     sys.exit(main(sys.argv))
-
-main()

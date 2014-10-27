@@ -1,8 +1,21 @@
 from card import *
 
 class BaseRules:
+    """
+    This class implements the rules for a basic game. The three
+    main parts of gameplay governed by the rules is.
+    
+    (1) which cards are trumps
+    (2) which plays are legal
+    (3) which card wins
+    
+    This class keeps track of trumps and exports the methods
+    valid(...) and winner(...) to determine (2) and (3).
+    """
+    
     def __init__(self, trumps):
         deck = Card.get_deck()
+        self.trump_suit = trumps
         
         # Get trumps from the given suit
         trump_suit = {
@@ -16,6 +29,12 @@ class BaseRules:
         # Add jacks, which are always trumps
         self.trumps.extend([card for card in deck if card.rank == Rank.jack])
         self.trumps = list(set(self.trumps))
+
+    def __str__(self):
+        """
+        Returns a string description of this game.
+        """
+        return self.trump_suit
 
     def winner(self, plays):
         """ 

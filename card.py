@@ -11,10 +11,10 @@ class Suit(IntEnum):
     
     def __str__(self):
         return {
-            "diamonds": "d",
-            "hearts"  : "h",
-            "spades"  : "s",
-            "clubs"   : "c"
+            "diamonds": "♦",
+            "hearts"  : "♥",
+            "spades"  : "♠",
+            "clubs"   : "♣"
         }[self.name]
     
     def __repr__(self):
@@ -54,6 +54,18 @@ class Rank(IntEnum):
     
     def __repr__(self):
         return self.__str__()
+        
+    def __int__(self):
+        return {
+            "seven": 0,
+            "eight": 0,
+            "nine" : 0,
+            "queen": 3,
+            "king" : 4,
+            "ten"  : 10,
+            "ace"  : 11,
+            "jack" : 2,
+        }[self.name]
         
     @classmethod
     def from_str(cls, str):
@@ -121,6 +133,12 @@ class Card:
         
     def __repr__(self):
         return self.__str__()
+        
+    def __int__(self):
+        """
+        Returns the points value of this card.
+        """
+        return int(self.rank)
 
     @staticmethod
     def hand_to_str(hand):

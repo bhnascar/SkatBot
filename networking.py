@@ -1,5 +1,15 @@
 import socket
 
+def open_socket(port):
+    """
+    Opens a socket on the given port
+    """
+    sk = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sk.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    sk.bind(("", port))
+    sk.listen(1)
+    return sk
+
 def recv_msg(conn):
     """
     Receives a message from the socket.
@@ -43,7 +53,7 @@ def send_str(conn, msg):
     msg = bytes(str(length).ljust(8), "UTF-8") + bytes(msg, "UTF-8")
     conn.send(msg)
     
-def broadcast_mst(conns, msg):
+def broadcast_msg(conns, msg):
     """
     Sends a message out to all given connections
     """
