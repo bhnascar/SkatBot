@@ -12,7 +12,7 @@ class Suit(IntEnum):
     clubs = 3
     
     def __str__(self):
-        if platform.system() != "Windows"
+        if platform.system() != "Windows":
             return {
                 "diamonds": "♦",
                 "hearts"  : "♥",
