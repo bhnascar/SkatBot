@@ -1,6 +1,7 @@
 import sys
 import pickle
 import socket
+import datetime
 import collections
 
 from card import *
@@ -82,7 +83,11 @@ def decide_game(declarer, skat):
 def main(argv):
     
     # Open log file
-    file = open("log", "w")
+    if len(argv) == 2 and arv[1] == 'd':
+        file = open("debug.txt", "w")
+    else:
+        time = datetime.datetime.now().strftime("%y-%m-%d-%H-%M")
+        file = open("log/" + time + ".txt", "a")
     
     # Generate hands
     deck = Card.shuffle_deck(Card.get_deck())
