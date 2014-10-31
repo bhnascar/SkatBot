@@ -81,7 +81,7 @@ def play_card(hand, plays, rules, server_socket):
 def main(argv):
     if len(argv) != 3:
         print("Usage: python3 [host IP address] [host port]")
-        sys.exit(0)
+        return 0
     
     # Connect to server
     host = argv[1]
@@ -127,6 +127,10 @@ def main(argv):
             print(str(pickle.loads(recv_msg(server_socket))))
         
         # Receive message about who won the round
+        print("\n" + recv_str(server_socket))
+        
+    # Receive message about game results
+    for i in range(0, 3):
         print("\n" + recv_str(server_socket))
     
     # Close socket

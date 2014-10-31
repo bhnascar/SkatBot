@@ -111,16 +111,13 @@ def main(argv):
         file.close()
         server_socket.close()
         return 1
-    announce = declarer.name + " is playing!"
-    broadcast_str(conns, announce)
-    print(announce)
+    broadcast_str(conns, declarer.name + " is playing!", log = True)
     
     # What are we playing?
     rules = decide_game(declarer, skat)
     announce = "\n" + declarer.name + " is playing " + str(rules) + "\n"
-    broadcast_str(conns, announce)
+    broadcast_str(conns, announce, log = True)
     broadcast_msg(conns, pickle.dumps(rules))
-    print(announce)
 
     # Log the game parameters
     file.write("(%d, %s, %s)\n" % 
@@ -149,9 +146,8 @@ def main(argv):
             plays.append((pid, card))
             
             # Broadcast state of round
-            broadcast_str(conns, players[pid].name + " played ")
+            broadcast_str(conns, players[pid].name + " played ", log = True)
             broadcast_msg(conns, pickle.dumps(card))
-            print(players[pid].name + " played " + str(card))
             
             # Choose next player
             pid = (pid + 1) if (pid + 1) < 4 else 1
@@ -160,8 +156,7 @@ def main(argv):
         winning_play = rules.winner(plays)
         pid = (rules.winner(plays))[0]
         announce = players[pid].name + " won the round!\n"
-        broadcast_str(conns, announce)
-        print(announce)
+        broadcast_str(conns, announce, log = True)
         
         # Next person to start is the winner of this round
         players[pid].cards_won.extend([play[1] for play in plays])
@@ -176,7 +171,8 @@ def main(argv):
         if len(player.cards_won) == 0:
             continue
         points = reduce(lambda c1, c2: int(c1) + int(c2), player.cards_won)
-        print(player.name + " won " + str(points) + " points")
+        announce = player.name + " won " + str(points) + " points"
+        broadcast_str(conns, announce, log = True)
 
     # Finish
     file.close()
