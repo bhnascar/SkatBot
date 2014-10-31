@@ -65,7 +65,7 @@ def decide_game(declarer, skat):
     trumps = recv_str(declarer.conn)
     
     # Create rules
-    rules = BaseRules(trumps)
+    rules = BaseRules(declarer.pid, trumps)
     return rules
     
 
@@ -128,7 +128,7 @@ def main(argv):
     for r in range(0, 10):
         
         # List of plays so far. It should be in the format
-        # [(pid, card), (pid, card), ...]
+        # [(pid, card), (pid, card), (pid, card)]
         plays = []
         for i in range(0, 3):
             
@@ -154,7 +154,7 @@ def main(argv):
 
         # Who won the round?
         winning_play = rules.winner(plays)
-        pid = (rules.winner(plays))[0]
+        pid = winning_play[0]
         announce = players[pid].name + " won the round!\n"
         broadcast_str(conns, announce, log = True)
         
@@ -170,7 +170,7 @@ def main(argv):
     for player in players.values():
         if len(player.cards_won) == 0:
             continue
-        points = reduce(lambda c1, c2: int(c1) + int(c2), player.cards_won)
+        points = rules.count_points(player.cards_won)
         announce = player.name + " won " + str(points) + " points"
         broadcast_str(conns, announce, log = True)
 
