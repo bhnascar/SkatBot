@@ -25,8 +25,7 @@ def process_player(player_info):
     This method returns a player object inflated
     from the player_info string read from the log file.
     """
-    # TODO: implement
-    pass
+    return Player.from_str(player_info)
 
 # The game file format is as follows:
 #
