@@ -55,3 +55,6 @@ target/
 
 # Local Skat debug file
 debug.txt
+
+# Mac junk
+*.DS_Store
