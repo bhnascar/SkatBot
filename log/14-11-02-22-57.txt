@@ -1,0 +1,14 @@
+(1, pedro, dQ dK d10 hA s7 s8 sQ c7 cQ c10)
+(2, inthishardtimeofmidtermsandprojectsitishardtoremmberthatsomehtingswillalwaysremiantrueforexamplethatyourmomisfatandpedroisapheggit, d7 d9 dA h8 hQ h10 sA cK dB sB)
+(3, boss, d8 h7 h9 hK s9 s10 c8 cA hB cB)
+(3, s, h7 h9 hK s9 sK s10 c8 cA hB cB)
+[(1, hA), (2, h10), (3, h7)]
+[(1, c7), (2, cK), (3, cA)]
+[(3, c8), (1, c10), (2, dA)]
+[(1, cQ), (2, sA), (3, hB)]
+[(3, s9), (1, sQ), (2, dB)]
+[(2, d9), (3, sK), (1, dQ)]
+[(3, cB), (1, s7), (2, sB)]
+[(3, s10), (1, s8), (2, d7)]
+[(3, hK), (1, dK), (2, h8)]
+[(3, h9), (1, d10), (2, hQ)]

@@ -5,7 +5,7 @@ from card import *
 class BaseRules:
     """
     This class implements the rules for a basic game. The three
-    main parts of gameplay governed by the rules is.
+    main parts of gameplay governed by the rules are:
     
     (1) which cards are trumps
     (2) which plays are legal

@@ -88,7 +88,10 @@ def main(argv):
     port = int(argv[2])
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.connect((host, port))
-    send_str(server_socket, input("\nUsername: ").strip())
+    username = input("\nUsername: ").strip();
+    while not username.isalnum() or len(username) > 15:
+        username = input("\nUsername must be <15 alphanumeric characters: ").strip()
+    send_str(server_socket, username)
     print("Connecting to server...")
     
     # Receive hand

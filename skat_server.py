@@ -103,7 +103,7 @@ def main(argv):
     conns = [player.conn for player in players.values()]
     for player in players.values():
         file.write("(%d, %s, %s)\n" % 
-                    (player.pid, player.name, Card.hand_to_str(player.hand)))
+                    (player.pid, player.name, Card.hand_to_repr(player.hand)))
     
     # Who's playing?
     declarer = decide_declarer(players)
@@ -121,7 +121,7 @@ def main(argv):
 
     # Log the game parameters
     file.write("(%d, %s, %s)\n" % 
-                (declarer.pid, str(rules), Card.hand_to_str(declarer.hand)))
+                (declarer.pid, str(rules), Card.hand_to_repr(declarer.hand)))
         
     # Play 10 rounds
     pid = 1
@@ -163,7 +163,7 @@ def main(argv):
         pid = (rules.winner(plays))[0]
         
         # Log round
-        file.write(str(plays) + "\n")
+        file.write(repr(plays) + "\n")
         file.flush()
 
     # Print points won
