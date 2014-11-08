@@ -22,10 +22,10 @@ class Suit(IntEnum):
             }[self.name]
         else:
             return {
-                "diamonds": "d",
-                "hearts"  : "h",
-                "spades"  : "s",
-                "clubs"   : "c"
+                "diamonds": chr(4),
+                "hearts"  : chr(3),
+                "spades"  : chr(6),
+                "clubs"   : chr(5)
             }[self.name]
     
     def __repr__(self):
