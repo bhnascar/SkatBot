@@ -1,5 +1,5 @@
 #!/bin/sh
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd $DIR
-python3 feature_extractor.py
+cd $DIR && cd ..
+python3 skat_server.py d
 read
