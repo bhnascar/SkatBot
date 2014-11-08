@@ -1,3 +1,4 @@
+import os
 import re
 import sys
 import collections
@@ -68,39 +69,32 @@ def process_round(plays, feature_file, players, rules):
         # before their play and export a tuple of features.
         # If the player did not have to make a decision,
         # 'examine' will return 'None' instead.
-        features = player.examine(plays[0:i], rules)
+        s_features = player.examine_suit(plays[0:i], rules)
+        r_features = player.examine_rank(play.card.suit, plays[0:i], rules)
         
         # Log the features, if it exists
-        if features:
-            feature_file.write(str(features) + "\n")
+        if s_features:
+            feature_file.write("s " + str(s_features)[1:-1] + "\n")
+        if r_features:
+            feature_file.write("r " + str(r_features)[1:-1] + "\n")
             
         # Remove played card from player's hand
         player.hand.remove(play.card)
-
-def main(argv):
-    """
-    Parses a game log and and spits out feature vectors for player 
-    decisions. The game log format is as follows:
-    
-    - Lines 1-3: Lists players and hands
-      (player ID, player name, player hand)
-    
-    - Line 4: Lists the teams and rules
-      (ID of whoever is playing, trump suit, player hand post-skat)
-    
-    - Line 5-14: Lists rounds
-      [(player ID, card), (player ID, card), (player ID, card),]
-    """
-    
-    if len(argv) < 3:
-        print("Usage: python3 feature_extractor.py [log file] [output file]")
-        return 0
         
+def process_log_file(log_file_path, feature_file_path):
+    """
+    Processes the given log file and writes feature vectors
+    from that game out to the given feature file.
+    """
     # Open log file
-    log_file = open(argv[1], "r")
+    log_file = open(log_file_path, "r")
         
     # Open feature set file
-    feature_file = open(argv[2], "w")
+    if feature_file_path:
+        feature_file = open(feature_file_path, "w")
+    else:
+        log_file_basename = os.path.basename(log_file_path)
+        feature_file = open("feature/" + log_file_basename, "w")
     
     # Read player info (Lines 1-3)
     players = {}
@@ -135,6 +129,30 @@ def main(argv):
     
     # Close log file
     log_file.close()
+
+def main(argv):
+    """
+    Parses a game log and and spits out feature vectors for player 
+    decisions. The game log format is as follows:
+    
+    - Lines 1-3: Lists players and hands
+      (player ID, player name, player hand)
+    
+    - Line 4: Lists the teams and rules
+      (ID of whoever is playing, trump suit, player hand post-skat)
+    
+    - Line 5-14: Lists rounds
+      [(player ID, card), (player ID, card), (player ID, card),]
+    """
+    
+    if len(argv) < 1:
+        print("Usage: python3 feature_extractor.py [log file] [output file]") 
+    elif len(argv) < 2:
+        for file_name in os.listdir("log"):
+            print("Processing file: " + file_name)
+            process_log_file("log/" + file_name, None)
+    elif len(argv) < 3:
+        process_log_file(argv[1], argv[2])
     
     return 0;
 

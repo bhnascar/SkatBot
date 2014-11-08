@@ -46,12 +46,14 @@ class Player:
     def __repr__(self):
         return self.__str__()   
         
-    def examine(self, previous_plays, rules):
+    def examine_suit(self, previous_plays, rules):
         """
         This method gets called right before this player plays
         a card. 'previous_plays' is a list containing Cards 
         played so far in the round. 'rules' is a BaseRules
         object representing the rules in effect for this game.
+        This method should output features for deciding what
+        suit to play.
         
         If there is no decision to be made for this play, this
         method should return 'None' (the Python equivalent of
@@ -92,6 +94,28 @@ class Player:
                 num_spades,
                 num_hearts,
                 num_diamonds)
+                
+    def examine_rank(self, suit, previous_plays, rules):
+        """
+        This method gets called right after examine_suit. 'suit'
+        contains the suit chosen by the player. 'previous_plays' 
+        is a list containing Cards played so far in the round. 
+        'rules' is a BaseRules object representing the rules in 
+        effect for this game. This method should output features 
+        for deciding what rank card to play.
+        
+        If there is no decision to be made for this play, this
+        method should return 'None'. If there is a decision to be 
+        made, this method should return a tuple representing the 
+        features for this decision. The framework that calls this 
+        code will handle writing the tuple to the feature file.
+        """
+        if len([card for card in self.hand 
+                if rules.valid(card, self.hand, previous_plays)]) < 2:
+            return None
+        
+        # Return feature tuple
+        return (0, 0)
     
     @staticmethod
     def from_str(player_info):
@@ -99,7 +123,7 @@ class Player:
         Creates a Player object from a string description from a
         log file.
         """
-        pattern = re.compile(r"\((\d), ([a-zA-Z ]+), ([a-zA-Z0-9 ]+)\)")
+        pattern = re.compile(r"\((\d), ([a-zA-Z0-9]+), ([a-zA-Z0-9 ]+)\)")
         results = pattern.match(player_info).groups()
         
         # Inflate hand

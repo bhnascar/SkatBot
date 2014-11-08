@@ -3,8 +3,8 @@
 REM Switch to the directory of the currently executing bat file
 cd %~dp0
 
-REM Invoke Skat script. CHANGE THE IP ADDRESS WHEN YOU PLAY
-python skat_client.py 127.0.0.1 50007
+REM Invoke feature extraction script
+python feature_extractor.py
 
 REM Keep cmd window open after script finishes
 pause
