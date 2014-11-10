@@ -1,0 +1,4 @@
+(1, 7, d7 d9 h7 hK s9 sK s10 sA cQ c10)
+(2, pedro6, d8 dK h9 hQ hA sQ c7 c8 c9 sB)
+(3, boss, dQ dA h8 h10 s7 s8 cK cA dB cB)
+(3, d, dQ d10 dA h8 h10 cK cA dB hB cB)
