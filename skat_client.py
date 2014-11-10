@@ -1,6 +1,7 @@
 import sys
 import socket
 import pickle
+import codecs
 
 from card import *
 from rules import *
@@ -79,13 +80,13 @@ def play_card(hand, plays, rules, server_socket):
     send_msg(server_socket, pickle.dumps(card))
 
 def main(argv):
-    if len(argv) != 3:
-        print("Usage: python3 [host IP address] [host port]")
-        sys.exit(0)
+    #if len(argv) != 3:
+    #    print("Usage: python3 [host IP address] [host port]")
+    #    sys.exit(0)
     
     # Connect to server
-    host = argv[1]
-    port = int(argv[2])
+    host = "10.31.241.130" #argv[1]
+    port = 50007 #int(argv[2])
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.connect((host, port))
     send_str(server_socket, input("\nUsername: ").strip())

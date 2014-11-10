@@ -12,20 +12,20 @@ class Suit(IntEnum):
     clubs = 3
     
     def __str__(self):
-        if platform.system() != "Windows":
+        #if platform.system() != "Windows":
             return {
                 "diamonds": "♦",
                 "hearts"  : "♥",
                 "spades"  : "♠",
                 "clubs"   : "♣"
             }[self.name]
-        else:
-            return {
-                "diamonds": "d",
-                "hearts"  : "h",
-                "spades"  : "s",
-                "clubs"   : "c"
-            }[self.name]
+        #else:
+        #    return {
+        #        "diamonds": "d",
+        #        "hearts"  : "h",
+        #        "spades"  : "s",
+        #        "clubs"   : "c"
+        #    }[self.name]
     
     def __repr__(self):
         return self.__str__().encode("cp437")
