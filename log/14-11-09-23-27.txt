@@ -1,0 +1,14 @@
+(1, TheChosenOne, d7 d8 dK d10 dA h9 s7 s8 sK c10)
+(2, FUCKINGJackOfD, dQ h8 hK s9 s10 sA c8 cA dB cB)
+(3, pedro1, d9 h7 hQ hA sQ c9 cQ cK hB sB)
+(2, h, h8 hK h10 s9 s10 sA c7 cA dB cB)
+[(1, h9), (2, h8), (3, h7)]
+[(1, sK), (2, sA), (3, sQ)]
+[(2, cB), (3, hQ), (1, s7)]
+[(2, cA), (3, c9), (1, c10)]
+[(2, c7), (3, cK), (1, dA)]
+[(3, sB), (1, d10), (2, hK)]
+[(3, hB), (1, dK), (2, h10)]
+[(3, cQ), (1, d8), (2, s9)]
+[(3, d9), (1, d7), (2, s10)]
+[(3, hA), (1, s8), (2, dB)]

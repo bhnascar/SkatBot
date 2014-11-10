@@ -65,7 +65,7 @@ def decide_game(declarer, skat):
     trumps = recv_str(declarer.conn)
     
     # Create rules
-    rules = BaseRules(trumps)
+    rules = BaseRules(declarer.pid, trumps)
     return rules
     
 
@@ -103,7 +103,7 @@ def main(argv):
     conns = [player.conn for player in players.values()]
     for player in players.values():
         file.write("(%d, %s, %s)\n" % 
-                    (player.pid, player.name, Card.hand_to_str(player.hand)))
+                    (player.pid, player.name, Card.hand_to_repr(player.hand)))
     
     # Who's playing?
     declarer = decide_declarer(players)
@@ -111,27 +111,24 @@ def main(argv):
         file.close()
         server_socket.close()
         return 1
-    announce = declarer.name + " is playing!"
-    broadcast_str(conns, announce)
-    print(announce)
+    broadcast_str(conns, declarer.name + " is playing!", log = True)
     
     # What are we playing?
     rules = decide_game(declarer, skat)
     announce = "\n" + declarer.name + " is playing " + str(rules) + "\n"
-    broadcast_str(conns, announce)
+    broadcast_str(conns, announce, log = True)
     broadcast_msg(conns, pickle.dumps(rules))
-    print(announce)
 
     # Log the game parameters
     file.write("(%d, %s, %s)\n" % 
-                (declarer.pid, str(rules), Card.hand_to_str(declarer.hand)))
+                (declarer.pid, str(rules), Card.hand_to_repr(declarer.hand)))
         
     # Play 10 rounds
     pid = 1
     for r in range(0, 10):
         
         # List of plays so far. It should be in the format
-        # [(pid, card), (pid, card), ...]
+        # [(pid, card), (pid, card), (pid, card)]
         plays = []
         for i in range(0, 3):
             
@@ -149,34 +146,33 @@ def main(argv):
             plays.append((pid, card))
             
             # Broadcast state of round
-            broadcast_str(conns, players[pid].name + " played ")
+            broadcast_str(conns, players[pid].name + " played ", log = True)
             broadcast_msg(conns, pickle.dumps(card))
-            print(players[pid].name + " played " + str(card))
             
             # Choose next player
             pid = (pid + 1) if (pid + 1) < 4 else 1
 
         # Who won the round?
         winning_play = rules.winner(plays)
-        pid = (rules.winner(plays))[0]
+        pid = winning_play[0]
         announce = players[pid].name + " won the round!\n"
-        broadcast_str(conns, announce)
-        print(announce)
+        broadcast_str(conns, announce, log = True)
         
         # Next person to start is the winner of this round
         players[pid].cards_won.extend([play[1] for play in plays])
         pid = (rules.winner(plays))[0]
         
         # Log round
-        file.write(str(plays) + "\n")
+        file.write(repr(plays) + "\n")
         file.flush()
 
     # Print points won
     for player in players.values():
         if len(player.cards_won) == 0:
             continue
-        points = reduce(lambda c1, c2: int(c1) + int(c2), player.cards_won)
-        print(player.name + " won " + str(points) + " points")
+        points = rules.count_points(player.cards_won)
+        announce = player.name + " won " + str(points) + " points"
+        broadcast_str(conns, announce, log = True)
 
     # Finish
     file.close()

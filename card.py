@@ -1,3 +1,4 @@
+import sys
 import platform
 
 from enum import IntEnum
@@ -12,23 +13,28 @@ class Suit(IntEnum):
     clubs = 3
     
     def __str__(self):
-        #if platform.system() != "Windows":
+        if platform.system() != "Windows" or "idlelib" in sys.modules:
             return {
                 "diamonds": "♦",
                 "hearts"  : "♥",
                 "spades"  : "♠",
                 "clubs"   : "♣"
             }[self.name]
-        #else:
-        #    return {
-        #        "diamonds": "d",
-        #        "hearts"  : "h",
-        #        "spades"  : "s",
-        #        "clubs"   : "c"
-        #    }[self.name]
+        else:
+            return {
+                "diamonds": chr(4),
+                "hearts"  : chr(3),
+                "spades"  : chr(6),
+                "clubs"   : chr(5)
+            }[self.name]
     
     def __repr__(self):
-        return self.__str__().encode("cp437")
+        return {
+            "diamonds": "d",
+            "hearts"  : "h",
+            "spades"  : "s",
+            "clubs"   : "c"
+        }[self.name]
         
     @classmethod
     def from_str(cls, str):
@@ -142,7 +148,7 @@ class Card:
         return str(self.suit) + str(self.rank)
         
     def __repr__(self):
-        return self.__str__()
+        return repr(self.suit) + repr(self.rank)
         
     def __int__(self):
         """
@@ -150,13 +156,28 @@ class Card:
         """
         return int(self.rank)
 
+    # General functions for manipulating a hand or deck,
+    # (which are simply lists of Cards). Just using the
+    # Card class like a namespace here, because it makes
+    # the most sense to stuff these methods here if we're
+    # not creating another utility file or some Hand/Deck
+    # class
+
     @staticmethod
     def hand_to_str(hand):
         """
         Turns a hand into a string. The hand should be given
         as a list of cards.
         """
-        return reduce(lambda x, y: "%s %s" % (x, y), hand)
+        return " ".join(str(card) for card in hand)
+    
+    @staticmethod
+    def hand_to_repr(hand):
+        """
+        Turns a hand into a repr. The hand should be given
+        as a list of cards.
+        """
+        return " ".join(repr(card) for card in hand)
 
     @staticmethod
     def print_hand(hand):
@@ -165,14 +186,14 @@ class Card:
         as a list of cards.
         """
         for card in hand: print(card, end = " ")
-
+        
     @staticmethod
     def from_abbrev(abbrev):
         """
         Returns a card corresponding to an abbreviation.
         The abbreviation should be a two character string
         with the following format.
-        
+    
         The first character denotes the suit. It can be one
         of:
         'c' - Clubs
@@ -199,7 +220,7 @@ class Card:
         except:
             return None
         return Card(suit, rank)
- 
+
     @staticmethod
     def get_deck():
         """
@@ -221,4 +242,3 @@ class Card:
             assert isinstance(card, Card)
         shuffle(deck)
         return deck
-

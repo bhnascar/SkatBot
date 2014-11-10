@@ -44,7 +44,7 @@ def send_msg(conn, msg):
         raise IOError()
         return None
     
-def send_str(conn, msg):
+def send_str(conn, msg, log = False):
     """
     Convenience method for sending a string
     out the socket.
@@ -52,6 +52,8 @@ def send_str(conn, msg):
     length = len(msg)
     msg = bytes(str(length).ljust(8), "UTF-8") + bytes(msg, "UTF-8")
     conn.send(msg)
+    if log:
+        print(msg)
     
 def broadcast_msg(conns, msg):
     """
@@ -60,11 +62,13 @@ def broadcast_msg(conns, msg):
     for conn in conns:
         send_msg(conn, msg)
         
-def broadcast_str(conns, msg):
+def broadcast_str(conns, msg, log = False):
     """
     Convenience method for broadcasting a string
     out the given list of sockets.
     """
     for conn in conns:
         send_str(conn, msg)
+    if log:
+        print(msg)
     

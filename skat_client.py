@@ -80,16 +80,19 @@ def play_card(hand, plays, rules, server_socket):
     send_msg(server_socket, pickle.dumps(card))
 
 def main(argv):
-    #if len(argv) != 3:
-    #    print("Usage: python3 [host IP address] [host port]")
-    #    sys.exit(0)
+    if len(argv) != 3:
+        print("Usage: python3 [host IP address] [host port]")
+        return 0
     
     # Connect to server
     host = "10.31.241.130" #argv[1]
     port = 50007 #int(argv[2])
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.connect((host, port))
-    send_str(server_socket, input("\nUsername: ").strip())
+    username = input("\nUsername: ").strip();
+    while not username.isalnum() or len(username) > 15:
+        username = input("\nUsername must be <15 alphanumeric characters: ").strip()
+    send_str(server_socket, username)
     print("Connecting to server...")
     
     # Receive hand
@@ -128,6 +131,10 @@ def main(argv):
             print(str(pickle.loads(recv_msg(server_socket))))
         
         # Receive message about who won the round
+        print("\n" + recv_str(server_socket))
+        
+    # Receive message about game results
+    for i in range(0, 3):
         print("\n" + recv_str(server_socket))
     
     # Close socket
