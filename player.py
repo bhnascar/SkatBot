@@ -277,12 +277,15 @@ class Player:
         # Has opponent played?
         played_opp = 0
         played_frd = 0
+        opp_card = None
         for play in previous_plays:
             if play.pid == id_opp:
                 played_opp = 1
+                opp_card = play.card
+                print("opponent card: " + str(opp_card))
             elif play.pid == id_frd:
                 played_frd = 1
-       
+              
         # Is my team winning?
         winner = rules.winner(previous_plays);
         is_winning = int(winner.pid == id_frd) if winner else 0
@@ -301,44 +304,52 @@ class Player:
                     if (card not in self.cards_seen) and (card not in self.hand)]  
 
         for play in previous_plays:
-            cur_deck.remove(play.card);
+            cur_deck.remove(play.card)
         # Have this card?
-        cur_trumps = [card for card in self.reference_deck if card in rules.trumps] 
-        full_cards = [cd for cd in self.reference_deck if cd.suit == suits and cd not in cur_trumps]
-        highest_card = self.winning_card(full_cards)
-        opp_card = []
-        win_card = [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0]
-        has_card = [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0]
-        beat_opp = [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0]
 
-        for i in range(0,len(full_cards)):
+        cur_trumps = [card for card in self.reference_deck if card in rules.trumps] 
+        full_cards = [cd for cd in self.reference_deck if cd.suit == suits[suits.index(suit)] and cd not in cur_trumps]
+        suit_len = 7
+        if suit == rules.trump_suit:
+            full_cards = cur_trumps
+            suit_len = 11
+        else:
+            print("suit != rules.trump_suit") 
+            if len(full_cards) != 7:
+                print("SUM TING WONG" + len(full_cards))
+            full_cards.extend([0]*4) 
+        print("the suit is:" + str(full_cards[0:suit_len]))
+        highest_card = self.winning_card(full_cards[0:suit_len])
+        print("winning card: " + str(highest_card))
+       
+
+        win_card = [0,0,0,0, 0,0,0,0, 0,0,0]
+        has_card = [0,0,0,0, 0,0,0,0, 0,0,0]
+        beat_opp = [0,0,0,0, 0,0,0,0, 0,0,0]
+
+
+        for i in range(0,suit_len):
             if full_cards[i] == highest_card:
                 win_card[i] = 1 
 
-        if suit == rules.trumps:
-            full_cards = cur_trumps        
-        else:
-            if len(full_cards) != 7:
-                print("sum ting wrong")
-            full_cards.extend([0]*4)
-                
-        #for i in range(0,11):
-        #    if full_cards[i] in self.hand:
-        #        has_card[i] = 1
-        for i in range(0,11):
-            if True:
-                pass
-                 
+                      
+        for i in range(0,suit_len):
+            if full_cards[i] in self.hand:
+                has_card[i] = 1
+                if opp_card and full_cards[i] > opp_card:
+                    beat_opp[i] = 1 
+
+                         
       
-        # Return feature tuple
-        #return (first, pts_on_table, played_opp, played_frd, is_winning,
-        #        self.diff_opp[suits.index(suit)], self.diff_frd[suits.index(suit)],
-        #        len(cur_deck),full_cards[0], full_cards[1], full_cards[2],
-        #        full_cards[3], full_cards[4], full_cards[5], full_cards[6],
-        #        full_cards[7], full_cards[8], full_cards[9], full_cards[10],
-        #        win_card[0], win_card[1], win_card[2], win_card[3], win_card[4],
-        #        win_card[5], win_card[6], win_card[7], win_card[8], win_card[9], win_card[10]
-        #        )
+        return (first, pts_on_table, played_opp, played_frd, is_winning,
+                self.diff_opp[suits.index(suit)], self.diff_frd[suits.index(suit)],
+                len(cur_deck),has_card[0], has_card[1], has_card[2], has_card[3], has_card[4],
+                has_card[5], has_card[6], has_card[7], has_card[8], has_card[9], has_card[10],           
+                win_card[0], win_card[1], win_card[2], win_card[3], win_card[4],
+                win_card[5], win_card[6], win_card[7], win_card[8], win_card[9], win_card[10],
+                beat_opp[0], beat_opp[1], beat_opp[2], beat_opp[3], beat_opp[4], beat_opp[5],
+                beat_opp[6], beat_opp[7], beat_opp[8], beat_opp[9], beat_opp[10]              
+                )
         return (0, 0)
     
     @staticmethod
