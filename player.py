@@ -65,7 +65,7 @@ class Player:
                 winning = cards[i]
         return winning
        
-    def examine_suit(self, previous_plays, card, rules):
+    def examine_suit(self, previous_plays, played_card, rules):
         """
         This method gets called right before this player plays
         a card. 'previous_plays' is a list containing tuples of
@@ -191,7 +191,7 @@ class Player:
                 big_pts[suits.index(card.suit)] = 1                                           
         # Return feature tuple
         
-        return (suits.index(card.suit),
+        return (suits.index(played_card.suit),
                 n_s1,
                 n_s2,
                 n_s3,
