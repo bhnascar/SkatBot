@@ -18,7 +18,7 @@ class BaseRules:
     def __init__(self, declarer_id, trumps):
         deck = Card.get_deck()
         self.declarer_id = declarer_id
-        self.trump_suit = trumps
+        self.trump_suit = Suit.from_str(trumps)
         
         # Get trumps from the given suit
         trump_suit = {
@@ -43,7 +43,7 @@ class BaseRules:
         results = pattern.match(rules_info).groups()
         
         # Return rules
-        return BaseRules(results[0], results[1])
+        return BaseRules(int(results[0]), results[1])
 
     def __str__(self):
         """
@@ -76,7 +76,7 @@ class BaseRules:
         Returns the winner of a sequence of plays.
         
         Plays is a sequence of tuples like so:
-        [(player, card), (player, card), (player, card)]
+        [(player, card), (player, card), (player, card)...]
         """
         if len(plays) == 0:
             return None

@@ -65,18 +65,23 @@ def process_round(plays, feature_file, players, rules):
         # Get the player who made the play
         player = players[play.pid]
         
-        # Have the player examine the state of the game
-        # before their play and export a tuple of features.
-        # If the player did not have to make a decision,
-        # 'examine' will return 'None' instead.
-        s_features = player.examine_suit(plays[0:i], rules)
-        r_features = player.examine_rank(play.card.suit, plays[0:i], rules)
-        
-        # Log the features, if it exists
-        if s_features:
-            feature_file.write("s " + str(s_features)[1:-1] + "\n")
-        if r_features:
-            feature_file.write("r " + str(r_features)[1:-1] + "\n")
+        if play.pid != rules.declarer_id:   
+            # Have the player examine the state of the game
+            # before their play and export a tuple of features.
+            # If the player did not have to make a decision,
+            # 'examine' will return 'None' instead.
+            s_features = player.examine_suit(plays[0:i], play.card, rules)
+            r_features = player.examine_rank(play.card.suit, plays[0:i], rules)
+            
+            # Log the features, if it exists
+            if s_features:
+                feature_file.write(str(s_features)[1:-1] + "\n")
+            #if r_features:
+            #    feature_file.write("r " + str(r_features)[1:-1] + "\n")
+            
+            print(player.name + " is about to play");
+            print(player.name + "'s hand is " + str(player.hand));
+            print("Feature vector is " + str(s_features) + "\n");
             
         # Remove played card from player's hand
         player.hand.remove(play.card)
