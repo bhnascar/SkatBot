@@ -95,6 +95,12 @@ class Player:
           rules - for instance, counting the number of
           trumps on a hand.
         """
+        if len(previous_plays) > 0:
+            if previous_plays[0].card in rules.trumps and rules.count_trumps(self.hand) > 0:
+                return None
+            elif rules.count_suit(previous_plays[0].card.suit, self.hand) > 0:
+                return None
+        
         if len([card for card in self.hand 
                 if rules.valid(card, self.hand, previous_plays)]) < 2:
             return None
@@ -125,28 +131,42 @@ class Player:
         for play in previous_plays:
             cur_deck.remove(play.card);
             rem_deck.remove(play.card);
-        print("Remaining cards: " + str(cur_deck))
 
         # Separate remaining cards by suit
         cur_trumps = [card for card in cur_deck if card in rules.trumps] 
         cur_suit1 = cur_trumps
-        cur_suit2 = [cd for cd in cur_deck if cd.suit == suits[1] and cd not in cur_trumps]
-        cur_suit3 = [cd for cd in cur_deck if cd.suit == suits[2] and cd not in cur_trumps]
-        cur_suit4 = [cd for cd in cur_deck if cd.suit == suits[3] and cd not in cur_trumps]
+        cur_suit2 = [cd for cd in cur_deck
+                     if cd.suit == suits[1] 
+                     and cd not in cur_trumps]
+        cur_suit3 = [cd for cd in cur_deck 
+                     if cd.suit == suits[2] 
+                     and cd not in cur_trumps]
+        cur_suit4 = [cd for cd in cur_deck 
+                     if cd.suit == suits[3] 
+                     and cd not in cur_trumps]
         rem_trumps = [card for card in rem_deck if card in rules.trumps]
         rem_suit1 = rem_trumps
-        rem_suit2 = [cd for cd in rem_deck if cd.suit == suits[1] and cd not in rem_trumps]
-        rem_suit3 = [cd for cd in rem_deck if cd.suit == suits[2] and cd not in rem_trumps]
-        rem_suit4 = [cd for cd in rem_deck if cd.suit == suits[3] and cd not in rem_trumps]
+        rem_suit2 = [cd for cd in rem_deck 
+                     if cd.suit == suits[1] 
+                     and cd not in rem_trumps]
+        rem_suit3 = [cd for cd in rem_deck 
+                     if cd.suit == suits[2] 
+                     and cd not in rem_trumps]
+        rem_suit4 = [cd for cd in rem_deck 
+                     if cd.suit == suits[3] 
+                     and cd not in rem_trumps]
+                     
         # Count remaining cards by suit
-        n_remain = [len(cur_suit1), len(cur_suit2), len(cur_suit3), len(cur_suit4)]
+        n_remain = [len(cur_suit1), 
+                    len(cur_suit2), 
+                    len(cur_suit3), 
+                    len(cur_suit4)]
               
         # Determine if player has winning card in each suit
         winning_cards = [self.winning_card(rem_suit1),
                          self.winning_card(rem_suit2),
                          self.winning_card(rem_suit3),
                          self.winning_card(rem_suit4)]
-        print("Winning cards are: " + str(winning_cards));
         has_winning = [int(cd in self.hand) for cd in winning_cards];
         
         # Find opponent id
