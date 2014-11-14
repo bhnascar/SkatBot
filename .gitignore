@@ -56,5 +56,8 @@ target/
 # Local Skat debug file
 debug.txt
 
+# Ignore output features
+feature/
+
 # Mac junk
 *.DS_Store
