@@ -95,6 +95,12 @@ class Player:
           rules - for instance, counting the number of
           trumps on a hand.
         """
+        if len(previous_plays) > 0:
+            if previous_plays[0].card in rules.trumps and rules.count_trumps(self.hand) > 0:
+                return None
+            elif rules.count_suit(previous_plays[0].card.suit, self.hand) > 0:
+                return None
+        
         if len([card for card in self.hand 
                 if rules.valid(card, self.hand, previous_plays)]) < 2:
             return None
@@ -125,28 +131,42 @@ class Player:
         for play in previous_plays:
             cur_deck.remove(play.card);
             rem_deck.remove(play.card);
-        print("Remaining cards: " + str(cur_deck))
 
         # Separate remaining cards by suit
         cur_trumps = [card for card in cur_deck if card in rules.trumps] 
         cur_suit1 = cur_trumps
-        cur_suit2 = [cd for cd in cur_deck if cd.suit == suits[1] and cd not in cur_trumps]
-        cur_suit3 = [cd for cd in cur_deck if cd.suit == suits[2] and cd not in cur_trumps]
-        cur_suit4 = [cd for cd in cur_deck if cd.suit == suits[3] and cd not in cur_trumps]
+        cur_suit2 = [cd for cd in cur_deck
+                     if cd.suit == suits[1] 
+                     and cd not in cur_trumps]
+        cur_suit3 = [cd for cd in cur_deck 
+                     if cd.suit == suits[2] 
+                     and cd not in cur_trumps]
+        cur_suit4 = [cd for cd in cur_deck 
+                     if cd.suit == suits[3] 
+                     and cd not in cur_trumps]
         rem_trumps = [card for card in rem_deck if card in rules.trumps]
         rem_suit1 = rem_trumps
-        rem_suit2 = [cd for cd in rem_deck if cd.suit == suits[1] and cd not in rem_trumps]
-        rem_suit3 = [cd for cd in rem_deck if cd.suit == suits[2] and cd not in rem_trumps]
-        rem_suit4 = [cd for cd in rem_deck if cd.suit == suits[3] and cd not in rem_trumps]
+        rem_suit2 = [cd for cd in rem_deck 
+                     if cd.suit == suits[1] 
+                     and cd not in rem_trumps]
+        rem_suit3 = [cd for cd in rem_deck 
+                     if cd.suit == suits[2] 
+                     and cd not in rem_trumps]
+        rem_suit4 = [cd for cd in rem_deck 
+                     if cd.suit == suits[3] 
+                     and cd not in rem_trumps]
+                     
         # Count remaining cards by suit
-        n_remain = [len(cur_suit1), len(cur_suit2), len(cur_suit3), len(cur_suit4)]
+        n_remain = [len(cur_suit1), 
+                    len(cur_suit2), 
+                    len(cur_suit3), 
+                    len(cur_suit4)]
               
         # Determine if player has winning card in each suit
         winning_cards = [self.winning_card(rem_suit1),
                          self.winning_card(rem_suit2),
                          self.winning_card(rem_suit3),
                          self.winning_card(rem_suit4)]
-        print("Winning cards are: " + str(winning_cards));
         has_winning = [int(cd in self.hand) for cd in winning_cards];
         
         # Find opponent id
@@ -220,8 +240,7 @@ class Player:
                 big_pts[0],
                 big_pts[1],
                 big_pts[2],
-                big_pts[3]
-               )
+                big_pts[3])
                 
     def examine_rank(self, suit, previous_plays, rules):
         """
@@ -277,12 +296,15 @@ class Player:
         # Has opponent played?
         played_opp = 0
         played_frd = 0
+        opp_card = None
         for play in previous_plays:
             if play.pid == id_opp:
                 played_opp = 1
+                opp_card = play.card
+                print("opponent card: " + str(opp_card))
             elif play.pid == id_frd:
                 played_frd = 1
-       
+              
         # Is my team winning?
         winner = rules.winner(previous_plays);
         is_winning = int(winner.pid == id_frd) if winner else 0
@@ -296,50 +318,58 @@ class Player:
                         self.diff_opp[suits.index(start_suit)] = 1
                     elif play.pid == id_frd:
                         self.diff_frd[suits.index(start_suit)] = 1
+                        
         # Find remaining cards in the game
         cur_deck = [card for card in self.reference_deck 
-                    if (card not in self.cards_seen) and (card not in self.hand)]  
+                    if (card not in self.cards_seen) 
+                    and (card not in self.hand)]  
 
         for play in previous_plays:
-            cur_deck.remove(play.card);
+            cur_deck.remove(play.card)
+        
         # Have this card?
-        cur_trumps = [card for card in self.reference_deck if card in rules.trumps] 
-        full_cards = [cd for cd in self.reference_deck if cd.suit == suits and cd not in cur_trumps]
-        highest_card = self.winning_card(full_cards)
-        opp_card = []
-        win_card = [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0]
-        has_card = [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0]
-        beat_opp = [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0]
+        cur_trumps = [card for card in self.reference_deck 
+                      if card in rules.trumps] 
+        full_cards = [cd for cd in self.reference_deck 
+                      if cd.suit == suits[suits.index(suit)] 
+                      and cd not in cur_trumps]
+        suit_len = 7
+        if suit == rules.trump_suit:
+            full_cards = cur_trumps
+            suit_len = 11
+        else:
+            print("suit != rules.trump_suit") 
+            if len(full_cards) != 7:
+                print("SUM TING WONG" + len(full_cards))
+            full_cards.extend([0]*4) 
+        print("the suit is:" + str(full_cards[0:suit_len]))
+        highest_card = self.winning_card(full_cards[0:suit_len])
+        print("winning card: " + str(highest_card))
 
-        for i in range(0,len(full_cards)):
+        win_card = [0,0,0,0, 0,0,0,0, 0,0,0]
+        has_card = [0,0,0,0, 0,0,0,0, 0,0,0]
+        beat_opp = [0,0,0,0, 0,0,0,0, 0,0,0]
+
+        for i in range(0,suit_len):
             if full_cards[i] == highest_card:
                 win_card[i] = 1 
+                      
+        for i in range(0,suit_len):
+            if full_cards[i] in self.hand:
+                has_card[i] = 1
+                if opp_card and full_cards[i] > opp_card:
+                    beat_opp[i] = 1 
 
-        if suit == rules.trumps:
-            full_cards = cur_trumps        
-        else:
-            if len(full_cards) != 7:
-                print("sum ting wrong")
-            full_cards.extend([0]*4)
-                
-        #for i in range(0,11):
-        #    if full_cards[i] in self.hand:
-        #        has_card[i] = 1
-        for i in range(0,11):
-            if True:
-                pass
-                 
-      
-        # Return feature tuple
-        #return (first, pts_on_table, played_opp, played_frd, is_winning,
-        #        self.diff_opp[suits.index(suit)], self.diff_frd[suits.index(suit)],
-        #        len(cur_deck),full_cards[0], full_cards[1], full_cards[2],
-        #        full_cards[3], full_cards[4], full_cards[5], full_cards[6],
-        #        full_cards[7], full_cards[8], full_cards[9], full_cards[10],
-        #        win_card[0], win_card[1], win_card[2], win_card[3], win_card[4],
-        #        win_card[5], win_card[6], win_card[7], win_card[8], win_card[9], win_card[10]
-        #        )
-        return (0, 0)
+        return tuple([
+            first, 
+            pts_on_table, 
+            played_opp, 
+            played_frd, 
+            is_winning,
+            self.diff_opp[suits.index(suit)],
+            self.diff_frd[suits.index(suit)],
+            len(cur_deck)
+        ] + has_card + win_card + beat_opp)
     
     @staticmethod
     def from_str(player_info):

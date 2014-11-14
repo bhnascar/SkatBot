@@ -50,7 +50,7 @@ def extract_round(round_info):
         plays.append(play)
     return plays
 
-def process_round(plays, feature_file, players, rules):
+def process_round(plays, suit_file, rank_file, players, rules):
     """
     This method should process a round of gameplay and
     generate features where possible. It should write to
@@ -75,18 +75,14 @@ def process_round(plays, feature_file, players, rules):
             
             # Log the features, if it exists
             if s_features:
-                feature_file.write(str(s_features)[1:-1] + "\n")
-            #if r_features:
-            #    feature_file.write("r " + str(r_features)[1:-1] + "\n")
-            
-            print(player.name + " is about to play");
-            print(player.name + "'s hand is " + str(player.hand));
-            print("Feature vector is " + str(s_features) + "\n");
+                suit_file.write(str(s_features)[1:-1] + "\n")
+            if r_features:
+                rank_file.write(str(r_features)[1:-1] + "\n")
             
         # Remove played card from player's hand
         player.hand.remove(play.card)
         
-def process_log_file(log_file_path, feature_file_path):
+def process_log_file(log_file_path, suit_file_path, rank_file_path):
     """
     Processes the given log file and writes feature vectors
     from that game out to the given feature file.
@@ -94,43 +90,58 @@ def process_log_file(log_file_path, feature_file_path):
     # Open log file
     log_file = open(log_file_path, "r")
         
-    # Open feature set file
-    if feature_file_path:
-        feature_file = open(feature_file_path, "w")
-    else:
-        log_file_basename = os.path.basename(log_file_path)
-        feature_file = open("feature/" + log_file_basename, "w")
+    # Open suit feature set file
+    if not suit_file_path:
+        suit_file_path = "feature/suit/" + os.path.basename(log_file_path)
+    suit_file = open(suit_file_path, "w")
     
-    # Read player info (Lines 1-3)
-    players = {}
-    for i in range(0, 3):
-        player_info = log_file.readline()
-        player = Player.from_str(player_info)
-        players[player.pid] = player
-        
-    # Read game rules (Line 4)
-    rule_info = log_file.readline()
-    rules = BaseRules.from_str(rule_info)
+    # Open rank feature set file
+    if not rank_file_path:
+        rank_file_path = "feature/rank/" + os.path.basename(log_file_path)
+    rank_file = open(rank_file_path, "w")
     
-    # Extract skat and fix the hand of
-    # whoever's playing
-    extract_skat(rule_info, players)
+    try:
+        # Read player info (Lines 1-3)
+        players = {}
+        for i in range(0, 3):
+            player_info = log_file.readline()
+            player = Player.from_str(player_info)
+            players[player.pid] = player
+        
+        # Read game rules (Line 4)
+        rule_info = log_file.readline()
+        rules = BaseRules.from_str(rule_info)
     
-    # Read gameplay (Lines 5-14)
-    for i in range(0, 10):
-        round_info = log_file.readline()
-        plays = extract_round(round_info)
-        process_round(plays, feature_file, players, rules)
+        # Extract skat and fix the hand of
+        # whoever's playing
+        extract_skat(rule_info, players)
+    
+        # Read gameplay (Lines 5-14)
+        for i in range(0, 10):
+            round_info = log_file.readline()
+            plays = extract_round(round_info)
+            process_round(plays, suit_file, rank_file, players, rules)
         
-        # Update game state
-        winning_play = rules.winner(plays)
-        winning_player = players[winning_play.pid]
-        winning_player.cards_won.extend([play.card for play in plays])
-        for player in players.values():
-            player.cards_seen.extend([play.card for play in plays])
+            # Update game state
+            winning_play = rules.winner(plays)
+            winning_player = players[winning_play.pid]
+            winning_player.cards_won.extend([play.card for play in plays])
+            for player in players.values():
+                player.cards_seen.extend([play.card for play in plays])
         
-    # Close feature set file
-    feature_file.close()
+        # Close feature files
+        print("Processed file: " + log_file_path)
+        suit_file.close()
+        rank_file.close()
+        
+    # Error? Delete feature file
+    except:
+        print("Error processing file: " + os.path.basename(log_file_path))
+        try:
+            os.remove(suit_file_path)
+            os.remove(rank_file_path)
+        except:
+            pass
     
     # Close log file
     log_file.close()
@@ -150,14 +161,18 @@ def main(argv):
       [(player ID, card), (player ID, card), (player ID, card),]
     """
     
-    if len(argv) < 1:
-        print("Usage: python3 feature_extractor.py [log file] [output file]") 
-    elif len(argv) < 2:
+    # One argument - interpret as command to read all
+    # files under log/ directory and write feature vector
+    # to files under feature/ directory
+    if len(argv) == 1:
         for file_name in os.listdir("log"):
-            print("Processing file: " + file_name)
-            process_log_file("log/" + file_name, None)
-    elif len(argv) < 3:
-        process_log_file(argv[1], argv[2])
+            process_log_file("log/" + file_name, None, None)
+                
+    # Two arguments - interpret as command to read a
+    # specific log file and write feature vectors
+    # to a specific feature file
+    elif len(argv) == 4:
+        process_log_file(argv[1], argv[2], argv[3])
     
     return 0;
 
