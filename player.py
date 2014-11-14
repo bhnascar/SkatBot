@@ -242,7 +242,7 @@ class Player:
                 big_pts[2],
                 big_pts[3])
                 
-    def examine_rank(self, suit, previous_plays, rules):
+    def examine_rank(self, previous_plays, played_card, rules):
         """
         This method gets called right after examine_suit. 'suit'
         contains the suit chosen by the player. 'previous_plays' 
@@ -257,11 +257,13 @@ class Player:
         features for this decision. The framework that calls this 
         code will handle writing the tuple to the feature file.
         """
+        
         if len([card for card in self.hand 
                 if rules.valid(card, self.hand, previous_plays)]) < 2:
             return None
 
         suits = [Suit.clubs, Suit.spades, Suit.hearts, Suit.diamonds];
+        suit = played_card.suit
  
         # Count number of plays made so far in this round
         n_plays = len(previous_plays)
@@ -360,7 +362,28 @@ class Player:
                 if opp_card and full_cards[i] > opp_card:
                     beat_opp[i] = 1 
 
+        # Encode played card
+        output_card = {
+            Rank.seven: 0,
+            Rank.eight: 1,
+            Rank.nine : 2,
+            Rank.queen: 3,
+            Rank.king : 4,
+            Rank.ten  : 5,
+            Rank.ace  : 6,
+            Rank.jack : 7
+        }[played_card.rank]
+        
+        if output_card == 7:
+            output_card = {
+                Suit.diamonds: 7,
+                Suit.hearts  : 8,
+                Suit.spades  : 9,
+                Suit.clubs   : 10
+            }[played_card.suit]
+
         return tuple([
+            output_card,
             first, 
             pts_on_table, 
             played_opp, 

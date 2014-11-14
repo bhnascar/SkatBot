@@ -71,7 +71,7 @@ def process_round(plays, suit_file, rank_file, players, rules):
             # If the player did not have to make a decision,
             # 'examine' will return 'None' instead.
             s_features = player.examine_suit(plays[0:i], play.card, rules)
-            r_features = player.examine_rank(play.card.suit, plays[0:i], rules)
+            r_features = player.examine_rank(plays[0:i], play.card, rules)
             
             # Log the features, if it exists
             if s_features:
