@@ -105,13 +105,15 @@ class Player:
                 if rules.valid(card, self.hand, previous_plays)]) < 2:
             return None
        
-        print(str(previous_plays))
+        print("previous plays " + str(previous_plays))
         suits = [Suit.clubs, Suit.spades, Suit.hearts, Suit.diamonds];
-        
+        print("self hand: " + str(self.hand))       
         # Rotate suits so that the trump suit is at
         # the beginning of the list
         i = suits.index(rules.trump_suit)        
         suits = suits[i:] + suits[:i]
+        print("suits: " + str(suits))
+        print("played card: " + str(played_card)) 
         
         # Count number of plays made so far in this round
         n_plays = len(previous_plays)
@@ -303,7 +305,7 @@ class Player:
             if play.pid == id_opp:
                 played_opp = 1
                 opp_card = play.card
-                print("opponent card: " + str(opp_card))
+                #print("opponent card: " + str(opp_card))
             elif play.pid == id_frd:
                 played_frd = 1
               
@@ -340,13 +342,13 @@ class Player:
             full_cards = cur_trumps
             suit_len = 11
         else:
-            print("suit != rules.trump_suit") 
+            #print("suit != rules.trump_suit") 
             if len(full_cards) != 7:
-                print("SUM TING WONG" + len(full_cards))
-            full_cards.extend([0]*4) 
-        print("the suit is:" + str(full_cards[0:suit_len]))
+                #print("SUM TING WONG" + len(full_cards))
+                full_cards.extend([0]*4) 
+        #print("the suit is:" + str(full_cards[0:suit_len]))
         highest_card = self.winning_card(full_cards[0:suit_len])
-        print("winning card: " + str(highest_card))
+        #print("winning card: " + str(highest_card))
 
         win_card = [0,0,0,0, 0,0,0,0, 0,0,0]
         has_card = [0,0,0,0, 0,0,0,0, 0,0,0]
