@@ -211,9 +211,13 @@ class Player:
         for card in self.hand:
             if int(card) >= 10:
                 big_pts[suits.index(card.suit)] = 1                                           
-        # Return feature tuple
+        # Find suit of played card (output)
+        played_suit = suits.index(played_card.suit);
+        if played_card.rank == Rank.jack:
+            played_suit = suits.index(rules.trump_suit)        
         
-        return (suits.index(played_card.suit),
+        # Return feature tuple
+        return (played_suit,
                 n_s1,
                 n_s2,
                 n_s3,
