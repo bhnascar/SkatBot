@@ -49,7 +49,7 @@ class BaseRules:
         """
         Returns a string description of this game.
         """
-        return self.trump_suit
+        return repr(self.trump_suit)
         
     def count_points(self, hand):
         """

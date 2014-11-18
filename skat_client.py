@@ -85,8 +85,8 @@ def main(argv):
         return 0
     
     # Connect to server
-    host = "10.31.241.130" #argv[1]
-    port = 50007 #int(argv[2])
+    host = argv[1]
+    port = int(argv[2])
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.connect((host, port))
     username = input("\nUsername: ").strip();
