@@ -136,8 +136,8 @@ def process_log_file(log_file_path, suit_file_path, rank_file_path):
         
     # Error? Delete feature file
     except Exception as e:
-        print(e)
         print("Error processing file: " + os.path.basename(log_file_path))
+        print(e)
         try:
             os.remove(suit_file_path)
             os.remove(rank_file_path)
@@ -162,7 +162,7 @@ def main(argv):
       [(player ID, card), (player ID, card), (player ID, card),]
     """
     
-    # One argument - interpret as command to read all
+    # No argument - interpret as command to read all
     # files under log/ directory and write feature vector
     # to files under feature/ directory
     if len(argv) == 1:

@@ -113,8 +113,6 @@ class Player:
         suits = [Suit.clubs, Suit.spades, Suit.hearts, Suit.diamonds]
         i = suits.index(rules.trump_suit)        
         suits = suits[i:] + suits[:i]
-        #print("suits: " + str(suits))
-        #print("played card: " + str(played_card)) 
         
         # Count number of plays made so far in this round
         n_plays = len(previous_plays)
@@ -249,6 +247,7 @@ class Player:
                 if rules.valid(card, self.hand, previous_plays)]) < 2:
             return None
 
+
         suits = [Suit.clubs, Suit.spades, Suit.hearts, Suit.diamonds];
         suit = played_card.suit
  
@@ -327,27 +326,19 @@ class Player:
         cur_cards = None
         suit_len = 7
         if suit == rules.trump_suit:
-            print("\n(trump)")
-            full_cards = cur_trumps
+            full_cards = sorted(cur_trumps)
             cur_cards = [cd for cd in cur_deck_hand
                          if cd in rules.trumps]
             suit_len = 11
         else:
-            print("\n(not trump)")
-            #print("suit != rules.trump_suit") 
             cur_cards = [cd for cd in cur_deck_hand
                          if cd.suit == suits[suits.index(suit)]
                          and cd not in rules.trumps]
 
             if len(full_cards) != 7:
-                #print("SUM TING WONG" + len(full_cards))
                 full_cards.extend([0]*4) 
-        #print("the suit is:" + str(full_cards[0:suit_len]))
+                
         highest_card = self.winning_card(cur_cards)
-        print("Suit: " + str(suit))
-        print("cards to be played: "+ str(cur_deck_hand))
-        print("cur_cards: " + str(cur_cards))
-        print("HIGHEST card: " + str(highest_card))
 
         win_card = [0,0,0,0, 0,0,0,0, 0,0,0]
         has_card = [0,0,0,0, 0,0,0,0, 0,0,0]
