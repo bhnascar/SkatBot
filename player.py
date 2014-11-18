@@ -341,17 +341,23 @@ class Player:
         full_cards = [cd for cd in self.reference_deck 
                       if cd.suit == suits[suits.index(suit)] 
                       and cd not in cur_trumps]
+        cur_cards = None
         suit_len = 7
         if suit == rules.trump_suit:
             full_cards = cur_trumps
+            cur_cards = [cd for cd in cur_deck
+                         if cd.suit == rules.trumps]
             suit_len = 11
+            cur_cards = [cd for cd in cur_deck
+                         if cd.suit == suits[suits.index(suit)]
+                         and cd not in rules.trumps]
         else:
             #print("suit != rules.trump_suit") 
             if len(full_cards) != 7:
                 #print("SUM TING WONG" + len(full_cards))
                 full_cards.extend([0]*4) 
         #print("the suit is:" + str(full_cards[0:suit_len]))
-        highest_card = self.winning_card(full_cards[0:suit_len])
+        highest_card = self.winning_card(cur_cards)
         #print("winning card: " + str(highest_card))
 
         win_card = [0,0,0,0, 0,0,0,0, 0,0,0]
