@@ -64,6 +64,32 @@ class Player:
             if cards[i] > winning:
                 winning = cards[i]
         return winning
+    
+    def encode_played_card(self, played_card):
+        """
+        Encodes the rank of the played card according to
+        the format expected by the feature vector.
+        """
+        output = {
+            Rank.seven: 0,
+            Rank.eight: 1,
+            Rank.nine : 2,
+            Rank.queen: 3,
+            Rank.king : 4,
+            Rank.ten  : 5,
+            Rank.ace  : 6,
+            Rank.jack : 7
+        }[played_card.rank]
+        
+        if output == 7:
+            output= {
+                Suit.diamonds: 7,
+                Suit.hearts  : 8,
+                Suit.spades  : 9,
+                Suit.clubs   : 10
+            }[played_card.suit]
+            
+        return output
        
     def examine_suit(self, previous_plays, played_card, rules):
         """
@@ -247,8 +273,6 @@ class Player:
                 if rules.valid(card, self.hand, previous_plays)]) < 2:
             return None
 
-
-        suits = [Suit.clubs, Suit.spades, Suit.hearts, Suit.diamonds];
         suit = played_card.suit
  
         # Count number of plays made so far in this round
@@ -256,6 +280,7 @@ class Player:
        
         # Rotate suits so that the trump suit is at
         # the beginning of the list
+        suits = [Suit.clubs, Suit.spades, Suit.hearts, Suit.diamonds];
         i = suits.index(rules.trump_suit)        
         suits = suits[i:] + suits[:i]
 
@@ -289,7 +314,6 @@ class Player:
             if play.pid == id_opp:
                 played_opp = 1
                 opp_card = play.card
-                #print("opponent card: " + str(opp_card))
             elif play.pid == id_frd:
                 played_frd = 1
               
@@ -334,48 +358,38 @@ class Player:
             cur_cards = [cd for cd in cur_deck_hand
                          if cd.suit == suits[suits.index(suit)]
                          and cd not in rules.trumps]
-
             if len(full_cards) != 7:
-                full_cards.extend([0]*4) 
+                full_cards.extend([0] * 4)
                 
         highest_card = self.winning_card(cur_cards)
 
-        win_card = [0,0,0,0, 0,0,0,0, 0,0,0]
-        has_card = [0,0,0,0, 0,0,0,0, 0,0,0]
-        beat_opp = [0,0,0,0, 0,0,0,0, 0,0,0]
+        # Describes the remaining cards of the suit to play.
+        # The indices correspond to the cards in the following way:
+        #
+        # [0, 1, 2, 3, 4, 5,  6,  7,  8,  9, 10]
+        # [7, 8, 9, Q, K, 10, A, dB, hB, sB, cB]
+        #
+        # (win_card[i] == 1) indicates that card is the winning card
+        # (has_card[i] == 1) indicates that the player has this card
+        # (beat_opp[i] == 1) indicates that the player has this card
+        #                    AND it beats the opponennt's played card
+        win_card = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        has_card = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        beat_opp = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
         for i in range(0,suit_len):
             if full_cards[i] == highest_card:
-                win_card[i] = 1 
-                      
-        for i in range(0,suit_len):
+                win_card[i] = 1
             if full_cards[i] in self.hand:
                 has_card[i] = 1
                 if opp_card and full_cards[i] > opp_card:
                     beat_opp[i] = 1 
 
         # Encode played card
-        output_card = {
-            Rank.seven: 0,
-            Rank.eight: 1,
-            Rank.nine : 2,
-            Rank.queen: 3,
-            Rank.king : 4,
-            Rank.ten  : 5,
-            Rank.ace  : 6,
-            Rank.jack : 7
-        }[played_card.rank]
+        output = self.encode_played_card(played_card)
         
-        if output_card == 7:
-            output_card = {
-                Suit.diamonds: 7,
-                Suit.hearts  : 8,
-                Suit.spades  : 9,
-                Suit.clubs   : 10
-            }[played_card.suit]
-
         return tuple([
-            output_card,
+            output,
             first, 
             pts_on_table, 
             played_opp, 

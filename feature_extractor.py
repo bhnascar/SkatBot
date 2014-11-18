@@ -168,6 +168,22 @@ def main(argv):
     if len(argv) == 1:
         for file_name in os.listdir("log"):
             process_log_file("log/" + file_name, None, None)
+        
+        print("Concatening all log files together...")
+        
+        # Write a "combined" file that concats all suit
+        # feature files together into a single file
+        with open("feature/suit/combined.txt", "w") as outfile:
+            for file_name in os.listdir("feature/suit"):
+                with open("feature/suit/" + file_name) as infile:
+                    outfile.write(infile.read())
+                    
+        # Write a "combined" file that concats all rank
+        # feature files together into a single file
+        with open("feature/rank/combined.txt", "w") as outfile:
+            for file_name in os.listdir("feature/rank"):
+                with open("feature/rank/" + file_name) as infile:
+                    outfile.write(infile.read())
                 
     # Two arguments - interpret as command to read a
     # specific log file and write feature vectors
