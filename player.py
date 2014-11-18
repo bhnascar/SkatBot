@@ -123,15 +123,18 @@ class Player:
         """
         # Skip plays where no suit decision was necessary
         if len(previous_plays) > 0:
-            # First person played trumps -> we have trumps
-            if previous_plays[0].card in rules.trumps and rules.count_trumps(self.hand) > 0:
+            
+            # First person played trumps and we have trumps
+            if (previous_plays[0].card in rules.trumps and 
+                rules.count_trumps(self.hand) > 0):
                 return None
-            # First person played a suit -> we have cards of that suit
+                
+            # First person played a suit and we have cards of that suit
             elif rules.count_suit(previous_plays[0].card.suit, self.hand) > 0:
                 return None
-        # Only one legal move
-        if len([card for card in self.hand 
-                if rules.valid(card, self.hand, previous_plays)]) < 2:
+            
+        # Only one card left?
+        if len(self.hand) == 1:
             return None
 
         # Rotate suits so that the trump suit is at
@@ -269,11 +272,27 @@ class Player:
         code will handle writing the tuple to the feature file.
         """
         
-        if len([card for card in self.hand 
-                if rules.valid(card, self.hand, previous_plays)]) < 2:
+        # Skip plays where no suit decision was necessary
+        if len(previous_plays) > 0:
+            
+            # First person played trumps and we have one trump
+            if (previous_plays[0].card in rules.trumps and 
+                rules.count_trumps(self.hand) == 1):
+                return None
+                
+            # First person played a suit and we have one card of that suit
+            elif rules.count_suit(previous_plays[0].card.suit, self.hand) == 1:
+                return None
+        
+        # Only one card left?
+        if len(self.hand) == 1:
             return None
 
-        suit = played_card.suit
+        # Determine suit of played_card
+        if played_card in rules.trumps:
+            suit = rules.trump_suit
+        else:
+            suit = played_card.suit
  
         # Count number of plays made so far in this round
         n_plays = len(previous_plays)
@@ -331,30 +350,22 @@ class Player:
                     elif play.pid == id_frd:
                         self.diff_frd[suits.index(start_suit)] = 1
                         
-        # Find remaining cards in the game
-        cur_deck = [card for card in self.reference_deck 
-                    if (card not in self.cards_seen) 
-                    and (card not in self.hand)]  
+        # Find remaining cards in the game (including hand)
         cur_deck_hand = [card for card in self.reference_deck
                          if (card not in self.cards_seen)]
         for play in previous_plays:
-            cur_deck.remove(play.card)
             cur_deck_hand.remove(play.card)
         
-        # Have this card?
-        cur_trumps = [card for card in self.reference_deck 
-                      if card in rules.trumps] 
-        full_cards = [cd for cd in self.reference_deck 
-                      if cd.suit == suits[suits.index(suit)] 
-                      and cd not in cur_trumps]
-        cur_cards = None
-        suit_len = 7
-        if suit == rules.trump_suit:
-            full_cards = sorted(cur_trumps)
-            cur_cards = [cd for cd in cur_deck_hand
-                         if cd in rules.trumps]
+        # What's the highest card of the given suit?
+        if played_card in rules.trumps:
             suit_len = 11
+            full_cards = rules.trumps
+            cur_cards = [cd for cd in cur_deck_hand if cd in rules.trumps]
         else:
+            suit_len = 7
+            full_cards = [cd for cd in self.reference_deck 
+                          if cd.suit == suits[suits.index(suit)] 
+                          and cd not in rules.trumps]
             cur_cards = [cd for cd in cur_deck_hand
                          if cd.suit == suits[suits.index(suit)]
                          and cd not in rules.trumps]
@@ -385,8 +396,25 @@ class Player:
                 if opp_card and full_cards[i] > opp_card:
                     beat_opp[i] = 1 
 
+        # How many cards are left in the game?
+        num_cards_left = len([card for card in cur_deck_hand if card not in                                   self.hand])
+
         # Encode played card
         output = self.encode_played_card(played_card)
+        
+        # Uncomment to debug feature variables
+        # print("Highest card (" + str(suit) + "): " + str(highest_card))
+        # print("Previous plays: " + str(previous_plays))
+        # print("Going first: " + str(first))
+        # print("Points on table: " + str(pts_on_table))
+        # print("Has opponent played: " + str(played_opp))
+        # print("Has friend played: " + str(played_frd))
+        # print("Is winning: " + str(is_winning))
+        # print("Hand: " + str(self.hand))
+        # print("Winning card: (" + str(suit) + ") " + str(win_card))
+        # print("Has card: (" + str(suit) + ") " + str(has_card))
+        # print("Beat opp: (" + str(suit) + ") " + str(beat_opp))
+        # print("Num. cards left: " + str(num_cards_left))
         
         return tuple([
             output,
@@ -397,7 +425,7 @@ class Player:
             is_winning,
             self.diff_opp[suits.index(suit)],
             self.diff_frd[suits.index(suit)],
-            len(cur_deck)
+            num_cards_left,
         ] + has_card + win_card + beat_opp)
     
     @staticmethod

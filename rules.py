@@ -31,7 +31,7 @@ class BaseRules:
 
         # Add jacks, which are always trumps
         self.trumps.extend([card for card in deck if card.rank == Rank.jack])
-        self.trumps = list(set(self.trumps))
+        self.trumps = sorted(list(set(self.trumps)))
 
     @staticmethod
     def from_str(rules_info):
