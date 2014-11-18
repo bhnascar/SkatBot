@@ -133,8 +133,9 @@ class Player:
             elif rules.count_suit(previous_plays[0].card.suit, self.hand) > 0:
                 return None
             
-        # Only one card left?
-        if len(self.hand) == 1:
+        # Only one suit left
+        # (This also catches the case of only one card left)
+        if len(set([card.suit for card in self.hand])) == 1:
             return None
 
         # Rotate suits so that the trump suit is at
@@ -271,28 +272,16 @@ class Player:
         features for this decision. The framework that calls this 
         code will handle writing the tuple to the feature file.
         """
-        
-        # Skip plays where no suit decision was necessary
-        if len(previous_plays) > 0:
-            
-            # First person played trumps and we have one trump
-            if (previous_plays[0].card in rules.trumps and 
-                rules.count_trumps(self.hand) == 1):
-                return None
-                
-            # First person played a suit and we have one card of that suit
-            elif rules.count_suit(previous_plays[0].card.suit, self.hand) == 1:
-                return None
-        
-        # Only one card left?
-        if len(self.hand) == 1:
-            return None
 
         # Determine suit of played_card
         if played_card in rules.trumps:
             suit = rules.trump_suit
+            if rules.count_trumps(self.hand) == 1:
+                return None
         else:
             suit = played_card.suit
+            if rules.count_suit(suit, self.hand) == 1:
+                return None
  
         # Count number of plays made so far in this round
         n_plays = len(previous_plays)
