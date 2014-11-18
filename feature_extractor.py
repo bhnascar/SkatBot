@@ -166,8 +166,8 @@ def main(argv):
     # files under log/ directory and write feature vector
     # to files under feature/ directory
     if len(argv) == 1:
-        for file_name in os.listdir("log"):
-            process_log_file("log/" + file_name, None, None)
+        for game_file_name in os.listdir("log"):
+            process_log_file("log/" + game_file_name, None, None)
         
         print("Concatening all log files together...")
         
@@ -175,6 +175,8 @@ def main(argv):
         # feature files together into a single file
         with open("feature/suit/combined.txt", "w") as outfile:
             for file_name in os.listdir("feature/suit"):
+                if file_name == "combined.txt" or file_name == "README.txt":
+                    continue
                 with open("feature/suit/" + file_name) as infile:
                     outfile.write(infile.read())
                     
@@ -182,6 +184,8 @@ def main(argv):
         # feature files together into a single file
         with open("feature/rank/combined.txt", "w") as outfile:
             for file_name in os.listdir("feature/rank"):
+                if file_name == "combined.txt" or file_name == "README.txt":
+                    continue
                 with open("feature/rank/" + file_name) as infile:
                     outfile.write(infile.read())
                 
