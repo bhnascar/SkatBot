@@ -328,16 +328,6 @@ class Player:
         # Is my team winning?
         winner = rules.winner(previous_plays);
         is_winning = int(winner.pid == id_frd) if winner else 0
-
-         # Has my opponent or friend run out of a suit?
-        if n_plays > 0:
-            start_suit = previous_plays[0].card.suit
-            for play in previous_plays:
-                if play.card.suit != start_suit:
-                    if play.pid == id_opp:
-                        self.diff_opp[suits.index(start_suit)] = 1
-                    elif play.pid == id_frd:
-                        self.diff_frd[suits.index(start_suit)] = 1
                         
         # Find remaining cards in the game (including hand)
         cur_deck_hand = [card for card in self.reference_deck
