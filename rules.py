@@ -49,6 +49,9 @@ class BaseRules:
         """
         Returns a string description of this game.
         """
+        # Using __repr__ here instead of __str__ because
+        # str returns a Unicode character that causes
+        # encoding issues over the network
         return repr(self.trump_suit)
         
     def count_points(self, hand):

@@ -95,21 +95,22 @@ class Player:
           rules - for instance, counting the number of
           trumps on a hand.
         """
+        # Skip plays where no suit decision was necessary
         if len(previous_plays) > 0:
+            # First person played trumps -> we have trumps
             if previous_plays[0].card in rules.trumps and rules.count_trumps(self.hand) > 0:
                 return None
+            # First person played a suit -> we have cards of that suit
             elif rules.count_suit(previous_plays[0].card.suit, self.hand) > 0:
                 return None
-        
+        # Only one legal move
         if len([card for card in self.hand 
                 if rules.valid(card, self.hand, previous_plays)]) < 2:
             return None
-       
-        print(str(previous_plays))
-        suits = [Suit.clubs, Suit.spades, Suit.hearts, Suit.diamonds];
         
         # Rotate suits so that the trump suit is at
         # the beginning of the list
+        suits = [Suit.clubs, Suit.spades, Suit.hearts, Suit.diamonds]
         i = suits.index(rules.trump_suit)        
         suits = suits[i:] + suits[:i]
         
@@ -123,14 +124,9 @@ class Player:
         n_s4 = rules.count_suit(suits[3], self.hand)
                        
         # Find remaining cards in the game
-        cur_deck = [card for card in self.reference_deck 
-                    if (card not in self.cards_seen) and (card not in self.hand)]
-        # Find remaining cards, including on hand
-        rem_deck = [card for card in self.reference_deck if card not in self.cards_seen]
-
+        cur_deck = list(set(self.reference_deck) - set(self.cards_seen))
         for play in previous_plays:
             cur_deck.remove(play.card);
-            rem_deck.remove(play.card);
 
         # Separate remaining cards by suit
         cur_trumps = [card for card in cur_deck if card in rules.trumps] 
@@ -144,29 +140,18 @@ class Player:
         cur_suit4 = [cd for cd in cur_deck 
                      if cd.suit == suits[3] 
                      and cd not in cur_trumps]
-        rem_trumps = [card for card in rem_deck if card in rules.trumps]
-        rem_suit1 = rem_trumps
-        rem_suit2 = [cd for cd in rem_deck 
-                     if cd.suit == suits[1] 
-                     and cd not in rem_trumps]
-        rem_suit3 = [cd for cd in rem_deck 
-                     if cd.suit == suits[2] 
-                     and cd not in rem_trumps]
-        rem_suit4 = [cd for cd in rem_deck 
-                     if cd.suit == suits[3] 
-                     and cd not in rem_trumps]
                      
-        # Count remaining cards by suit
-        n_remain = [len(cur_suit1), 
-                    len(cur_suit2), 
-                    len(cur_suit3), 
-                    len(cur_suit4)]
+        # Count remaining cards (and not in hand) by suit
+        n_remain = [len(cur_suit1) - n_s1, 
+                    len(cur_suit2) - n_s2, 
+                    len(cur_suit3) - n_s3, 
+                    len(cur_suit4) - n_s4]
               
         # Determine if player has winning card in each suit
-        winning_cards = [self.winning_card(rem_suit1),
-                         self.winning_card(rem_suit2),
-                         self.winning_card(rem_suit3),
-                         self.winning_card(rem_suit4)]
+        winning_cards = [self.winning_card(cur_suit1),
+                         self.winning_card(cur_suit2),
+                         self.winning_card(cur_suit3),
+                         self.winning_card(cur_suit4)]
         has_winning = [int(cd in self.hand) for cd in winning_cards];
         
         # Find opponent id
@@ -189,30 +174,26 @@ class Player:
         first = int(len(previous_plays) == 0)
 
         # How many points are on table?
-        pts_on_table = sum([int(play.card) for play in previous_plays]);
+        pts_on_table = sum([int(play.card) for play in previous_plays])
  
         # Has opponent played?
-        played_opp = 0
-        played_frd = 0
-        for play in previous_plays:
-            if play.pid == id_opp:
-                played_opp = 1
-            elif play.pid == id_frd:
-                played_frd = 1
+        played_opp = int(any(play.pid == id_opp for play in previous_plays))
+        played_frd = int(any(play.pid == id_frd for play in previous_plays))
        
         # Is my team winning?
-        winner = rules.winner(previous_plays);
+        winner = rules.winner(previous_plays)
         is_winning = int(winner.pid == id_frd) if winner else 0
 
-        # Do I have "big" points (A or 10)?
+        # Do I have "big" points (A or 10) in each suit?
         big_pts = [0, 0, 0, 0]
         for card in self.hand:
             if int(card) >= 10:
                 big_pts[suits.index(card.suit)] = 1                                           
         # Find suit of played card (output)
-        played_suit = suits.index(played_card.suit);
         if played_card.rank == Rank.jack:
-            played_suit = suits.index(rules.trump_suit)        
+            played_suit = suits.index(rules.trump_suit)
+        else:
+            played_suit = suits.index(played_card.suit);
         
         # Return feature tuple
         return (played_suit,

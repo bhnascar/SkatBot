@@ -135,7 +135,8 @@ def process_log_file(log_file_path, suit_file_path, rank_file_path):
         rank_file.close()
         
     # Error? Delete feature file
-    except:
+    except Exception as e:
+        print(e)
         print("Error processing file: " + os.path.basename(log_file_path))
         try:
             os.remove(suit_file_path)
