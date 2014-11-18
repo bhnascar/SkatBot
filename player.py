@@ -105,15 +105,15 @@ class Player:
                 if rules.valid(card, self.hand, previous_plays)]) < 2:
             return None
        
-        print("previous plays " + str(previous_plays))
+        #print("previous plays " + str(previous_plays))
         suits = [Suit.clubs, Suit.spades, Suit.hearts, Suit.diamonds];
-        print("self hand: " + str(self.hand))       
+        #print("self hand: " + str(self.hand))       
         # Rotate suits so that the trump suit is at
         # the beginning of the list
         i = suits.index(rules.trump_suit)        
         suits = suits[i:] + suits[:i]
-        print("suits: " + str(suits))
-        print("played card: " + str(played_card)) 
+        #print("suits: " + str(suits))
+        #print("played card: " + str(played_card)) 
         
         # Count number of plays made so far in this round
         n_plays = len(previous_plays)
@@ -331,9 +331,11 @@ class Player:
         cur_deck = [card for card in self.reference_deck 
                     if (card not in self.cards_seen) 
                     and (card not in self.hand)]  
-
+        cur_deck_hand = [card for card in self.reference_deck
+                         if (card not in self.cards_seen)]
         for play in previous_plays:
             cur_deck.remove(play.card)
+            cur_deck_hand.remove(play.card)
         
         # Have this card?
         cur_trumps = [card for card in self.reference_deck 
@@ -344,21 +346,27 @@ class Player:
         cur_cards = None
         suit_len = 7
         if suit == rules.trump_suit:
+            print("\n(trump)")
             full_cards = cur_trumps
-            cur_cards = [cd for cd in cur_deck
-                         if cd.suit == rules.trumps]
+            cur_cards = [cd for cd in cur_deck_hand
+                         if cd in rules.trumps]
             suit_len = 11
-            cur_cards = [cd for cd in cur_deck
+        else:
+            print("\n(not trump)")
+            #print("suit != rules.trump_suit") 
+            cur_cards = [cd for cd in cur_deck_hand
                          if cd.suit == suits[suits.index(suit)]
                          and cd not in rules.trumps]
-        else:
-            #print("suit != rules.trump_suit") 
+
             if len(full_cards) != 7:
                 #print("SUM TING WONG" + len(full_cards))
                 full_cards.extend([0]*4) 
         #print("the suit is:" + str(full_cards[0:suit_len]))
         highest_card = self.winning_card(cur_cards)
-        #print("winning card: " + str(highest_card))
+        print("Suit: " + str(suit))
+        print("cards to be played: "+ str(cur_deck_hand))
+        print("cur_cards: " + str(cur_cards))
+        print("HIGHEST card: " + str(highest_card))
 
         win_card = [0,0,0,0, 0,0,0,0, 0,0,0]
         has_card = [0,0,0,0, 0,0,0,0, 0,0,0]
