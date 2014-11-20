@@ -1,0 +1,14 @@
+(1, pedro, d7 h8 hK s8 s9 sQ s10 c8 dB hB)
+(2, ivan, d8 dK h7 h9 h10 sK c7 c9 cK c10)
+(3, boss, d9 dQ d10 dA hA s7 sA cA sB cB)
+(3, d, d9 dQ d10 dA hA sA cQ cA sB cB)
+[(1, c8), (2, c9), (3, cA)]
+[(3, hA), (1, h8), (2, h9)]
+[(3, sA), (1, s8), (2, sK)]
+[(3, d9), (1, d7), (2, dK)]
+[(2, h10), (3, dA), (1, hK)]
+[(3, dQ), (1, dB), (2, d8)]
+[(1, s10), (2, h7), (3, d10)]
+[(3, cB), (1, hB), (2, c7)]
+[(3, sB), (1, s9), (2, cK)]
+[(3, cQ), (1, sQ), (2, c10)]
