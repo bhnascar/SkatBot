@@ -152,14 +152,16 @@ class HumanPlayer(Player):
     
     def get_play(self, previous_plays, rules):
         """
-        Retrieves a play from over the network in a Skat game.
+        Retrieves a card from over the network in a Skat game.
         """
         if not self.conn:
             print("No op!")
             return None
         send_str(self.conn, "Your turn")
         send_msg(self.conn, pickle.dumps(previous_plays))
-        return pickle.loads(recv_msg(self.conn))
+        card = pickle.loads(recv_msg(self.conn))
+        self.hand.remove(card)
+        return card
         
 class BotPlayer(Player):
     """
@@ -236,7 +238,9 @@ class BotPlayer(Player):
         """
         valid_cards = [card for card in self.hand 
                        if rules.valid(card, self.hand, previous_plays)]
-        return random.choice(valid_cards)
+        card = random.choice(valid_cards)
+        self.hand.remove(card)
+        return card
     
     def encode_card_rank(self, card):
         """
