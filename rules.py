@@ -58,6 +58,10 @@ class BaseRules:
         """
         Returns the number of points in the given hand
         """
+        if not hand:
+            return 0
+        if len(hand) == 0:
+            return 0
         return reduce(lambda card_1, card_2: int(card_1) + int(card_2), hand)
 
     def count_suit(self, suit, hand):

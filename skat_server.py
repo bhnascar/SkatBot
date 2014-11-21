@@ -61,6 +61,9 @@ def decide_game(declarer, skat):
     declarer.hand.remove(hidden[1])
     declarer.hand.sort()
     
+    # Give hidden cards to declarer's cards won
+    declarer.cards_won.extend(hidden)
+    
     # Receive trumps from the person playing
     trumps = recv_str(declarer.conn)
     
@@ -168,8 +171,6 @@ def main(argv):
 
     # Print points won
     for player in players.values():
-        if len(player.cards_won) == 0:
-            continue
         points = rules.count_points(player.cards_won)
         announce = player.name + " won " + str(points) + " points"
         broadcast_str(conns, announce, log = True)
