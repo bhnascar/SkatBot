@@ -123,7 +123,7 @@ def process_log_file(log_file_path, suit_file_path, rank_file_path):
             process_round(plays, suit_file, rank_file, players, rules)
         
             # Update game state
-            winning_play = rules.winner(plays)
+            winning_play = rules.winning_play(plays)
             winning_player = players[winning_play.pid]
             winning_player.cards_won.extend([play.card for play in plays])
             for player in players.values():

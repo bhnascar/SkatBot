@@ -50,26 +50,8 @@ def decide_game(declarer, skat):
     to hide and the trump suit. Returns a Rules object
     indicating the game to play.
     """
-    # Send the skat
-    print("\nSending skat to " + declarer.name + "...")
-    send_msg(declarer.conn, pickle.dumps(skat))
-    
-    # Receive hidden cards from the person playing
-    hidden = pickle.loads(recv_msg(declarer.conn))
-    declarer.hand.extend(skat)
-    declarer.hand.remove(hidden[0])
-    declarer.hand.remove(hidden[1])
-    declarer.hand.sort()
-    
-    # Give hidden cards to declarer's cards won
-    declarer.cards_won.extend(hidden)
-    
-    # Receive trumps from the person playing
-    trumps = recv_str(declarer.conn)
-    
-    # Create rules
-    rules = BaseRules(declarer.pid, trumps)
-    return rules
+    declarer.hide_cards(skat)
+    return declarer.get_rules()
     
 
 # The game file format is as follows:
@@ -154,7 +136,7 @@ def main(argv):
             pid = (pid + 1) if (pid + 1) < 4 else 1
 
         # Who won the round?
-        winning_play = rules.winner(plays)
+        winning_play = rules.winning_play(plays)
         winner = players[winning_play[0]]
         announce = winner.name + " won the round!\n"
         broadcast_str(conns, announce, log = True)

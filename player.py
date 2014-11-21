@@ -43,6 +43,25 @@ class Player:
         pass
     
     @abc.abstractmethod
+    def hide_cards(self, skat):
+        """
+        If this player is declaring the game, this method lets
+        the player pick which cards to hide.
+        
+        'skat' is a list of cards representing the original skat.
+        """
+        pass
+        
+    @abc.abstractmethod
+    def get_rules(self):
+        """
+        If this player is declaring the game, this method should
+        return a rules object indicating the suit the player would
+        like to play.
+        """
+        pass
+    
+    @abc.abstractmethod
     def get_play(self, previous_plays, rules):
         """
         Retrieves a play from over the player given a list of
@@ -101,6 +120,35 @@ class HumanPlayer(Player):
         bet = recv_str(self.conn)
         print("Received " + bet + " from " + self.name)
         return bet
+    
+    def hide_cards(self, skat):
+        """
+        If this player is declaring the game, this method lets
+        the player pick which cards to hide.
+        """
+        print("\nSending skat to " + self.name + "...")
+        send_msg(self.conn, pickle.dumps(skat))
+    
+        # Receive hidden cards from the player client
+        hidden = pickle.loads(recv_msg(self.conn))
+        self.hand.extend(skat)
+        self.hand.remove(hidden[0])
+        self.hand.remove(hidden[1])
+        self.hand.sort()
+    
+        # Add the hidden cards to player's cards won
+        self.cards_won.extend(hidden)
+        
+    def get_rules(self):
+        """
+        If this player is declaring the game, this method should
+        return a rules object indicating the suit the player would
+        like to play.
+        """
+        # Receive trumps from the player client
+        trumps = recv_str(self.conn)
+        rules = BaseRules(self.pid, trumps)
+        return rules
     
     def get_play(self, previous_plays, rules):
         """
@@ -164,6 +212,19 @@ class BotPlayer(Player):
         A computer never plays.
         """
         return 'n'
+        
+    def hide_cards(self, skat):
+        """
+        A computer should never play, so it will never need to
+        hide cards.
+        """
+        pass
+
+    def get_rules(self):
+        """
+        A computer should never play. Returns a dummy value.
+        """
+        return BaseRules(self.pid, "s")
     
     def get_play(self, previous_plays, rules):
         """
@@ -176,23 +237,10 @@ class BotPlayer(Player):
         valid_cards = [card for card in self.hand 
                        if rules.valid(card, self.hand, previous_plays)]
         return random.choice(valid_cards)
-        
-    def winning_card(self, cards):
-        """
-        Given an array of cards, return the winning card
-        """
-        if len(cards) == 0:
-            return None
-
-        winning = cards[0]
-        for i in range(0, len(cards)):
-            if cards[i] > winning:
-                winning = cards[i]
-        return winning
     
-    def encode_played_card(self, played_card):
+    def encode_card_rank(self, card):
         """
-        Encodes the rank of the played card according to
+        Encodes the rank of the given card according to
         the format expected by the feature vector.
         """
         output = {
@@ -207,7 +255,7 @@ class BotPlayer(Player):
         }[played_card.rank]
         
         if output == 7:
-            output= {
+            output = {
                 Suit.diamonds: 7,
                 Suit.hearts  : 8,
                 Suit.spades  : 9,
@@ -303,10 +351,10 @@ class BotPlayer(Player):
                     len(cur_suit4) - n_s4]
               
         # Determine if player has winning card in each suit
-        winning_cards = [self.winning_card(cur_suit1),
-                         self.winning_card(cur_suit2),
-                         self.winning_card(cur_suit3),
-                         self.winning_card(cur_suit4)]
+        winning_cards = [rules.winning_card(cur_suit1),
+                         rules.winning_card(cur_suit2),
+                         rules.winning_card(cur_suit3),
+                         rules.winning_card(cur_suit4)]
         has_winning = [int(cd in self.hand) for cd in winning_cards];
         
         # Find opponent id
@@ -336,7 +384,7 @@ class BotPlayer(Player):
         played_frd = int(any(play.pid == id_frd for play in previous_plays))
        
         # Is my team winning?
-        winner = rules.winner(previous_plays)
+        winner = rules.winning_play(previous_plays)
         is_winning = int(winner.pid == id_frd) if winner else 0
 
         # Do I have "big" points (A or 10) in each suit?
@@ -451,7 +499,7 @@ class BotPlayer(Player):
                 played_frd = 1
               
         # Is my team winning?
-        winner = rules.winner(previous_plays);
+        winner = rules.winning_play(previous_plays);
         is_winning = int(winner.pid == id_frd) if winner else 0
                         
         # Find remaining cards in the game (including hand)
@@ -476,7 +524,7 @@ class BotPlayer(Player):
             if len(full_cards) != 7:
                 full_cards.extend([0] * 4)
                 
-        highest_card = self.winning_card(cur_cards)
+        highest_card = rules.winning_card(cur_cards)
 
         # Describes the remaining cards of the suit to play.
         # The indices correspond to the cards in the following way:
@@ -504,7 +552,7 @@ class BotPlayer(Player):
         num_cards_left = len([card for card in cur_deck_hand if card not in                                   self.hand])
 
         # Encode played card
-        output = self.encode_played_card(played_card)
+        output = self.encode_card_rank(played_card)
         
         # Uncomment to debug feature variables
         # print("Highest card (" + str(suit) + "): " + str(highest_card))
