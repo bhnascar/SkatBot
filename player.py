@@ -559,7 +559,8 @@ class BotPlayer(Player):
                     beat_opp[i] = 1 
 
         # How many cards are left in the game?
-        num_cards_left = len([card for card in cur_deck_hand if card not in                                   self.hand])
+        num_cards_left = len([card for card in cur_deck_hand 
+                              if card not in self.hand])
 
         # Encode played card
         output = self.encode_card_rank(played_card)
