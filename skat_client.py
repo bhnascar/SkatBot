@@ -81,7 +81,7 @@ def play_card(hand, plays, rules, server_socket):
 
 def main(argv):
     if len(argv) != 3:
-        print("Usage: python3 [host IP address] [host port]")
+        print("Usage: python(3) [host IP address] [host port]")
         return 0
     
     # Connect to server

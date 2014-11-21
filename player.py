@@ -126,6 +126,10 @@ class HumanPlayer(Player):
         If this player is declaring the game, this method lets
         the player pick which cards to hide.
         """
+        if not self.conn:
+            print("No op!")
+            return None
+            
         print("\nSending skat to " + self.name + "...")
         send_msg(self.conn, pickle.dumps(skat))
     
@@ -145,7 +149,9 @@ class HumanPlayer(Player):
         return a rules object indicating the suit the player would
         like to play.
         """
-        # Receive trumps from the player client
+        if not self.conn:
+            print("No op!")
+            return None
         trumps = recv_str(self.conn)
         rules = BaseRules(self.pid, trumps)
         return rules
