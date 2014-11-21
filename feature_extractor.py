@@ -105,7 +105,7 @@ def process_log_file(log_file_path, suit_file_path, rank_file_path):
         players = {}
         for i in range(0, 3):
             player_info = log_file.readline()
-            player = Player.from_str(player_info)
+            player = BotPlayer.from_str(player_info)
             players[player.pid] = player
         
         # Read game rules (Line 4)

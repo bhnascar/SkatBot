@@ -1,30 +1,131 @@
 import re
+import abc
+import pickle
+import random
 
 from card import *
 from rules import *
+from networking import *
 
 class Player:
     """
-    A class to maintain player state information. This includes
-    data such as the player's hand, cards won by the player, cards 
-    known to that player, etc.
-    """
+    An abstract class outlining the methods required of any
+    player, human or computer.
     
-    def __init__(self, pid, name, hand, conn = None):
+    Also provides instance variables to maintain player state
+    information. This includes the player's hand and cards 
+    won by the player so far.
+    """
+    __metaclass__ = abc.ABCMeta
+
+    def __init__(self, pid, hand):
         """
-        Initializes player information
+        At minimum, a player must be given an ID and a hand
         """
-        # This player's player ID
+        # The player's ID
         self.pid = pid
         
-        # This player's name
-        self.name = name
-        
-        # This player's hand
+        # The player's hand
         self.hand = hand
+        
+        # The player's name
+        self.name = "Fish"
         
         # Cards won by this player so far
         self.cards_won = []
+
+    @abc.abstractmethod
+    def get_bet(self):
+        """
+        Retrieves a player's pre-game bet over the network.
+        Used to decide if the player gets to declare the game.
+        """
+        pass
+    
+    @abc.abstractmethod
+    def get_play(self, previous_plays, rules):
+        """
+        Retrieves a play from over the player given a list of
+        previous plays in the round and the rules of the game.
+        
+        'previous_plays' is a list containing tuples of
+        (player, card) pairs representing plays made so 
+        far in the round.
+        
+        'rules' is a BaseRules object (see rules.py).
+        """
+        pass
+        
+    def __str__(self):
+        """
+        Returns a string representation of this player.
+        """
+        return "(%d, %s, %s)\n" % (self.pid, self.name, 
+                                   Card.hand_to_str(self.hand))
+                                   
+    def __repr__(self):
+        return self.__str__()
+
+class HumanPlayer(Player):
+    """
+    A human Skat player. Connects using the Skat client (see
+    skat_client.py) from over the network.
+    """
+    
+    def __init__(self, pid, hand, conn):
+        """
+        Initializes a human player with an ID and hand.
+        Human players additionally require a network
+        connection from which the game server will receive
+        input.
+        """
+        super(HumanPlayer, self).__init__(pid, hand)
+        
+        # This player's connection
+        self.conn = conn
+        
+        # This player's name
+        self.name = recv_str(self.conn)
+        
+        # Send hand to player client
+        send_msg(self.conn, pickle.dumps(self.hand))
+    
+    def get_bet(self):
+        """
+        Retrieves a player's pre-game bet over the network.
+        Used to decide if the player gets to play.
+        """
+        if not self.conn:
+            print("No op!")
+            return None
+        bet = recv_str(self.conn)
+        print("Received " + bet + " from " + self.name)
+        return bet
+    
+    def get_play(self, previous_plays, rules):
+        """
+        Retrieves a play from over the network in a Skat game.
+        """
+        if not self.conn:
+            print("No op!")
+            return None
+        send_str(self.conn, "Your turn")
+        send_msg(self.conn, pickle.dumps(previous_plays))
+        return pickle.loads(recv_msg(self.conn))
+        
+class BotPlayer(Player):
+    """
+    A computer Skat player. Overrides methods expecting user
+    input and returns computer-predicted values instead.
+    """
+    
+    def __init__(self, pid, hand, name):
+        """
+        Initializes a computer player with an ID and hand.
+        """
+        super(BotPlayer, self).__init__(pid, hand)
+        
+        self.name = name
         
         # Cards seen by this player so far
         # (Excludes cards on player's hand and
@@ -34,23 +135,47 @@ class Player:
         # A reference deck of all Skat cards
         self.reference_deck = Card.get_deck()
         
-        # This player's network connection (ignore)
-        self.conn = conn
-
         # Has my opponent run out of a suit?
         self.diff_opp = [0, 0, 0, 0]
 
         # Has my friend run out of a suit?
         self.diff_frd = [0, 0, 0, 0]
-        
-    def __str__(self):
+    
+    @staticmethod
+    def from_str(player_info):
         """
-        Returns a string representation of this player.
+        Creates a BotPlayer object from a string description from a
+        log file.
         """
-        return "(%d, %s, %s)\n" % (self.pid, self.name, Card.hand_to_str(self.hand))
+        pattern = re.compile(r"\((\d), ([a-zA-Z0-9]+), ([a-zA-Z0-9 ]+)\)")
+        results = pattern.match(player_info).groups()
         
-    def __repr__(self):
-        return self.__str__()   
+        # Inflate hand
+        card_abbrevs = results[2].split()
+        hand = []
+        for abbrev in card_abbrevs:
+            hand.append(Card.from_abbrev(abbrev))
+        
+        # Return player
+        return BotPlayer(int(results[0]), hand, results[1])
+    
+    def get_bet(self):
+        """
+        A computer never plays.
+        """
+        return 'n'
+    
+    def get_play(self, previous_plays, rules):
+        """
+        Generates suit and rank feature vectors and writes it
+        to a file (lolz...). Invokes Matlab on the file to generate 
+        a prediction and receives the result back from Matlab.
+        This is what happens when you have a multi-person project
+        and are too lazy to rewrite Matlab stuff with numpy...
+        """
+        valid_cards = [card for card in self.hand 
+                       if rules.valid(card, self.hand, previous_plays)]
+        return random.choice(valid_cards)
         
     def winning_card(self, cards):
         """
@@ -406,22 +531,3 @@ class Player:
             self.diff_frd[suits.index(suit)],
             num_cards_left,
         ] + has_card + win_card + beat_opp)
-    
-    @staticmethod
-    def from_str(player_info):
-        """
-        Creates a Player object from a string description from a
-        log file.
-        """
-        pattern = re.compile(r"\((\d), ([a-zA-Z0-9]+), ([a-zA-Z0-9 ]+)\)")
-        results = pattern.match(player_info).groups()
-        
-        # Inflate hand
-        card_abbrevs = results[2].split()
-        hand = []
-        for abbrev in card_abbrevs:
-            hand.append(Card.from_abbrev(abbrev))
-        
-        # Return player
-        return Player(int(results[0]), results[1], hand)
-        

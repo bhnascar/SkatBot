@@ -16,18 +16,18 @@ def accept_players(server_socket, hands):
     to Player objects.
     """
     players = {}
-    for i in range(0, 3):
+    for i in range(0, 2):
         # Create player
         conn, addr = server_socket.accept()
-        name = recv_str(conn)
-        player = Player(i + 1, name, hands[i], conn)
+        player = HumanPlayer(i + 1, hands[i], conn)
         players[i + 1] = player
         
         # Log connection
-        print(name + " connected")
-        
-        # Send hand to player client
-        send_msg(player.conn, pickle.dumps(player.hand))
+        print(player.name + " connected")
+    
+    # Add bot player
+    players[3] = BotPlayer(3, hands[2], "Bot")
+    
     return players
     
 def decide_declarer(players):
@@ -39,7 +39,7 @@ def decide_declarer(players):
     """
     declarer = None
     for player in players.values():
-        response = recv_str(player.conn)
+        response = player.get_bet()
         declarer = player if response == "y" else declarer
     return declarer
 
@@ -103,7 +103,7 @@ def main(argv):
     
     # Accept players
     players = accept_players(server_socket, hands)
-    conns = [player.conn for player in players.values()]
+    conns = [player.conn for player in players.values() if isinstance(player, HumanPlayer)]
     for player in players.values():
         file.write("(%d, %s, %s)\n" % 
                     (player.pid, player.name, Card.hand_to_repr(player.hand)))
@@ -138,14 +138,12 @@ def main(argv):
             # Make play
             for player in players.values():
                 if player == players[pid]:
-                    send_str(player.conn, "Your turn")
-                    send_msg(player.conn, pickle.dumps(plays))
-                else:
+                    card = player.get_play(plays, rules)
+                elif isinstance(player, HumanPlayer):
                     announce = "Waiting for " + players[pid].name + " to play..."
                     send_str(player.conn, announce)
                     
             # Receive play
-            card = pickle.loads(recv_msg(players[pid].conn))
             plays.append((pid, card))
             
             # Broadcast state of round
@@ -157,13 +155,13 @@ def main(argv):
 
         # Who won the round?
         winning_play = rules.winner(plays)
-        pid = winning_play[0]
-        announce = players[pid].name + " won the round!\n"
+        winner = players[winning_play[0]]
+        announce = winner.name + " won the round!\n"
         broadcast_str(conns, announce, log = True)
         
         # Next person to start is the winner of this round
-        players[pid].cards_won.extend([play[1] for play in plays])
-        pid = (rules.winner(plays))[0]
+        winner.cards_won.extend([play[1] for play in plays])
+        pid = winner.pid
         
         # Log round
         file.write(repr(plays) + "\n")
