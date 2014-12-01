@@ -1,0 +1,14 @@
+(1, Balls, dA h8 h9 h10 s8 s9 sQ sA c8 sB)
+(2, boss, d7 dK h7 hK hA s7 c9 cK cA hB)
+(3, pedro4, d9 dQ d10 hQ sK c7 cQ c10 dB cB)
+(1, s, d8 dA h8 h9 s8 s9 sQ s10 sA sB)
+[(1, h9), (2, hA), (3, hQ)]
+[(2, cA), (3, c7), (1, sA)]
+[(1, s9), (2, hB), (3, sK)]
+[(2, dK), (3, d9), (1, dA)]
+[(1, s8), (2, s7), (3, dB)]
+[(3, d10), (1, d8), (2, d7)]
+[(3, dQ), (1, h8), (2, cK)]
+[(3, cQ), (1, sQ), (2, c9)]
+[(1, sB), (2, h7), (3, cB)]
+[(3, c10), (1, s10), (2, hK)]

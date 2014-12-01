@@ -16,7 +16,7 @@ def accept_players(server_socket, hands):
     to Player objects.
     """
     players = {}
-    for i in range(0, 2):
+    for i in range(0, 3):
         # Create player
         conn, addr = server_socket.accept()
         player = HumanPlayer(i + 1, hands[i], conn)
@@ -26,7 +26,7 @@ def accept_players(server_socket, hands):
         print(player.name + " connected")
     
     # Add bot player
-    players[3] = BotPlayer(3, hands[2], "Bot")
+    #players[3] = BotPlayer(3, hands[2], "Bot")
     
     return players
     
