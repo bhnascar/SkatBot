@@ -262,7 +262,7 @@ class BotPlayer(Player):
             Rank.ten  : 5,
             Rank.ace  : 6,
             Rank.jack : 7
-        }[played_card.rank]
+        }[card.rank]
         
         if output == 7:
             output = {
@@ -270,7 +270,7 @@ class BotPlayer(Player):
                 Suit.hearts  : 8,
                 Suit.spades  : 9,
                 Suit.clubs   : 10
-            }[played_card.suit]
+            }[card.suit]
             
         return output
        
