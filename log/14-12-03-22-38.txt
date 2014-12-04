@@ -1,4 +1,0 @@
-(1, boss, dK h7 hK hA s9 s10 c8 dB hB sB)
-(2, Bot, d7 d9 dQ d10 h10 s7 sQ sK c9 cB)
-(3, Bot, d8 dA h8 h9 hQ sA c7 cQ cK cA)
-(1, h, h7 hK hA s9 s10 c8 c10 dB hB sB)

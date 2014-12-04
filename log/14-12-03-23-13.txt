@@ -1,4 +1,0 @@
-(1, ivancito, dK d10 h8 hQ s7 s8 s10 c9 cK cB)
-(2, pedro, d7 d8 dQ h10 hA c7 c8 cA dB hB)
-(3, boss, dA h7 h9 hK s9 sQ sK sA c10 sB)
-(2, d, d7 d8 d9 dQ h10 hA c8 cA dB hB)

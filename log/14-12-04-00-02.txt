@@ -2,13 +2,13 @@
 (2, negreeeeeto, d8 dQ h9 c8 cQ cK cA dB hB sB)
 (3, boss, d7 d9 d10 dA hK s8 s9 sK c10 cB)
 (2, c, h8 h9 hA c8 cQ cK cA dB hB sB)
-[Play(pid=1, card=hQ), Play(pid=2, card=hA), Play(pid=3, card=hK)]
-[Play(pid=2, card=sB), Play(pid=3, card=cB), Play(pid=1, card=c7)]
-[Play(pid=3, card=c10), Play(pid=1, card=c9), Play(pid=2, card=cA)]
-[Play(pid=2, card=hB), Play(pid=3, card=s8), Play(pid=1, card=s7)]
-[Play(pid=2, card=dB), Play(pid=3, card=d7), Play(pid=1, card=h7)]
-[Play(pid=2, card=cK), Play(pid=3, card=d9), Play(pid=1, card=sQ)]
-[Play(pid=2, card=cQ), Play(pid=3, card=s9), Play(pid=1, card=dK)]
-[Play(pid=2, card=c8), Play(pid=3, card=sK), Play(pid=1, card=s10)]
-[Play(pid=2, card=h9), Play(pid=3, card=d10), Play(pid=1, card=h10)]
-[Play(pid=1, card=sA), Play(pid=2, card=h8), Play(pid=3, card=dA)]
+[(1, hQ), (2, hA), (3, hK)]
+[(2, sB), (3, cB), (1, c7)]
+[(3, c10), (1, c9), (2, cA)]
+[(2, hB), (3, s8), (1, s7)]
+[(2, dB), (3, d7), (1, h7)]
+[(2, cK), (3, d9), (1, sQ)]
+[(2, cQ), (3, s9), (1, dK)]
+[(2, c8), (3, sK), (1, s10)]
+[(2, h9), (3, d10), (1, h10)]
+[(1, sA), (2, h8), (3, dA)]
