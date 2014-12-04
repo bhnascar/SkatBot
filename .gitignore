@@ -59,8 +59,5 @@ debug.txt
 # Ignore output features
 feature/
 
-# Ignore changes to scripts
-scripts/
-
 # Mac junk
 *.DS_Store

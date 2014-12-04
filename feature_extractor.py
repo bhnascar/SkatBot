@@ -105,7 +105,7 @@ def process_log_file(log_file_path, suit_file_path, rank_file_path):
         players = {}
         for i in range(0, 3):
             player_info = log_file.readline()
-            player = BotPlayer.from_str(player_info)
+            player = Player.from_str(player_info)
             players[player.pid] = player
         
         # Read game rules (Line 4)
@@ -123,7 +123,7 @@ def process_log_file(log_file_path, suit_file_path, rank_file_path):
             process_round(plays, suit_file, rank_file, players, rules)
         
             # Update game state
-            winning_play = rules.winning_play(plays)
+            winning_play = rules.winner(plays)
             winning_player = players[winning_play.pid]
             winning_player.cards_won.extend([play.card for play in plays])
             for player in players.values():
