@@ -1,0 +1,4 @@
+(1, boss, d7 d8 h7 h10 hA s7 s10 c7 sB cB)
+(2, pedro, d10 dA h9 hK s8 sK c9 cK c10 dB)
+(3, ivan, d9 dQ dK hQ s9 sQ sA c8 cQ hB)
+(1, h, d8 h7 h8 h10 hA s7 s10 cA sB cB)
