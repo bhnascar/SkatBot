@@ -1,0 +1,14 @@
+(1, ivan, d9 d10 h7 hQ hK s9 s10 cA dB cB)
+(2, pedrito, d7 d8 dQ dK dA h10 sQ sK sA cK)
+(3, boss, h8 h9 hA c7 c8 c9 cQ c10 hB sB)
+(3, c, h8 h9 hA c7 c8 c9 cQ c10 hB sB)
+[Play(pid=1, card=h7), Play(pid=2, card=h10), Play(pid=3, card=hA)]
+[Play(pid=3, card=h8), Play(pid=1, card=hK), Play(pid=2, card=dA)]
+[Play(pid=1, card=hQ), Play(pid=2, card=dQ), Play(pid=3, card=h9)]
+[Play(pid=1, card=d10), Play(pid=2, card=d7), Play(pid=3, card=c10)]
+[Play(pid=3, card=c7), Play(pid=1, card=cA), Play(pid=2, card=cK)]
+[Play(pid=1, card=d9), Play(pid=2, card=d8), Play(pid=3, card=cQ)]
+[Play(pid=3, card=c8), Play(pid=1, card=dB), Play(pid=2, card=dK)]
+[Play(pid=1, card=s9), Play(pid=2, card=sQ), Play(pid=3, card=hB)]
+[Play(pid=3, card=c9), Play(pid=1, card=cB), Play(pid=2, card=sA)]
+[Play(pid=1, card=s10), Play(pid=2, card=sK), Play(pid=3, card=sB)]

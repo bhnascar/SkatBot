@@ -1,0 +1,4 @@
+(1, boss, d7 d9 hQ s7 sK s10 c9 hB sB cB)
+(2, Bot, d8 h8 h9 s9 sQ c8 cK c10 cA dB)
+(3, Bot, dQ d10 dA h7 hK h10 hA s8 sA cQ)
+(1, s, d7 hQ s7 sK s10 c7 c9 hB sB cB)
