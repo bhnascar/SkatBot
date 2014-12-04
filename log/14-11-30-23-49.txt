@@ -1,0 +1,14 @@
+(1, Dickmaster, d9 d10 h8 hA sQ sK s10 sA c7 dB)
+(2, pedro7, d7 dK h9 hK s7 s8 cK c10 hB cB)
+(3, boss, d8 dA h7 hQ s9 c8 c9 cQ cA sB)
+(3, c, dA h7 hQ h10 s9 c8 c9 cQ cA sB)
+[(1, hA), (2, hK), (3, h7)]
+[(1, h8), (2, h9), (3, h10)]
+[(3, dA), (1, d9), (2, d7)]
+[(3, c8), (1, c7), (2, c10)]
+[(2, dK), (3, cA), (1, d10)]
+[(3, c9), (1, dB), (2, cK)]
+[(1, sA), (2, s7), (3, s9)]
+[(1, s10), (2, s8), (3, cQ)]
+[(3, sB), (1, sQ), (2, cB)]
+[(2, hB), (3, hQ), (1, sK)]

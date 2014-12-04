@@ -58,6 +58,10 @@ class BaseRules:
         """
         Returns the number of points in the given hand
         """
+        if not hand:
+            return 0
+        if len(hand) == 0:
+            return 0
         return reduce(lambda card_1, card_2: int(card_1) + int(card_2), hand)
 
     def count_suit(self, suit, hand):
@@ -74,7 +78,33 @@ class BaseRules:
         """
         return len(set(hand).intersection(set(self.trumps)))
 
-    def winner(self, plays):
+    def winning_card(self, cards):
+        """
+        Returns the winning card in a list of cards.
+        """
+        if len(cards) == 0:
+            return None
+        
+        trumps = [card for card in cards if card in self.trumps]
+        
+        # If trumps were played, the winner will be one of them
+        if len(trumps) > 0:
+            winner = trumps[0]
+            for i in range(1, len(trumps)):
+                trump = trumps[i]
+                winner = trump if trump > winner else winner
+        
+        # If trumps were not played...
+        else:
+            winner = cards[0]
+            for i in range(1, len(cards)):
+                card = cards[i]
+                if card > winner and card.suit == winner.suit:
+                    winner = card
+                
+        return winner
+
+    def winning_play(self, plays):
         """ 
         Returns the winner of a sequence of plays.
         

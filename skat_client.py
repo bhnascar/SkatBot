@@ -2,10 +2,13 @@ import sys
 import socket
 import pickle
 import codecs
+import collections
 
 from card import *
 from rules import *
 from networking import *
+
+Play = collections.namedtuple('Play', ['pid', 'card'])
 
 def hide(cards, hand, skat, server_socket):
     """
@@ -81,7 +84,7 @@ def play_card(hand, plays, rules, server_socket):
 
 def main(argv):
     if len(argv) != 3:
-        print("Usage: python3 [host IP address] [host port]")
+        print("Usage: python(3) [host IP address] [host port]")
         return 0
     
     # Connect to server

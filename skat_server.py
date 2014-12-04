@@ -9,25 +9,28 @@ from rules import *
 from player import *
 from networking import *
 
-def accept_players(server_socket, hands):
+Play = collections.namedtuple('Play', ['pid', 'card'])
+
+def accept_players(server_socket, hands, num_bots):
     """
     Accepts three players for this game of Skat. Deals out
     their hands. Returns a dictionary that maps player IDs
     to Player objects.
     """
     players = {}
-    for i in range(0, 3):
+    for i in range(0, 3 - num_bots):
         # Create player
         conn, addr = server_socket.accept()
-        name = recv_str(conn)
-        player = Player(i + 1, name, hands[i], conn)
+        player = HumanPlayer(i + 1, hands[i], conn)
         players[i + 1] = player
         
         # Log connection
-        print(name + " connected")
-        
-        # Send hand to player client
-        send_msg(player.conn, pickle.dumps(player.hand))
+        print(player.name + " connected")
+    
+    # Add bot players
+    for i in range(3 - num_bots, 3):
+        players[i + 1] = BotPlayer(i + 1, hands[i], "Bot")
+    
     return players
     
 def decide_declarer(players):
@@ -39,7 +42,7 @@ def decide_declarer(players):
     """
     declarer = None
     for player in players.values():
-        response = recv_str(player.conn)
+        response = player.get_bet()
         declarer = player if response == "y" else declarer
     return declarer
 
@@ -50,23 +53,8 @@ def decide_game(declarer, skat):
     to hide and the trump suit. Returns a Rules object
     indicating the game to play.
     """
-    # Send the skat
-    print("\nSending skat to " + declarer.name + "...")
-    send_msg(declarer.conn, pickle.dumps(skat))
-    
-    # Receive hidden cards from the person playing
-    hidden = pickle.loads(recv_msg(declarer.conn))
-    declarer.hand.extend(skat)
-    declarer.hand.remove(hidden[0])
-    declarer.hand.remove(hidden[1])
-    declarer.hand.sort()
-    
-    # Receive trumps from the person playing
-    trumps = recv_str(declarer.conn)
-    
-    # Create rules
-    rules = BaseRules(declarer.pid, trumps)
-    return rules
+    declarer.hide_cards(skat)
+    return declarer.get_rules()
     
 
 # The game file format is as follows:
@@ -83,12 +71,21 @@ def decide_game(declarer, skat):
 def main(argv):
     
     # Open log file
-    if len(argv) == 2 and argv[1] == 'd':
+    print(argv)
+    if 'd' in argv:
         file = open("debug.txt", "w")
     else:
         time = datetime.datetime.now().strftime("%y-%m-%d-%H-%M")
         file = open("log/" + time + ".txt", "a")
     
+    # Count bots
+    if 'b' in argv:
+        index = argv.index('b');
+        num_bots = int(argv[index + 1])
+    else:
+        num_bots = 0
+    print(num_bots)
+
     # Generate hands
     deck = Card.shuffle_deck(Card.get_deck())
     hands = [sorted(deck[0:10]), sorted(deck[10:20]), sorted(deck[20:30])]
@@ -99,8 +96,8 @@ def main(argv):
     server_socket = open_socket(50007)
     
     # Accept players
-    players = accept_players(server_socket, hands)
-    conns = [player.conn for player in players.values()]
+    players = accept_players(server_socket, hands, num_bots)
+    conns = [player.conn for player in players.values() if isinstance(player, HumanPlayer)]
     for player in players.values():
         file.write("(%d, %s, %s)\n" % 
                     (player.pid, player.name, Card.hand_to_repr(player.hand)))
@@ -135,15 +132,13 @@ def main(argv):
             # Make play
             for player in players.values():
                 if player == players[pid]:
-                    send_str(player.conn, "Your turn")
-                    send_msg(player.conn, pickle.dumps(plays))
-                else:
+                    card = player.get_play(plays, rules)
+                elif isinstance(player, HumanPlayer):
                     announce = "Waiting for " + players[pid].name + " to play..."
                     send_str(player.conn, announce)
                     
             # Receive play
-            card = pickle.loads(recv_msg(players[pid].conn))
-            plays.append((pid, card))
+            plays.append(Play(pid = pid, card = card))
             
             # Broadcast state of round
             broadcast_str(conns, players[pid].name + " played ", log = True)
@@ -153,14 +148,14 @@ def main(argv):
             pid = (pid + 1) if (pid + 1) < 4 else 1
 
         # Who won the round?
-        winning_play = rules.winner(plays)
-        pid = winning_play[0]
-        announce = players[pid].name + " won the round!\n"
+        winning_play = rules.winning_play(plays)
+        winner = players[winning_play[0]]
+        announce = winner.name + " won the round!\n"
         broadcast_str(conns, announce, log = True)
         
         # Next person to start is the winner of this round
-        players[pid].cards_won.extend([play[1] for play in plays])
-        pid = (rules.winner(plays))[0]
+        winner.cards_won.extend([play[1] for play in plays])
+        pid = winner.pid
         
         # Log round
         file.write(repr(plays) + "\n")
@@ -168,8 +163,6 @@ def main(argv):
 
     # Print points won
     for player in players.values():
-        if len(player.cards_won) == 0:
-            continue
         points = rules.count_points(player.cards_won)
         announce = player.name + " won " + str(points) + " points"
         broadcast_str(conns, announce, log = True)

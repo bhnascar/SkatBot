@@ -1,0 +1,14 @@
+(1, ivantheterrible, d7 d8 d9 dA hK sK sA cQ dB hB)
+(2, boss, dQ h7 h8 h10 hA s8 s9 s10 c9 cK)
+(3, pedrito, dK d10 h9 hQ sQ c8 c10 cA sB cB)
+(1, d, d7 d8 d9 dA s7 sK sA c7 dB hB)
+[(1, sA), (2, s8), (3, sQ)]
+[(1, d7), (2, dQ), (3, d10)]
+[(3, h9), (1, c7), (2, hA)]
+[(2, c9), (3, cA), (1, dA)]
+[(1, d8), (2, cK), (3, dK)]
+[(3, c8), (1, s7), (2, h10)]
+[(3, hQ), (1, sK), (2, h8)]
+[(3, cB), (1, d9), (2, s10)]
+[(3, sB), (1, dB), (2, s9)]
+[(3, c10), (1, hB), (2, h7)]
