@@ -5,6 +5,7 @@ import random
 
 from card import *
 from rules import *
+from globals import *
 from networking import *
 
 class Player:

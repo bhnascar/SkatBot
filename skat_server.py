@@ -2,17 +2,12 @@ import sys
 import pickle
 import socket
 import datetime
-import collections
 
 from card import *
 from rules import *
 from player import *
+from globals import *
 from networking import *
-
-from pymatbridge import Matlab
-
-Play = collections.namedtuple('Play', ['pid', 'card'])
-mlab = Matlab(matlab='/Applications/MATLAB_R2011a.app/bin/matlab')
 
 def accept_players(server_socket, hands, num_bots):
     """
