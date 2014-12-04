@@ -4,7 +4,7 @@
 # Max Jaderberg 2012
 ###############################################
 from http.client import BadStatusLine
-import urllib, os, json, time
+import urllib, os, json, time, subprocess, platform, sys
 from multiprocessing import Process
 
 MATLAB_FOLDER = '%s/matlab' % os.path.realpath(os.path.dirname(__file__))
@@ -26,13 +26,17 @@ class Matlab(object):
         self.server = 'http://%s:%s' % (self.host, str(self.port))
         self.id = id
 
-    def start(self):
-        def _run_matlab_server():
+    def _run_matlab_server(self):
+        if platform.system() != "Windows" or "idlelib" in sys.modules:
             os.system('%s -nodesktop -nosplash -nodisplay -r "cd pymatbridge/matlab,webserver(%s),exit" -logfile ./pymatbridge/logs/matlablog_%s.txt > ./pymatbridge/logs/bashlog_%s.txt' % (self.matlab, self.port, self.id, self.id))
-            return True
+        else:
+            subprocess.call('%s -nodesktop -nosplash -nodisplay -r "cd pymatbridge/matlab,webserver(%s),exit" -logfile ./pymatbridge/logs/matlablog_%s.txt > ./pymatbridge/logs/bashlog_%s.txt' % (self.matlab, self.port, self.id, self.id))
+        return True
+
+    def start(self):
         # Start the MATLAB server
         print("Starting MATLAB")
-        self.server_process = Process(target=_run_matlab_server)
+        self.server_process = Process(target=self._run_matlab_server)
         self.server_process.daemon = True
         self.server_process.start()
         while not self.is_connected():
@@ -40,8 +44,6 @@ class Matlab(object):
             time.sleep(1)
         print("MATLAB started and connected!")
         return True
-
-
 
     def stop(self):
         # Stop the MATLAB server
