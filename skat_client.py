@@ -2,10 +2,13 @@ import sys
 import socket
 import pickle
 import codecs
+import collections
 
 from card import *
 from rules import *
 from networking import *
+
+Play = collections.namedtuple('Play', ['pid', 'card'])
 
 def hide(cards, hand, skat, server_socket):
     """

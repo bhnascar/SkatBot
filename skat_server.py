@@ -9,14 +9,16 @@ from rules import *
 from player import *
 from networking import *
 
-def accept_players(server_socket, hands):
+Play = collections.namedtuple('Play', ['pid', 'card'])
+
+def accept_players(server_socket, hands, num_bots):
     """
     Accepts three players for this game of Skat. Deals out
     their hands. Returns a dictionary that maps player IDs
     to Player objects.
     """
     players = {}
-    for i in range(0, 3):
+    for i in range(0, 3 - num_bots):
         # Create player
         conn, addr = server_socket.accept()
         player = HumanPlayer(i + 1, hands[i], conn)
@@ -25,8 +27,9 @@ def accept_players(server_socket, hands):
         # Log connection
         print(player.name + " connected")
     
-    # Add bot player
-    #players[3] = BotPlayer(3, hands[2], "Bot")
+    # Add bot players
+    for i in range(3 - num_bots, 3):
+        players[i + 1] = BotPlayer(i + 1, hands[i], "Bot")
     
     return players
     
@@ -68,12 +71,21 @@ def decide_game(declarer, skat):
 def main(argv):
     
     # Open log file
-    if len(argv) == 2 and argv[1] == 'd':
+    print(argv)
+    if 'd' in argv:
         file = open("debug.txt", "w")
     else:
         time = datetime.datetime.now().strftime("%y-%m-%d-%H-%M")
         file = open("log/" + time + ".txt", "a")
     
+    # Count bots
+    if 'b' in argv:
+        index = argv.index('b');
+        num_bots = int(argv[index + 1])
+    else:
+        num_bots = 0
+    print(num_bots)
+
     # Generate hands
     deck = Card.shuffle_deck(Card.get_deck())
     hands = [sorted(deck[0:10]), sorted(deck[10:20]), sorted(deck[20:30])]
@@ -84,7 +96,7 @@ def main(argv):
     server_socket = open_socket(50007)
     
     # Accept players
-    players = accept_players(server_socket, hands)
+    players = accept_players(server_socket, hands, num_bots)
     conns = [player.conn for player in players.values() if isinstance(player, HumanPlayer)]
     for player in players.values():
         file.write("(%d, %s, %s)\n" % 
@@ -126,7 +138,7 @@ def main(argv):
                     send_str(player.conn, announce)
                     
             # Receive play
-            plays.append((pid, card))
+            plays.append(Play(pid = pid, card = card))
             
             # Broadcast state of round
             broadcast_str(conns, players[pid].name + " played ", log = True)

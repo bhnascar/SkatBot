@@ -246,6 +246,15 @@ class BotPlayer(Player):
                        if rules.valid(card, self.hand, previous_plays)]
         card = random.choice(valid_cards)
         self.hand.remove(card)
+
+        s_features = self.examine_suit(previous_plays, None, rules)
+        if (s_features):
+            print("\n" + str(s_features)[1:-1])
+
+        r_features = self.examine_rank(previous_plays, None, rules, chosen_suit = card.suit)
+        if (r_features):
+            print(str(r_features)[1:-1])
+
         return card
     
     def encode_card_rank(self, card):
@@ -401,9 +410,12 @@ class BotPlayer(Player):
         big_pts = [0, 0, 0, 0]
         for card in self.hand:
             if int(card) >= 10:
-                big_pts[suits.index(card.suit)] = 1                                           
+                big_pts[suits.index(card.suit)] = 1 
+
         # Find suit of played card (output)
-        if played_card.rank == Rank.jack:
+        if not played_card:
+            played_suit = 0
+        elif played_card.rank == Rank.jack:
             played_suit = suits.index(rules.trump_suit)
         else:
             played_suit = suits.index(played_card.suit);
@@ -440,7 +452,7 @@ class BotPlayer(Player):
                 big_pts[2],
                 big_pts[3])
                 
-    def examine_rank(self, previous_plays, played_card, rules):
+    def examine_rank(self, previous_plays, played_card, rules, chosen_suit = Suit.clubs):
         """
         This method gets called right after examine_suit. 'suit'
         contains the suit chosen by the player. 'previous_plays' 
@@ -457,14 +469,17 @@ class BotPlayer(Player):
         """
 
         # Determine suit of played_card
-        if played_card in rules.trumps:
-            suit = rules.trump_suit
-            if rules.count_trumps(self.hand) == 1:
-                return None
+        if played_card:
+            if played_card in rules.trumps:
+                suit = rules.trump_suit
+                if rules.count_trumps(self.hand) == 1:
+                    return None
+            else:
+                suit = played_card.suit
+                if rules.count_suit(suit, self.hand) == 1:
+                    return None
         else:
-            suit = played_card.suit
-            if rules.count_suit(suit, self.hand) == 1:
-                return None
+            suit = chosen_suit
  
         # Count number of plays made so far in this round
         n_plays = len(previous_plays)
@@ -563,7 +578,10 @@ class BotPlayer(Player):
                               if card not in self.hand])
 
         # Encode played card
-        output = self.encode_card_rank(played_card)
+        if not played_card:
+            output = 0
+        else:
+            output = self.encode_card_rank(played_card)
         
         # Uncomment to debug feature variables
         # print("Highest card (" + str(suit) + "): " + str(highest_card))
