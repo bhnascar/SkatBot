@@ -256,7 +256,7 @@ class BotPlayer(Player):
         for i in range(0, len(s_features)):
             args['arg' + str(i + 1)] = s_features[i]
         res = mlab.run('path/to/jk.m', args)
-        print res['result']
+        print(res['result'])
 
         r_features = self.examine_rank(previous_plays, None, rules, chosen_suit = card.suit)
         if (r_features):
@@ -267,7 +267,7 @@ class BotPlayer(Player):
         for i in range(0, len(r_features)):
             args['arg' + str(i + 1)] = r_features[i]
         res = mlab.run('path/to/jk.m', args)
-        print res['result']
+        print(res['result'])
 
         return card
     
