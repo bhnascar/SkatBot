@@ -9,7 +9,10 @@ from rules import *
 from player import *
 from networking import *
 
+from pymatbridge import Matlab
+
 Play = collections.namedtuple('Play', ['pid', 'card'])
+mlab = Matlab(matlab='/Applications/MATLAB_R2011a.app/bin/matlab')
 
 def accept_players(server_socket, hands, num_bots):
     """
@@ -69,7 +72,7 @@ def decide_game(declarer, skat):
 # [(player ID, card), (player ID, card), (player ID, card),]
 
 def main(argv):
-    
+
     # Open log file
     print(argv)
     if 'd' in argv:
@@ -170,7 +173,15 @@ def main(argv):
     # Finish
     file.close()
     server_socket.close()
+
     return 0
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv))
+    # Always stop the Matlab server
+    try:
+        mlab.start()
+        ret = main(sys.argv)
+        mlab.stop()
+        sys.exit(ret)
+    except:
+        mlab.stop()
