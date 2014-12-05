@@ -4,7 +4,7 @@
 # Max Jaderberg 2012
 ###############################################
 from http.client import BadStatusLine
-import urllib, os, json, time, subprocess, platform, sys
+import urllib, urllib.request, urllib.parse, os, json, time, subprocess, platform, sys
 from multiprocessing import Process
 
 MATLAB_FOLDER = '%s/matlab' % os.path.realpath(os.path.dirname(__file__))
@@ -91,8 +91,18 @@ class Matlab(object):
 
     def _open_page(self, page_name, arguments={}, timeout=10):
         self.running = True
-        page = urllib.urlopen('%s/%s' % (self.server, page_name), urllib.urlencode(arguments), timeout)
+        data = urllib.parse.urlencode(arguments)
+        binary_data = data.encode('utf-8')
+        page = urllib.request.urlopen('%s/%s' % (self.server, page_name), binary_data, timeout)
         self.running = False
-        return json.loads(page.read())
+        result = str(page.read(), encoding='utf-8')
+        
+        # Hacky fix for backslashes in Windows paths messing up JSON decoding (read as invalid escape)
+        result = result.replace('\\', '\\\\')
+        
+        if result:
+            return json.loads(result)
+        else:
+            return ''
 
 

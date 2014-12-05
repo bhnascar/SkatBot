@@ -248,27 +248,31 @@ class BotPlayer(Player):
         card = random.choice(valid_cards)
         self.hand.remove(card)
 
+		# Get suit features
         s_features = self.examine_suit(previous_plays, None, rules)
         if (s_features):
             print("\n" + str(s_features)[1:-1])
 
-        # Talk to Matlab
-        args = {}
-        for i in range(0, len(s_features)):
-            args['arg' + str(i + 1)] = s_features[i]
-        res = mlab.run('Matlab/PythonInterface/PredictSuitSoftmax.m', args)
-        print(res['result'])
+            # Talk to Matlab
+            args = {}
+            for i in range(0, len(s_features)):
+                args['arg' + str(i + 1)] = s_features[i]
+            print('Foobar')
+            res = mlab.run('Matlab/PythonInterface/PredictSuitSoftmax.m', args)
+            print('Baz')
+            print(res['result'])
 
+		# Get rank features
         r_features = self.examine_rank(previous_plays, None, rules, chosen_suit = card.suit)
         if (r_features):
             print(str(r_features)[1:-1])
 
-        # Talk to Matlab
-        args = {}
-        for i in range(0, len(r_features)):
-            args['arg' + str(i + 1)] = r_features[i]
-        res = mlab.run('Matlab/PythonInterface/PredictRankSVM.m', args)
-        print(res['result'])
+            # Talk to Matlab
+            args = {}
+            for i in range(0, len(r_features)):
+                args['arg' + str(i + 1)] = r_features[i]
+            res = mlab.run('Matlab/PythonInterface/PredictRankSVM.m', args)
+            print(res['result'])
 
         return card
     
@@ -599,18 +603,18 @@ class BotPlayer(Player):
             output = self.encode_card_rank(played_card)
         
         # Uncomment to debug feature variables
-        # print("Highest card (" + str(suit) + "): " + str(highest_card))
-        # print("Previous plays: " + str(previous_plays))
-        # print("Going first: " + str(first))
-        # print("Points on table: " + str(pts_on_table))
-        # print("Has opponent played: " + str(played_opp))
-        # print("Has friend played: " + str(played_frd))
-        # print("Is winning: " + str(is_winning))
-        # print("Hand: " + str(self.hand))
-        # print("Winning card: (" + str(suit) + ") " + str(win_card))
-        # print("Has card: (" + str(suit) + ") " + str(has_card))
-        # print("Beat opp: (" + str(suit) + ") " + str(beat_opp))
-        # print("Num. cards left: " + str(num_cards_left))
+        print("Highest card (" + str(suit) + "): " + str(highest_card))
+        print("Previous plays: " + str(previous_plays))
+        print("Going first: " + str(first))
+        print("Points on table: " + str(pts_on_table))
+        print("Has opponent played: " + str(played_opp))
+        print("Has friend played: " + str(played_frd))
+        print("Is winning: " + str(is_winning))
+        print("Hand: " + str(self.hand))
+        print("Winning card: (" + str(suit) + ") " + str(win_card))
+        print("Has card: (" + str(suit) + ") " + str(has_card))
+        print("Beat opp: (" + str(suit) + ") " + str(beat_opp))
+        print("Num. cards left: " + str(num_cards_left))
         
         return tuple([
             output,

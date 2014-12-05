@@ -178,5 +178,6 @@ if __name__ == "__main__":
         ret = main(sys.argv)
         mlab.stop()
         sys.exit(ret)
-    except:
+    except Exception as e:
+        print(str(e))
         mlab.stop()
