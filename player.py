@@ -252,7 +252,7 @@ class BotPlayer(Player):
                        if rules.valid(card, self.hand, previous_plays)]
         random_card = random.choice(valid_cards)
         if not self.suit_algo or not self.rank_algo:
-            print(self.name + g" has no prediction algorithm. Playing randomly.")
+            print(self.name + " has no prediction algorithm. Playing randomly.")
             return random_card
 
         # Log hand

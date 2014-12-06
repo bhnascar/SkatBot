@@ -118,7 +118,7 @@ def main(argv):
     
     # Count bots
     if '-b' in argv:
-        index = argv.index('b');
+        index = argv.index('-b');
         num_bots = max(2, int(argv[index + 1]))
         mlab.start()
     else:
