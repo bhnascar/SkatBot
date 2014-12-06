@@ -21,7 +21,7 @@ def recv_msg(conn):
         body = conn.recv(length)
         return body
     except:
-        raise IOError()
+        raise IOError("Network connection failure")
         return None
     
 def recv_str(conn):
@@ -41,7 +41,7 @@ def send_msg(conn, msg):
         msg = bytes(str(length).ljust(8), "UTF-8") + msg
         conn.send(msg)
     except:
-        raise IOError()
+        raise IOError("Network connection failure")
         return None
     
 def send_str(conn, msg, log = False):

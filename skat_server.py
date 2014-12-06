@@ -1,7 +1,9 @@
+import os
 import sys
 import pickle
 import socket
 import datetime
+import traceback
 
 from card import *
 from rules import *
@@ -53,36 +55,70 @@ def decide_game(declarer, skat):
     """
     declarer.hide_cards(skat)
     return declarer.get_rules()
-    
 
-# The game file format is as follows:
-#
-# Lines 1-3: Lists players and hands
-# (player ID, player name, player hand)
-#
-# Line 4: Lists the teams and rules
-# (ID of whoever is playing, trump suit, player hand post-skat)
-#
-# Line 5-14: Lists rounds
-# [(player ID, card), (player ID, card), (player ID, card),]
+def open_log_file(file_args):
+    """
+    Opens a log file according to the given file arguments.
+    Returns the opened file.
 
-def main(argv):
+    Arguments are:
+    'd' - Use "debug.txt" in the project root directory
+    'l [folder]' - Write to a date-named file in the given 
+                   folder
+    Nothing (default) - Write to a date-named file in the
+                        log/ directory
+    ________________________________________________________
 
-    # Open log file
-    print(argv)
-    if 'd' in argv:
+    The game file format is as follows:
+
+    Lines 1-3: Lists players and hands
+    (player ID, player name, player hand)
+
+    Line 4: Lists the teams and rules
+    (ID of whoever is playing, trump suit, player hand post-skat)
+
+    Line 5-14: Lists rounds
+    [(player ID, card), (player ID, card), (player ID, card),]
+    """
+    # Use debug file in root directory
+    if '-d' in file_args:
         file = open("debug.txt", "w")
+
+    # Write a new file in the user-given directory
+    elif '-l' in file_args:
+        index = file_args.index('l');
+        log_folder = str(file_args[index + 1])
+        if not os.path.exists(log_folder):
+            os.makedirs(log_folder)
+        time = datetime.datetime.now().strftime("%y-%m-%d-%H-%M")
+        file = open(log_folder + "/" + time + ".txt", "a")
+
+    # Write a new file in the default log directory
     else:
         time = datetime.datetime.now().strftime("%y-%m-%d-%H-%M")
         file = open("log/" + time + ".txt", "a")
+
+    return file
+
+def main(argv):
+    """
+    Main function...
+
+    Arguments are:
+    Folder arguments - see open_log_file
+    'b [number]' - Play with a given number of bots
+    """
+
+    # Open log file
+    file = open_log_file(argv)
     
     # Count bots
-    if 'b' in argv:
+    if '-b' in argv:
         index = argv.index('b');
-        num_bots = int(argv[index + 1])
+        num_bots = max(2, int(argv[index + 1]))
+        mlab.start()
     else:
         num_bots = 0
-    print(num_bots)
 
     # Generate hands
     deck = Card.shuffle_deck(Card.get_deck())
@@ -105,6 +141,7 @@ def main(argv):
     if not declarer:
         file.close()
         server_socket.close()
+        mlab.stop()
         return 1
     broadcast_str(conns, declarer.name + " is playing!", log = True)
     
@@ -147,12 +184,12 @@ def main(argv):
 
         # Who won the round?
         winning_play = rules.winning_play(plays)
-        winner = players[winning_play[0]]
+        winner = players[winning_play.pid]
         announce = winner.name + " won the round!\n"
         broadcast_str(conns, announce, log = True)
         
         # Next person to start is the winner of this round
-        winner.cards_won.extend([play[1] for play in plays])
+        winner.cards_won.extend([play.card for play in plays])
         pid = winner.pid
         
         # Update cards seen
@@ -161,7 +198,13 @@ def main(argv):
 		        player.cards_seen.extend([play.card for play in plays])
         
         # Log round
-        file.write(repr(plays) + "\n")
+        file.write("[")
+        for i in range(0, len(plays)):
+            play = plays[i]
+            file.write("(%d, %s)" % (play.pid, repr(play.card)))
+            if i != len(plays) - 1:
+                file.write(", ")
+        file.write("]\n")
         file.flush()
 
     # Print points won
@@ -173,16 +216,14 @@ def main(argv):
     # Finish
     file.close()
     server_socket.close()
+    mlab.stop()
 
     return 0
 
 if __name__ == "__main__":
-    # Always stop the Matlab server
     try:
-        mlab.start()
-        ret = main(sys.argv)
-        mlab.stop()
-        sys.exit(ret)
-    except Exception as e:
-        print(str(e.message))
+        sys.exit(main(sys.argv))
+    except Exception:
+        # Always stop the Matlab server, especially if we crash
+        traceback.print_exc(file = sys.stdout)
         mlab.stop()

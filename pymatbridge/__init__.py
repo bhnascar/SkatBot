@@ -4,8 +4,16 @@
 # Max Jaderberg 2012
 ###############################################
 from http.client import BadStatusLine
-import urllib, urllib.request, urllib.parse, os, json, time, subprocess, platform, sys
 from multiprocessing import Process
+
+import urllib
+import urllib.request
+import urllib.parse
+
+import os
+import json
+import time
+import subprocess
 
 MATLAB_FOLDER = '%s/matlab' % os.path.realpath(os.path.dirname(__file__))
 
@@ -27,10 +35,7 @@ class Matlab(object):
         self.id = id
 
     def _run_matlab_server(self):
-        if platform.system() != "Windows" or "idlelib" in sys.modules:
-            os.system('%s -nodesktop -nosplash -nodisplay -r "cd pymatbridge/matlab,webserver(%s),exit" -logfile ./pymatbridge/logs/matlablog_%s.txt > ./pymatbridge/logs/bashlog_%s.txt' % (self.matlab, self.port, self.id, self.id))
-        else:
-            subprocess.call('%s -nodesktop -nosplash -nodisplay -r "cd pymatbridge/matlab,webserver(%s),exit" -logfile ./pymatbridge/logs/matlablog_%s.txt > ./pymatbridge/logs/bashlog_%s.txt' % (self.matlab, self.port, self.id, self.id))
+        subprocess.call('%s -nodesktop -nosplash -nodisplay -r "cd pymatbridge/matlab,webserver(%s),exit" -logfile ./pymatbridge/logs/matlablog_%s.txt > ./pymatbridge/logs/bashlog_%s.txt' % (self.matlab, self.port, self.id, self.id))
         return True
 
     def start(self):
@@ -99,10 +104,7 @@ class Matlab(object):
         
         # Hacky fix for backslashes in Windows paths messing up JSON decoding (read as invalid escape)
         result = result.replace('\\', '\\\\')
-        
-        if result:
-            return json.loads(result)
-        else:
-            return ''
+
+        return json.loads(result) if result else ''
 
 
