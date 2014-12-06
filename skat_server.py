@@ -155,6 +155,11 @@ def main(argv):
         winner.cards_won.extend([play[1] for play in plays])
         pid = winner.pid
         
+        # Update cards seen
+        for player in players.values():
+	        if isinstance(player, BotPlayer):
+		        player.cards_seen.extend([play.card for play in plays])
+        
         # Log round
         file.write(repr(plays) + "\n")
         file.flush()

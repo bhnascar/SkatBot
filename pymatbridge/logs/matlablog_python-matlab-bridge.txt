@@ -10,19 +10,19 @@ Webserver Available on http://localhost:4000/
 POST /test_connect.m HTTP/1.1
 Accept-Encoding: identity
 Connection: close
+User-Agent: Python-urllib/3.4
 Content-Length: 23
 Content-Type: application/x-www-form-urlencoded
 Host: localhost:4000
-User-Agent: Python-urllib/3.4
 
 id=python-matlab-bridge
               Post: [1x1 struct]
     AcceptEncoding: 'identity'
         Connection: 'close'
+         UserAgent: 'Python-urllib/3.4'
      ContentLength: '23'
        ContentType: [1x1 struct]
               Host: 'localhost:4000'
-         UserAgent: 'Python-urllib/3.4'
            Content: [1x1 struct]
 
 HTTP/1.0 200 OK
@@ -41,19 +41,19 @@ Content-Type: text/html; charset=UTF-8
 POST /web_feval.m HTTP/1.1
 Accept-Encoding: identity
 Connection: close
-Content-Length: 1006
+User-Agent: Python-urllib/3.4
+Content-Length: 1010
 Content-Type: application/x-www-form-urlencoded
 Host: localhost:4000
-User-Agent: Python-urllib/3.4
 
-arguments=%7B%22arg15%22%3A+0%2C+%22arg16%22%3A+1%2C+%22arg29%22%3A+0%2C+%22arg22%22%3A+0%2C+%22arg41%22%3A+0%2C+%22arg3%22%3A+11%2C+%22arg36%22%3A+0%2C+%22arg8%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg12%22%3A+1%2C+%22arg34%22%3A+0%2C+%22arg18%22%3A+0%2C+%22arg17%22%3A+0%2C+%22arg26%22%3A+0%2C+%22arg31%22%3A+0%2C+%22arg6%22%3A+0%2C+%22arg24%22%3A+0%2C+%22arg35%22%3A+0%2C+%22arg28%22%3A+0%2C+%22arg27%22%3A+1%2C+%22arg37%22%3A+0%2C+%22arg14%22%3A+1%2C+%22arg1%22%3A+0%2C+%22arg39%22%3A+0%2C+%22arg38%22%3A+0%2C+%22arg20%22%3A+0%2C+%22arg25%22%3A+0%2C+%22arg7%22%3A+0%2C+%22arg10%22%3A+0%2C+%22arg9%22%3A+22%2C+%22arg11%22%3A+0%2C+%22arg40%22%3A+0%2C+%22arg32%22%3A+0%2C+%22arg19%22%3A+0%2C+%22arg5%22%3A+0%2C+%22arg23%22%3A+0%2C+%22arg4%22%3A+1%2C+%22arg13%22%3A+0%2C+%22arg42%22%3A+0%2C+%22arg33%22%3
+func_path=C%3A%5CUsers%5CPedro+Milani%5CDocuments%5CAcademic%5CStanford%5CClasses%5CFall+-+2014%5CCS-229%5CSkatBot%5CMatlab%5CPythonInterface%5CPredictRankSoftmax.m&arguments=%7B%22arg1%22%3A+0%2C+%22arg32%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg10%22%3A+1%2C+%22arg25%22%3A+0%2C+%22arg37%22%3A+0%2C+%22arg36%22%3A+0%2C+%22arg9%22%3A+22%2C+%22arg2%22%3A+0%2C+%22arg27%22%3A+1%2C+%22arg20%22%3A+0%2C+%22arg24%22%3A+0%2C+%22arg21%22%3A+0%2C+%22arg33%22%3A+0%2C+%22arg19%22%3A+0%2C+%22arg23%22%3A+0%2C+%22arg18%22%3A+0%2C+%22arg14%22%3A+0%2C+%22arg13%22%3A+1%2C+%22arg5%22%3A+0%2C+%22arg4%22%3A+1%2C+%22arg3%22%3A+11%2C+%22arg17%22%3A+0%2C+%22arg35%22%3A+0%2C+%22arg31%22%3A+0%2C+%22arg11%22%3A+0%2C+%22arg29%22%3A+0%2C+%22arg7%22%3A+0%2C+%22arg16%22%3A+0%2C+%22arg6%22%3A+0%2C+%22arg28%22%3A+0%2C+%22arg12
               Post: [1x1 struct]
     AcceptEncoding: 'identity'
         Connection: 'close'
-     ContentLength: '1006'
+         UserAgent: 'Python-urllib/3.4'
+     ContentLength: '1010'
        ContentType: [1x1 struct]
               Host: 'localhost:4000'
-         UserAgent: 'Python-urllib/3.4'
            Content: [1x1 struct]
 
 HTTP/1.0 200 OK
@@ -65,26 +65,26 @@ Expires: Thu, 19 Nov 1980 08:00:00 GMT
 Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
 Pragma: no-cache
 Connection: close
-Content-Length: 650
+Content-Length: 677
 Content-Type: text/html; charset=UTF-8
 
 
 POST /web_feval.m HTTP/1.1
 Accept-Encoding: identity
 Connection: close
-Content-Length: 1006
+User-Agent: Python-urllib/3.4
+Content-Length: 1010
 Content-Type: application/x-www-form-urlencoded
 Host: localhost:4000
-User-Agent: Python-urllib/3.4
 
-arguments=%7B%22arg15%22%3A+1%2C+%22arg16%22%3A+0%2C+%22arg29%22%3A+0%2C+%22arg22%22%3A+0%2C+%22arg41%22%3A+0%2C+%22arg3%22%3A+13%2C+%22arg36%22%3A+0%2C+%22arg8%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg12%22%3A+1%2C+%22arg34%22%3A+1%2C+%22arg18%22%3A+0%2C+%22arg17%22%3A+0%2C+%22arg26%22%3A+0%2C+%22arg31%22%3A+0%2C+%22arg6%22%3A+1%2C+%22arg24%22%3A+0%2C+%22arg35%22%3A+1%2C+%22arg28%22%3A+0%2C+%22arg27%22%3A+1%2C+%22arg37%22%3A+1%2C+%22arg14%22%3A+0%2C+%22arg1%22%3A+0%2C+%22arg39%22%3A+0%2C+%22arg38%22%3A+0%2C+%22arg20%22%3A+0%2C+%22arg25%22%3A+0%2C+%22arg7%22%3A+0%2C+%22arg10%22%3A+1%2C+%22arg9%22%3A+21%2C+%22arg11%22%3A+0%2C+%22arg40%22%3A+0%2C+%22arg32%22%3A+1%2C+%22arg19%22%3A+0%2C+%22arg5%22%3A+1%2C+%22arg23%22%3A+0%2C+%22arg4%22%3A+1%2C+%22arg13%22%3A+1%2C+%22arg42%22%3A+0%2C+%22arg33%22%3
+func_path=C%3A%5CUsers%5CPedro+Milani%5CDocuments%5CAcademic%5CStanford%5CClasses%5CFall+-+2014%5CCS-229%5CSkatBot%5CMatlab%5CPythonInterface%5CPredictRankSoftmax.m&arguments=%7B%22arg1%22%3A+0%2C+%22arg32%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg10%22%3A+0%2C+%22arg25%22%3A+0%2C+%22arg37%22%3A+0%2C+%22arg36%22%3A+0%2C+%22arg9%22%3A+22%2C+%22arg2%22%3A+0%2C+%22arg27%22%3A+1%2C+%22arg20%22%3A+0%2C+%22arg24%22%3A+0%2C+%22arg21%22%3A+0%2C+%22arg33%22%3A+0%2C+%22arg19%22%3A+0%2C+%22arg23%22%3A+0%2C+%22arg18%22%3A+0%2C+%22arg14%22%3A+1%2C+%22arg13%22%3A+0%2C+%22arg5%22%3A+1%2C+%22arg4%22%3A+1%2C+%22arg3%22%3A+11%2C+%22arg17%22%3A+0%2C+%22arg35%22%3A+0%2C+%22arg31%22%3A+0%2C+%22arg11%22%3A+0%2C+%22arg29%22%3A+0%2C+%22arg7%22%3A+0%2C+%22arg16%22%3A+0%2C+%22arg6%22%3A+0%2C+%22arg28%22%3A+0%2C+%22arg12
               Post: [1x1 struct]
     AcceptEncoding: 'identity'
         Connection: 'close'
-     ContentLength: '1006'
+         UserAgent: 'Python-urllib/3.4'
+     ContentLength: '1010'
        ContentType: [1x1 struct]
               Host: 'localhost:4000'
-         UserAgent: 'Python-urllib/3.4'
            Content: [1x1 struct]
 
 HTTP/1.0 200 OK
@@ -96,26 +96,26 @@ Expires: Thu, 19 Nov 1980 08:00:00 GMT
 Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
 Pragma: no-cache
 Connection: close
-Content-Length: 650
+Content-Length: 677
 Content-Type: text/html; charset=UTF-8
 
 
 POST /web_feval.m HTTP/1.1
 Accept-Encoding: identity
 Connection: close
-Content-Length: 768
+User-Agent: Python-urllib/3.4
+Content-Length: 1009
 Content-Type: application/x-www-form-urlencoded
 Host: localhost:4000
-User-Agent: Python-urllib/3.4
 
-arguments=%7B%22arg15%22%3A+0%2C+%22arg16%22%3A+0%2C+%22arg29%22%3A+1%2C+%22arg22%22%3A+1%2C+%22arg3%22%3A+1%2C+%22arg8%22%3A+5%2C+%22arg30%22%3A+0%2C+%22arg12%22%3A+0%2C+%22arg18%22%3A+1%2C+%22arg17%22%3A+0%2C+%22arg26%22%3A+0%2C+%22arg6%22%3A+9%2C+%22arg24%22%3A+0%2C+%22arg28%22%3A+0%2C+%22arg27%22%3A+0%2C+%22arg14%22%3A+0%2C+%22arg1%22%3A+0%2C+%22arg20%22%3A+0%2C+%22arg25%22%3A+0%2C+%22arg7%22%3A+6%2C+%22arg10%22%3A+0%2C+%22arg9%22%3A+4%2C+%22arg11%22%3A+0%2C+%22arg19%22%3A+0%2C+%22arg5%22%3A+3%2C+%22arg23%22%3A+0%2C+%22arg4%22%3A+2%2C+%22arg13%22%3A+0%2C+%22arg2%22%3A+2%2C+%22arg21%22%3A+0%7D&func_path=C%3A%5CUsers%5CPedro+Milani%5CDocuments%5CAcademic%5CStanford%5CClasses%5CFall+-+2014%5CCS-229%5CSkatBot%5CMatlab%5CPythonInterface%5CPredictSuitSoftmax.m
+func_path=C%3A%5CUsers%5CPedro+Milani%5CDocuments%5CAcademic%5CStanford%5CClasses%5CFall+-+2014%5CCS-229%5CSkatBot%5CMatlab%5CPythonInterface%5CPredictRankSoftmax.m&arguments=%7B%22arg1%22%3A+0%2C+%22arg32%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg10%22%3A+0%2C+%22arg25%22%3A+0%2C+%22arg37%22%3A+0%2C+%22arg36%22%3A+1%2C+%22arg9%22%3A+20%2C+%22arg2%22%3A+0%2C+%22arg27%22%3A+1%2C+%22arg20%22%3A+0%2C+%22arg24%22%3A+0%2C+%22arg21%22%3A+0%2C+%22arg33%22%3A+0%2C+%22arg19%22%3A+0%2C+%22arg23%22%3A+0%2C+%22arg18%22%3A+0%2C+%22arg14%22%3A+1%2C+%22arg13%22%3A+0%2C+%22arg5%22%3A+0%2C+%22arg4%22%3A+1%2C+%22arg3%22%3A+0%2C+%22arg17%22%3A+0%2C+%22arg35%22%3A+0%2C+%22arg31%22%3A+0%2C+%22arg11%22%3A+0%2C+%22arg29%22%3A+0%2C+%22arg7%22%3A+0%2C+%22arg16%22%3A+1%2C+%22arg6%22%3A+0%2C+%22arg28%22%3A+0%2C+%22arg12%
               Post: [1x1 struct]
     AcceptEncoding: 'identity'
         Connection: 'close'
-     ContentLength: '768'
+         UserAgent: 'Python-urllib/3.4'
+     ContentLength: '1009'
        ContentType: [1x1 struct]
               Host: 'localhost:4000'
-         UserAgent: 'Python-urllib/3.4'
            Content: [1x1 struct]
 
 HTTP/1.0 200 OK
@@ -127,26 +127,26 @@ Expires: Thu, 19 Nov 1980 08:00:00 GMT
 Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
 Pragma: no-cache
 Connection: close
-Content-Length: 540
+Content-Length: 676
 Content-Type: text/html; charset=UTF-8
 
 
 POST /web_feval.m HTTP/1.1
 Accept-Encoding: identity
 Connection: close
-Content-Length: 1005
+User-Agent: Python-urllib/3.4
+Content-Length: 1009
 Content-Type: application/x-www-form-urlencoded
 Host: localhost:4000
-User-Agent: Python-urllib/3.4
 
-arguments=%7B%22arg15%22%3A+0%2C+%22arg16%22%3A+0%2C+%22arg29%22%3A+0%2C+%22arg22%22%3A+0%2C+%22arg41%22%3A+0%2C+%22arg3%22%3A+0%2C+%22arg36%22%3A+0%2C+%22arg8%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg12%22%3A+1%2C+%22arg34%22%3A+0%2C+%22arg18%22%3A+0%2C+%22arg17%22%3A+0%2C+%22arg26%22%3A+0%2C+%22arg31%22%3A+0%2C+%22arg6%22%3A+0%2C+%22arg24%22%3A+0%2C+%22arg35%22%3A+0%2C+%22arg28%22%3A+0%2C+%22arg27%22%3A+1%2C+%22arg37%22%3A+0%2C+%22arg14%22%3A+0%2C+%22arg1%22%3A+0%2C+%22arg39%22%3A+0%2C+%22arg38%22%3A+0%2C+%22arg20%22%3A+0%2C+%22arg25%22%3A+0%2C+%22arg7%22%3A+0%2C+%22arg10%22%3A+1%2C+%22arg9%22%3A+24%2C+%22arg11%22%3A+0%2C+%22arg40%22%3A+0%2C+%22arg32%22%3A+0%2C+%22arg19%22%3A+0%2C+%22arg5%22%3A+0%2C+%22arg23%22%3A+0%2C+%22arg4%22%3A+0%2C+%22arg13%22%3A+1%2C+%22arg42%22%3A+0%2C+%22arg33%22%3A
+func_path=C%3A%5CUsers%5CPedro+Milani%5CDocuments%5CAcademic%5CStanford%5CClasses%5CFall+-+2014%5CCS-229%5CSkatBot%5CMatlab%5CPythonInterface%5CPredictRankSoftmax.m&arguments=%7B%22arg1%22%3A+0%2C+%22arg32%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg10%22%3A+0%2C+%22arg25%22%3A+0%2C+%22arg37%22%3A+1%2C+%22arg36%22%3A+0%2C+%22arg9%22%3A+20%2C+%22arg2%22%3A+0%2C+%22arg27%22%3A+1%2C+%22arg20%22%3A+0%2C+%22arg24%22%3A+0%2C+%22arg21%22%3A+0%2C+%22arg33%22%3A+0%2C+%22arg19%22%3A+0%2C+%22arg23%22%3A+0%2C+%22arg18%22%3A+0%2C+%22arg14%22%3A+0%2C+%22arg13%22%3A+0%2C+%22arg5%22%3A+1%2C+%22arg4%22%3A+1%2C+%22arg3%22%3A+4%2C+%22arg17%22%3A+0%2C+%22arg35%22%3A+0%2C+%22arg31%22%3A+0%2C+%22arg11%22%3A+0%2C+%22arg29%22%3A+0%2C+%22arg7%22%3A+0%2C+%22arg16%22%3A+0%2C+%22arg6%22%3A+1%2C+%22arg28%22%3A+0%2C+%22arg12%
               Post: [1x1 struct]
     AcceptEncoding: 'identity'
         Connection: 'close'
-     ContentLength: '1005'
+         UserAgent: 'Python-urllib/3.4'
+     ContentLength: '1009'
        ContentType: [1x1 struct]
               Host: 'localhost:4000'
-         UserAgent: 'Python-urllib/3.4'
            Content: [1x1 struct]
 
 HTTP/1.0 200 OK
@@ -158,26 +158,26 @@ Expires: Thu, 19 Nov 1980 08:00:00 GMT
 Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
 Pragma: no-cache
 Connection: close
-Content-Length: 649
+Content-Length: 676
 Content-Type: text/html; charset=UTF-8
 
 
 POST /web_feval.m HTTP/1.1
 Accept-Encoding: identity
 Connection: close
+User-Agent: Python-urllib/3.4
 Content-Length: 769
 Content-Type: application/x-www-form-urlencoded
 Host: localhost:4000
-User-Agent: Python-urllib/3.4
 
-arguments=%7B%22arg15%22%3A+0%2C+%22arg16%22%3A+0%2C+%22arg29%22%3A+1%2C+%22arg22%22%3A+0%2C+%22arg3%22%3A+3%2C+%22arg8%22%3A+4%2C+%22arg30%22%3A+0%2C+%22arg12%22%3A+1%2C+%22arg18%22%3A+0%2C+%22arg17%22%3A+0%2C+%22arg26%22%3A+0%2C+%22arg6%22%3A+9%2C+%22arg24%22%3A+1%2C+%22arg28%22%3A+1%2C+%22arg27%22%3A+1%2C+%22arg14%22%3A+0%2C+%22arg1%22%3A+0%2C+%22arg20%22%3A+0%2C+%22arg25%22%3A+1%2C+%22arg7%22%3A+4%2C+%22arg10%22%3A+0%2C+%22arg9%22%3A+5%2C+%22arg11%22%3A+1%2C+%22arg19%22%3A+0%2C+%22arg5%22%3A+0%2C+%22arg23%22%3A+21%2C+%22arg4%22%3A+3%2C+%22arg13%22%3A+0%2C+%22arg2%22%3A+2%2C+%22arg21%22%3A+0%7D&func_path=C%3A%5CUsers%5CPedro+Milani%5CDocuments%5CAcademic%5CStanford%5CClasses%5CFall+-+2014%5CCS-229%5CSkatBot%5CMatlab%5CPythonInterface%5CPredictSuitSoftmax.m
+func_path=C%3A%5CUsers%5CPedro+Milani%5CDocuments%5CAcademic%5CStanford%5CClasses%5CFall+-+2014%5CCS-229%5CSkatBot%5CMatlab%5CPythonInterface%5CPredictSuitSoftmax.m&arguments=%7B%22arg1%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg10%22%3A+0%2C+%22arg25%22%3A+0%2C+%22arg9%22%3A+3%2C+%22arg2%22%3A+1%2C+%22arg27%22%3A+0%2C+%22arg20%22%3A+0%2C+%22arg24%22%3A+0%2C+%22arg21%22%3A+0%2C+%22arg19%22%3A+0%2C+%22arg23%22%3A+0%2C+%22arg18%22%3A+0%2C+%22arg14%22%3A+0%2C+%22arg13%22%3A+0%2C+%22arg5%22%3A+1%2C+%22arg4%22%3A+2%2C+%22arg3%22%3A+4%2C+%22arg17%22%3A+0%2C+%22arg11%22%3A+1%2C+%22arg29%22%3A+1%2C+%22arg7%22%3A+3%2C+%22arg16%22%3A+0%2C+%22arg6%22%3A+10%2C+%22arg28%22%3A+1%2C+%22arg12%22%3A+1%2C+%22arg26%22%3A+0%2C+%22arg15%22%3A+0%2C+%22arg22%22%3A+1%2C+%22arg8%22%3A+2%7D
               Post: [1x1 struct]
     AcceptEncoding: 'identity'
         Connection: 'close'
+         UserAgent: 'Python-urllib/3.4'
      ContentLength: '769'
        ContentType: [1x1 struct]
               Host: 'localhost:4000'
-         UserAgent: 'Python-urllib/3.4'
            Content: [1x1 struct]
 
 HTTP/1.0 200 OK
@@ -196,19 +196,19 @@ Content-Type: text/html; charset=UTF-8
 POST /web_feval.m HTTP/1.1
 Accept-Encoding: identity
 Connection: close
-Content-Length: 1006
+User-Agent: Python-urllib/3.4
+Content-Length: 1009
 Content-Type: application/x-www-form-urlencoded
 Host: localhost:4000
-User-Agent: Python-urllib/3.4
 
-arguments=%7B%22arg15%22%3A+0%2C+%22arg16%22%3A+0%2C+%22arg29%22%3A+0%2C+%22arg22%22%3A+0%2C+%22arg41%22%3A+0%2C+%22arg3%22%3A+21%2C+%22arg36%22%3A+0%2C+%22arg8%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg12%22%3A+0%2C+%22arg34%22%3A+0%2C+%22arg18%22%3A+0%2C+%22arg17%22%3A+0%2C+%22arg26%22%3A+0%2C+%22arg31%22%3A+0%2C+%22arg6%22%3A+0%2C+%22arg24%22%3A+0%2C+%22arg35%22%3A+0%2C+%22arg28%22%3A+0%2C+%22arg27%22%3A+0%2C+%22arg37%22%3A+0%2C+%22arg14%22%3A+0%2C+%22arg1%22%3A+0%2C+%22arg39%22%3A+0%2C+%22arg38%22%3A+0%2C+%22arg20%22%3A+0%2C+%22arg25%22%3A+1%2C+%22arg7%22%3A+0%2C+%22arg10%22%3A+0%2C+%22arg9%22%3A+22%2C+%22arg11%22%3A+0%2C+%22arg40%22%3A+0%2C+%22arg32%22%3A+0%2C+%22arg19%22%3A+0%2C+%22arg5%22%3A+1%2C+%22arg23%22%3A+0%2C+%22arg4%22%3A+1%2C+%22arg13%22%3A+0%2C+%22arg42%22%3A+0%2C+%22arg33%22%3
+func_path=C%3A%5CUsers%5CPedro+Milani%5CDocuments%5CAcademic%5CStanford%5CClasses%5CFall+-+2014%5CCS-229%5CSkatBot%5CMatlab%5CPythonInterface%5CPredictRankSoftmax.m&arguments=%7B%22arg1%22%3A+0%2C+%22arg32%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg10%22%3A+1%2C+%22arg25%22%3A+0%2C+%22arg37%22%3A+0%2C+%22arg36%22%3A+0%2C+%22arg9%22%3A+18%2C+%22arg2%22%3A+1%2C+%22arg27%22%3A+1%2C+%22arg20%22%3A+0%2C+%22arg24%22%3A+0%2C+%22arg21%22%3A+0%2C+%22arg33%22%3A+0%2C+%22arg19%22%3A+0%2C+%22arg23%22%3A+0%2C+%22arg18%22%3A+0%2C+%22arg14%22%3A+1%2C+%22arg13%22%3A+1%2C+%22arg5%22%3A+0%2C+%22arg4%22%3A+0%2C+%22arg3%22%3A+0%2C+%22arg17%22%3A+0%2C+%22arg35%22%3A+0%2C+%22arg31%22%3A+0%2C+%22arg11%22%3A+0%2C+%22arg29%22%3A+0%2C+%22arg7%22%3A+0%2C+%22arg16%22%3A+1%2C+%22arg6%22%3A+0%2C+%22arg28%22%3A+0%2C+%22arg12%
               Post: [1x1 struct]
     AcceptEncoding: 'identity'
         Connection: 'close'
-     ContentLength: '1006'
+         UserAgent: 'Python-urllib/3.4'
+     ContentLength: '1009'
        ContentType: [1x1 struct]
               Host: 'localhost:4000'
-         UserAgent: 'Python-urllib/3.4'
            Content: [1x1 struct]
 
 HTTP/1.0 200 OK
@@ -220,7 +220,335 @@ Expires: Thu, 19 Nov 1980 08:00:00 GMT
 Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
 Pragma: no-cache
 Connection: close
-Content-Length: 650
+Content-Length: 676
 Content-Type: text/html; charset=UTF-8
 
+
+POST /web_feval.m HTTP/1.1
+Accept-Encoding: identity
+Connection: close
+User-Agent: Python-urllib/3.4
+Content-Length: 1010
+Content-Type: application/x-www-form-urlencoded
+Host: localhost:4000
+
+func_path=C%3A%5CUsers%5CPedro+Milani%5CDocuments%5CAcademic%5CStanford%5CClasses%5CFall+-+2014%5CCS-229%5CSkatBot%5CMatlab%5CPythonInterface%5CPredictRankSoftmax.m&arguments=%7B%22arg1%22%3A+0%2C+%22arg32%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg10%22%3A+0%2C+%22arg25%22%3A+0%2C+%22arg37%22%3A+0%2C+%22arg36%22%3A+0%2C+%22arg9%22%3A+18%2C+%22arg2%22%3A+0%2C+%22arg27%22%3A+1%2C+%22arg20%22%3A+0%2C+%22arg24%22%3A+0%2C+%22arg21%22%3A+0%2C+%22arg33%22%3A+1%2C+%22arg19%22%3A+0%2C+%22arg23%22%3A+0%2C+%22arg18%22%3A+0%2C+%22arg14%22%3A+0%2C+%22arg13%22%3A+0%2C+%22arg5%22%3A+1%2C+%22arg4%22%3A+1%2C+%22arg3%22%3A+22%2C+%22arg17%22%3A+0%2C+%22arg35%22%3A+0%2C+%22arg31%22%3A+0%2C+%22arg11%22%3A+1%2C+%22arg29%22%3A+0%2C+%22arg7%22%3A+1%2C+%22arg16%22%3A+0%2C+%22arg6%22%3A+0%2C+%22arg28%22%3A+0%2C+%22arg12
+              Post: [1x1 struct]
+    AcceptEncoding: 'identity'
+        Connection: 'close'
+         UserAgent: 'Python-urllib/3.4'
+     ContentLength: '1010'
+       ContentType: [1x1 struct]
+              Host: 'localhost:4000'
+           Content: [1x1 struct]
+
+HTTP/1.0 200 OK
+Date: Tue, 12 Oct 2010 09:19:05 GMT
+Server: Matlab Webserver
+X-Powered-By: Matlab7.12.0.635 (R2011a)
+Set-Cookie: SESSID=5322082bf473207961031e3df1f45a22; path=/
+Expires: Thu, 19 Nov 1980 08:00:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Connection: close
+Content-Length: 677
+Content-Type: text/html; charset=UTF-8
+
+
+POST /web_feval.m HTTP/1.1
+Accept-Encoding: identity
+Connection: close
+User-Agent: Python-urllib/3.4
+Content-Length: 1009
+Content-Type: application/x-www-form-urlencoded
+Host: localhost:4000
+
+func_path=C%3A%5CUsers%5CPedro+Milani%5CDocuments%5CAcademic%5CStanford%5CClasses%5CFall+-+2014%5CCS-229%5CSkatBot%5CMatlab%5CPythonInterface%5CPredictRankSoftmax.m&arguments=%7B%22arg1%22%3A+0%2C+%22arg32%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg10%22%3A+1%2C+%22arg25%22%3A+0%2C+%22arg37%22%3A+1%2C+%22arg36%22%3A+0%2C+%22arg9%22%3A+16%2C+%22arg2%22%3A+0%2C+%22arg27%22%3A+0%2C+%22arg20%22%3A+1%2C+%22arg24%22%3A+0%2C+%22arg21%22%3A+0%2C+%22arg33%22%3A+0%2C+%22arg19%22%3A+0%2C+%22arg23%22%3A+0%2C+%22arg18%22%3A+0%2C+%22arg14%22%3A+0%2C+%22arg13%22%3A+0%2C+%22arg5%22%3A+0%2C+%22arg4%22%3A+1%2C+%22arg3%22%3A+0%2C+%22arg17%22%3A+0%2C+%22arg35%22%3A+0%2C+%22arg31%22%3A+1%2C+%22arg11%22%3A+0%2C+%22arg29%22%3A+0%2C+%22arg7%22%3A+0%2C+%22arg16%22%3A+0%2C+%22arg6%22%3A+0%2C+%22arg28%22%3A+0%2C+%22arg12%
+              Post: [1x1 struct]
+    AcceptEncoding: 'identity'
+        Connection: 'close'
+         UserAgent: 'Python-urllib/3.4'
+     ContentLength: '1009'
+       ContentType: [1x1 struct]
+              Host: 'localhost:4000'
+           Content: [1x1 struct]
+
+HTTP/1.0 200 OK
+Date: Tue, 12 Oct 2010 09:19:05 GMT
+Server: Matlab Webserver
+X-Powered-By: Matlab7.12.0.635 (R2011a)
+Set-Cookie: SESSID=5322082bf473207961031e3df1f45a22; path=/
+Expires: Thu, 19 Nov 1980 08:00:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Connection: close
+Content-Length: 676
+Content-Type: text/html; charset=UTF-8
+
+
+POST /web_feval.m HTTP/1.1
+Accept-Encoding: identity
+Connection: close
+User-Agent: Python-urllib/3.4
+Content-Length: 768
+Content-Type: application/x-www-form-urlencoded
+Host: localhost:4000
+
+func_path=C%3A%5CUsers%5CPedro+Milani%5CDocuments%5CAcademic%5CStanford%5CClasses%5CFall+-+2014%5CCS-229%5CSkatBot%5CMatlab%5CPythonInterface%5CPredictSuitSoftmax.m&arguments=%7B%22arg1%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg10%22%3A+0%2C+%22arg25%22%3A+0%2C+%22arg9%22%3A+3%2C+%22arg2%22%3A+0%2C+%22arg27%22%3A+0%2C+%22arg20%22%3A+0%2C+%22arg24%22%3A+0%2C+%22arg21%22%3A+0%2C+%22arg19%22%3A+0%2C+%22arg23%22%3A+0%2C+%22arg18%22%3A+0%2C+%22arg14%22%3A+0%2C+%22arg13%22%3A+0%2C+%22arg5%22%3A+1%2C+%22arg4%22%3A+2%2C+%22arg3%22%3A+3%2C+%22arg17%22%3A+0%2C+%22arg11%22%3A+0%2C+%22arg29%22%3A+1%2C+%22arg7%22%3A+2%2C+%22arg16%22%3A+0%2C+%22arg6%22%3A+7%2C+%22arg28%22%3A+0%2C+%22arg12%22%3A+1%2C+%22arg26%22%3A+0%2C+%22arg15%22%3A+0%2C+%22arg22%22%3A+1%2C+%22arg8%22%3A+2%7D
+              Post: [1x1 struct]
+    AcceptEncoding: 'identity'
+        Connection: 'close'
+         UserAgent: 'Python-urllib/3.4'
+     ContentLength: '768'
+       ContentType: [1x1 struct]
+              Host: 'localhost:4000'
+           Content: [1x1 struct]
+
+HTTP/1.0 200 OK
+Date: Tue, 12 Oct 2010 09:19:05 GMT
+Server: Matlab Webserver
+X-Powered-By: Matlab7.12.0.635 (R2011a)
+Set-Cookie: SESSID=5322082bf473207961031e3df1f45a22; path=/
+Expires: Thu, 19 Nov 1980 08:00:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Connection: close
+Content-Length: 540
+Content-Type: text/html; charset=UTF-8
+
+
+POST /web_feval.m HTTP/1.1
+Accept-Encoding: identity
+Connection: close
+User-Agent: Python-urllib/3.4
+Content-Length: 1009
+Content-Type: application/x-www-form-urlencoded
+Host: localhost:4000
+
+func_path=C%3A%5CUsers%5CPedro+Milani%5CDocuments%5CAcademic%5CStanford%5CClasses%5CFall+-+2014%5CCS-229%5CSkatBot%5CMatlab%5CPythonInterface%5CPredictRankSoftmax.m&arguments=%7B%22arg1%22%3A+0%2C+%22arg32%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg10%22%3A+0%2C+%22arg25%22%3A+0%2C+%22arg37%22%3A+0%2C+%22arg36%22%3A+0%2C+%22arg9%22%3A+14%2C+%22arg2%22%3A+1%2C+%22arg27%22%3A+0%2C+%22arg20%22%3A+0%2C+%22arg24%22%3A+0%2C+%22arg21%22%3A+0%2C+%22arg33%22%3A+0%2C+%22arg19%22%3A+0%2C+%22arg23%22%3A+0%2C+%22arg18%22%3A+0%2C+%22arg14%22%3A+1%2C+%22arg13%22%3A+0%2C+%22arg5%22%3A+0%2C+%22arg4%22%3A+0%2C+%22arg3%22%3A+0%2C+%22arg17%22%3A+0%2C+%22arg35%22%3A+0%2C+%22arg31%22%3A+0%2C+%22arg11%22%3A+0%2C+%22arg29%22%3A+0%2C+%22arg7%22%3A+0%2C+%22arg16%22%3A+0%2C+%22arg6%22%3A+0%2C+%22arg28%22%3A+0%2C+%22arg12%
+              Post: [1x1 struct]
+    AcceptEncoding: 'identity'
+        Connection: 'close'
+         UserAgent: 'Python-urllib/3.4'
+     ContentLength: '1009'
+       ContentType: [1x1 struct]
+              Host: 'localhost:4000'
+           Content: [1x1 struct]
+
+HTTP/1.0 200 OK
+Date: Tue, 12 Oct 2010 09:19:05 GMT
+Server: Matlab Webserver
+X-Powered-By: Matlab7.12.0.635 (R2011a)
+Set-Cookie: SESSID=5322082bf473207961031e3df1f45a22; path=/
+Expires: Thu, 19 Nov 1980 08:00:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Connection: close
+Content-Length: 676
+Content-Type: text/html; charset=UTF-8
+
+
+POST /web_feval.m HTTP/1.1
+Accept-Encoding: identity
+Connection: close
+User-Agent: Python-urllib/3.4
+Content-Length: 1009
+Content-Type: application/x-www-form-urlencoded
+Host: localhost:4000
+
+func_path=C%3A%5CUsers%5CPedro+Milani%5CDocuments%5CAcademic%5CStanford%5CClasses%5CFall+-+2014%5CCS-229%5CSkatBot%5CMatlab%5CPythonInterface%5CPredictRankSoftmax.m&arguments=%7B%22arg1%22%3A+0%2C+%22arg32%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg10%22%3A+1%2C+%22arg25%22%3A+0%2C+%22arg37%22%3A+0%2C+%22arg36%22%3A+0%2C+%22arg9%22%3A+12%2C+%22arg2%22%3A+0%2C+%22arg27%22%3A+0%2C+%22arg20%22%3A+1%2C+%22arg24%22%3A+0%2C+%22arg21%22%3A+0%2C+%22arg33%22%3A+0%2C+%22arg19%22%3A+0%2C+%22arg23%22%3A+0%2C+%22arg18%22%3A+0%2C+%22arg14%22%3A+0%2C+%22arg13%22%3A+0%2C+%22arg5%22%3A+0%2C+%22arg4%22%3A+1%2C+%22arg3%22%3A+2%2C+%22arg17%22%3A+0%2C+%22arg35%22%3A+0%2C+%22arg31%22%3A+1%2C+%22arg11%22%3A+0%2C+%22arg29%22%3A+0%2C+%22arg7%22%3A+0%2C+%22arg16%22%3A+0%2C+%22arg6%22%3A+0%2C+%22arg28%22%3A+0%2C+%22arg12%
+              Post: [1x1 struct]
+    AcceptEncoding: 'identity'
+        Connection: 'close'
+         UserAgent: 'Python-urllib/3.4'
+     ContentLength: '1009'
+       ContentType: [1x1 struct]
+              Host: 'localhost:4000'
+           Content: [1x1 struct]
+
+HTTP/1.0 200 OK
+Date: Tue, 12 Oct 2010 09:19:05 GMT
+Server: Matlab Webserver
+X-Powered-By: Matlab7.12.0.635 (R2011a)
+Set-Cookie: SESSID=5322082bf473207961031e3df1f45a22; path=/
+Expires: Thu, 19 Nov 1980 08:00:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Connection: close
+Content-Length: 676
+Content-Type: text/html; charset=UTF-8
+
+
+POST /web_feval.m HTTP/1.1
+Accept-Encoding: identity
+Connection: close
+User-Agent: Python-urllib/3.4
+Content-Length: 768
+Content-Type: application/x-www-form-urlencoded
+Host: localhost:4000
+
+func_path=C%3A%5CUsers%5CPedro+Milani%5CDocuments%5CAcademic%5CStanford%5CClasses%5CFall+-+2014%5CCS-229%5CSkatBot%5CMatlab%5CPythonInterface%5CPredictSuitSoftmax.m&arguments=%7B%22arg1%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg10%22%3A+0%2C+%22arg25%22%3A+1%2C+%22arg9%22%3A+3%2C+%22arg2%22%3A+0%2C+%22arg27%22%3A+0%2C+%22arg20%22%3A+0%2C+%22arg24%22%3A+1%2C+%22arg21%22%3A+0%2C+%22arg19%22%3A+0%2C+%22arg23%22%3A+2%2C+%22arg18%22%3A+0%2C+%22arg14%22%3A+0%2C+%22arg13%22%3A+0%2C+%22arg5%22%3A+1%2C+%22arg4%22%3A+1%2C+%22arg3%22%3A+3%2C+%22arg17%22%3A+0%2C+%22arg11%22%3A+0%2C+%22arg29%22%3A+0%2C+%22arg7%22%3A+2%2C+%22arg16%22%3A+0%2C+%22arg6%22%3A+6%2C+%22arg28%22%3A+0%2C+%22arg12%22%3A+1%2C+%22arg26%22%3A+0%2C+%22arg15%22%3A+0%2C+%22arg22%22%3A+0%2C+%22arg8%22%3A+1%7D
+              Post: [1x1 struct]
+    AcceptEncoding: 'identity'
+        Connection: 'close'
+         UserAgent: 'Python-urllib/3.4'
+     ContentLength: '768'
+       ContentType: [1x1 struct]
+              Host: 'localhost:4000'
+           Content: [1x1 struct]
+
+HTTP/1.0 200 OK
+Date: Tue, 12 Oct 2010 09:19:05 GMT
+Server: Matlab Webserver
+X-Powered-By: Matlab7.12.0.635 (R2011a)
+Set-Cookie: SESSID=5322082bf473207961031e3df1f45a22; path=/
+Expires: Thu, 19 Nov 1980 08:00:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Connection: close
+Content-Length: 540
+Content-Type: text/html; charset=UTF-8
+
+
+POST /web_feval.m HTTP/1.1
+Accept-Encoding: identity
+Connection: close
+User-Agent: Python-urllib/3.4
+Content-Length: 1009
+Content-Type: application/x-www-form-urlencoded
+Host: localhost:4000
+
+func_path=C%3A%5CUsers%5CPedro+Milani%5CDocuments%5CAcademic%5CStanford%5CClasses%5CFall+-+2014%5CCS-229%5CSkatBot%5CMatlab%5CPythonInterface%5CPredictRankSoftmax.m&arguments=%7B%22arg1%22%3A+0%2C+%22arg32%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg10%22%3A+1%2C+%22arg25%22%3A+0%2C+%22arg37%22%3A+0%2C+%22arg36%22%3A+0%2C+%22arg9%22%3A+12%2C+%22arg2%22%3A+0%2C+%22arg27%22%3A+0%2C+%22arg20%22%3A+0%2C+%22arg24%22%3A+0%2C+%22arg21%22%3A+0%2C+%22arg33%22%3A+0%2C+%22arg19%22%3A+0%2C+%22arg23%22%3A+0%2C+%22arg18%22%3A+0%2C+%22arg14%22%3A+1%2C+%22arg13%22%3A+1%2C+%22arg5%22%3A+1%2C+%22arg4%22%3A+1%2C+%22arg3%22%3A+2%2C+%22arg17%22%3A+0%2C+%22arg35%22%3A+0%2C+%22arg31%22%3A+0%2C+%22arg11%22%3A+0%2C+%22arg29%22%3A+0%2C+%22arg7%22%3A+0%2C+%22arg16%22%3A+0%2C+%22arg6%22%3A+0%2C+%22arg28%22%3A+0%2C+%22arg12%
+              Post: [1x1 struct]
+    AcceptEncoding: 'identity'
+        Connection: 'close'
+         UserAgent: 'Python-urllib/3.4'
+     ContentLength: '1009'
+       ContentType: [1x1 struct]
+              Host: 'localhost:4000'
+           Content: [1x1 struct]
+
+HTTP/1.0 200 OK
+Date: Tue, 12 Oct 2010 09:19:05 GMT
+Server: Matlab Webserver
+X-Powered-By: Matlab7.12.0.635 (R2011a)
+Set-Cookie: SESSID=5322082bf473207961031e3df1f45a22; path=/
+Expires: Thu, 19 Nov 1980 08:00:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Connection: close
+Content-Length: 676
+Content-Type: text/html; charset=UTF-8
+
+
+POST /web_feval.m HTTP/1.1
+Accept-Encoding: identity
+Connection: close
+User-Agent: Python-urllib/3.4
+Content-Length: 1009
+Content-Type: application/x-www-form-urlencoded
+Host: localhost:4000
+
+func_path=C%3A%5CUsers%5CPedro+Milani%5CDocuments%5CAcademic%5CStanford%5CClasses%5CFall+-+2014%5CCS-229%5CSkatBot%5CMatlab%5CPythonInterface%5CPredictRankSoftmax.m&arguments=%7B%22arg1%22%3A+0%2C+%22arg32%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg10%22%3A+0%2C+%22arg25%22%3A+0%2C+%22arg37%22%3A+0%2C+%22arg36%22%3A+0%2C+%22arg9%22%3A+10%2C+%22arg2%22%3A+0%2C+%22arg27%22%3A+0%2C+%22arg20%22%3A+1%2C+%22arg24%22%3A+0%2C+%22arg21%22%3A+0%2C+%22arg33%22%3A+0%2C+%22arg19%22%3A+0%2C+%22arg23%22%3A+0%2C+%22arg18%22%3A+0%2C+%22arg14%22%3A+0%2C+%22arg13%22%3A+0%2C+%22arg5%22%3A+0%2C+%22arg4%22%3A+1%2C+%22arg3%22%3A+2%2C+%22arg17%22%3A+0%2C+%22arg35%22%3A+0%2C+%22arg31%22%3A+1%2C+%22arg11%22%3A+0%2C+%22arg29%22%3A+0%2C+%22arg7%22%3A+0%2C+%22arg16%22%3A+0%2C+%22arg6%22%3A+0%2C+%22arg28%22%3A+0%2C+%22arg12%
+              Post: [1x1 struct]
+    AcceptEncoding: 'identity'
+        Connection: 'close'
+         UserAgent: 'Python-urllib/3.4'
+     ContentLength: '1009'
+       ContentType: [1x1 struct]
+              Host: 'localhost:4000'
+           Content: [1x1 struct]
+
+HTTP/1.0 200 OK
+Date: Tue, 12 Oct 2010 09:19:05 GMT
+Server: Matlab Webserver
+X-Powered-By: Matlab7.12.0.635 (R2011a)
+Set-Cookie: SESSID=5322082bf473207961031e3df1f45a22; path=/
+Expires: Thu, 19 Nov 1980 08:00:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Connection: close
+Content-Length: 676
+Content-Type: text/html; charset=UTF-8
+
+
+POST /web_feval.m HTTP/1.1
+Accept-Encoding: identity
+Connection: close
+User-Agent: Python-urllib/3.4
+Content-Length: 769
+Content-Type: application/x-www-form-urlencoded
+Host: localhost:4000
+
+func_path=C%3A%5CUsers%5CPedro+Milani%5CDocuments%5CAcademic%5CStanford%5CClasses%5CFall+-+2014%5CCS-229%5CSkatBot%5CMatlab%5CPythonInterface%5CPredictSuitSoftmax.m&arguments=%7B%22arg1%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg10%22%3A+0%2C+%22arg25%22%3A+1%2C+%22arg9%22%3A+3%2C+%22arg2%22%3A+0%2C+%22arg27%22%3A+0%2C+%22arg20%22%3A+0%2C+%22arg24%22%3A+1%2C+%22arg21%22%3A+0%2C+%22arg19%22%3A+0%2C+%22arg23%22%3A+11%2C+%22arg18%22%3A+0%2C+%22arg14%22%3A+0%2C+%22arg13%22%3A+0%2C+%22arg5%22%3A+0%2C+%22arg4%22%3A+1%2C+%22arg3%22%3A+2%2C+%22arg17%22%3A+0%2C+%22arg11%22%3A+0%2C+%22arg29%22%3A+0%2C+%22arg7%22%3A+2%2C+%22arg16%22%3A+0%2C+%22arg6%22%3A+2%2C+%22arg28%22%3A+0%2C+%22arg12%22%3A+1%2C+%22arg26%22%3A+1%2C+%22arg15%22%3A+0%2C+%22arg22%22%3A+0%2C+%22arg8%22%3A+1%7D
+              Post: [1x1 struct]
+    AcceptEncoding: 'identity'
+        Connection: 'close'
+         UserAgent: 'Python-urllib/3.4'
+     ContentLength: '769'
+       ContentType: [1x1 struct]
+              Host: 'localhost:4000'
+           Content: [1x1 struct]
+
+HTTP/1.0 200 OK
+Date: Tue, 12 Oct 2010 09:19:05 GMT
+Server: Matlab Webserver
+X-Powered-By: Matlab7.12.0.635 (R2011a)
+Set-Cookie: SESSID=5322082bf473207961031e3df1f45a22; path=/
+Expires: Thu, 19 Nov 1980 08:00:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Connection: close
+Content-Length: 541
+Content-Type: text/html; charset=UTF-8
+
+
+POST /web_feval.m HTTP/1.1
+Accept-Encoding: identity
+Connection: close
+User-Agent: Python-urllib/3.4
+Content-Length: 1009
+Content-Type: application/x-www-form-urlencoded
+Host: localhost:4000
+
+func_path=C%3A%5CUsers%5CPedro+Milani%5CDocuments%5CAcademic%5CStanford%5CClasses%5CFall+-+2014%5CCS-229%5CSkatBot%5CMatlab%5CPythonInterface%5CPredictRankSoftmax.m&arguments=%7B%22arg1%22%3A+0%2C+%22arg32%22%3A+0%2C+%22arg30%22%3A+0%2C+%22arg10%22%3A+0%2C+%22arg25%22%3A+0%2C+%22arg37%22%3A+0%2C+%22arg36%22%3A+1%2C+%22arg9%22%3A+8%2C+%22arg2%22%3A+0%2C+%22arg27%22%3A+0%2C+%22arg20%22%3A+0%2C+%22arg24%22%3A+0%2C+%22arg21%22%3A+0%2C+%22arg33%22%3A+0%2C+%22arg19%22%3A+0%2C+%22arg23%22%3A+0%2C+%22arg18%22%3A+0%2C+%22arg14%22%3A+1%2C+%22arg13%22%3A+1%2C+%22arg5%22%3A+1%2C+%22arg4%22%3A+1%2C+%22arg3%22%3A+11%2C+%22arg17%22%3A+0%2C+%22arg35%22%3A+1%2C+%22arg31%22%3A+0%2C+%22arg11%22%3A+0%2C+%22arg29%22%3A+0%2C+%22arg7%22%3A+0%2C+%22arg16%22%3A+0%2C+%22arg6%22%3A+1%2C+%22arg28%22%3A+0%2C+%22arg12%
+              Post: [1x1 struct]
+    AcceptEncoding: 'identity'
+        Connection: 'close'
+         UserAgent: 'Python-urllib/3.4'
+     ContentLength: '1009'
+       ContentType: [1x1 struct]
+              Host: 'localhost:4000'
+           Content: [1x1 struct]
+
+HTTP/1.0 200 OK
+Date: Tue, 12 Oct 2010 09:19:05 GMT
+Server: Matlab Webserver
+X-Powered-By: Matlab7.12.0.635 (R2011a)
+Set-Cookie: SESSID=5322082bf473207961031e3df1f45a22; path=/
+Expires: Thu, 19 Nov 1980 08:00:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Connection: close
+Content-Length: 676
+Content-Type: text/html; charset=UTF-8
+
+
+POST /exit_server.m HTTP/1.1
+Accept-Encoding: identity
+Connection: close
+User-Agent: Python-urllib/3.4
+Content-Length: 23
+Content-Type: application/x-www-form-urlencoded
+Host: localhost:4000
+
+id=python-matlab-bridge
+              Post: [1x1 struct]
+    AcceptEncoding: 'identity'
+        Connection: 'close'
+         UserAgent: 'Python-urllib/3.4'
+     ContentLength: '23'
+       ContentType: [1x1 struct]
+              Host: 'localhost:4000'
+           Content: [1x1 struct]
 

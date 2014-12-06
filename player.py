@@ -246,6 +246,7 @@ class BotPlayer(Player):
         valid_cards = [card for card in self.hand 
                        if rules.valid(card, self.hand, previous_plays)]
         card = random.choice(valid_cards)
+        print("Random legal move should be " + str(card))
 
         # Rotate suits so that the trump suit is at
         # the beginning of the list
@@ -257,7 +258,7 @@ class BotPlayer(Player):
         s_features = self.examine_suit(previous_plays, None, rules)
         s_result = None
         if s_features:
-            print("\n" + str(s_features)[1:-1])
+            print("Talking to Matlab for suit")
 
             # Talk to Matlab
             args = {}
@@ -265,9 +266,10 @@ class BotPlayer(Player):
                 args['arg' + str(i + 1)] = s_features[i]
             res = mlab.run('Matlab/PythonInterface/PredictSuitSoftmax.m', args)
             s_result = res['result']
+            print("Matlab results were " + str(s_result))
 
         # Figure out chosen suit (handle case where illegal suit was chosen)
-        chosen_suit = card.suit
+        chosen_suit = rules.trump_suit if card in rules.trumps else card.suit
         if s_result:
             for i in range(0, 4):
                 chosen_suit = suits[s_result[i]]
@@ -277,12 +279,14 @@ class BotPlayer(Player):
                 else:
                     if rules.count_suit(chosen_suit, self.hand) > 0:
                         break
-
-		# Get rank features (dependent on suit)
+        
+        print("Chose to play " + str(chosen_suit))
+        
+	# Get rank features (dependent on suit)
         r_features = self.examine_rank(previous_plays, None, rules, chosen_suit = chosen_suit)
         r_result = None
         if r_features:
-            print(str(r_features)[1:-1])
+            print("Talking to Matlab for rank")
 
             # Talk to Matlab
             args = {}
@@ -290,23 +294,25 @@ class BotPlayer(Player):
                 args['arg' + str(i + 1)] = r_features[i]
             res = mlab.run('Matlab/PythonInterface/PredictRankSoftmax.m', args)
             r_result = res['result']
+            print("Matlab results were " + str(r_result))
 
-        # Figure out chosen card (handle case where illegal card was chosen)
+        # Figure out chosen card (handle case where illegal rank was chosen)
         if r_result:
             for i in range(0, 11):
                 chosen_rank = r_result[i]
+                print("Chose to play " + self.decode_card_rank(chosen_rank))
                 if chosen_rank >= 7:
                     abbrev = self.decode_card_rank(chosen_rank)
                 else:
-                    abbrev = chosen_suit + self.decode_card_rank(chosen_rank)
+                    abbrev = repr(chosen_suit) + self.decode_card_rank(chosen_rank)
                 card = Card.from_abbrev(abbrev)
+                print("Selected card " + str(card))
                 if card in self.hand:
                     break
+            self.hand.remove(card)
+            return card
         else:
-            valid_cards = [card for card in self.hand 
-                           if rules.valid(card, self.hand, previous_plays)
-                           and card.suit == chosen_suit]
-            card = random.choice(valid_cards)
+            # Play the randomly selected card
             self.hand.remove(card)
             return card
     
@@ -421,8 +427,8 @@ class BotPlayer(Player):
                        
         # Find remaining cards in the game
         cur_deck = list(set(self.reference_deck) - set(self.cards_seen))
-        for play in previous_plays:
-            cur_deck.remove(play.card);
+        #for play in previous_plays:
+        #    cur_deck.remove(play.card);
 
         # Separate remaining cards by suit
         cur_trumps = [card for card in cur_deck if card in rules.trumps] 
@@ -554,6 +560,12 @@ class BotPlayer(Player):
                     return None
         else:
             suit = chosen_suit
+            if suit == rules.trump_suit:
+                if rules.count_trumps(self.hand) == 1:
+                    return None
+            else:
+                if rules.count_suit(suit, self.hand) == 1:
+                    return None
  
         # Count number of plays made so far in this round
         n_plays = len(previous_plays)
@@ -574,6 +586,7 @@ class BotPlayer(Player):
         if n_plays > 0:
             start_suit = previous_plays[0].card.suit
             for play in previous_plays:
+                print(play)
                 if play.card.suit != start_suit:
                     if play.pid == id_opp:
                         self.diff_opp[suits.index(start_suit)] = 1
@@ -604,26 +617,43 @@ class BotPlayer(Player):
         # Find remaining cards in the game (including hand)
         cur_deck_hand = [card for card in self.reference_deck
                          if (card not in self.cards_seen)]
-        for play in previous_plays:
-            cur_deck_hand.remove(play.card)
+        #for play in previous_plays:
+        #    cur_deck_hand.remove(play.card)
         
         # What's the highest card of the given suit?
-        if played_card in rules.trumps:
-            suit_len = 11
-            full_cards = rules.trumps
-            cur_cards = [cd for cd in cur_deck_hand if cd in rules.trumps]
+        if played_card:
+            if played_card in rules.trumps:
+                suit_len = 11
+                full_cards = rules.trumps
+                cur_cards = [cd for cd in cur_deck_hand if cd in rules.trumps]
+            else:
+                suit_len = 7
+                full_cards = [cd for cd in self.reference_deck 
+                              if cd.suit == suits[suits.index(suit)] 
+                              and cd not in rules.trumps]
+                cur_cards = [cd for cd in cur_deck_hand
+                             if cd.suit == suits[suits.index(suit)]
+                             and cd not in rules.trumps]
+                full_cards.extend([0] * 4)
         else:
-            suit_len = 7
-            full_cards = [cd for cd in self.reference_deck 
-                          if cd.suit == suits[suits.index(suit)] 
-                          and cd not in rules.trumps]
-            cur_cards = [cd for cd in cur_deck_hand
-                         if cd.suit == suits[suits.index(suit)]
-                         and cd not in rules.trumps]
-            full_cards.extend([0] * 4)
-                
-        highest_card = rules.winning_card(cur_cards)
+            if chosen_suit == rules.trump_suit:
+                suit_len = 11
+                full_cards = rules.trumps
+                cur_cards = [cd for cd in cur_deck_hand if cd in rules.trumps]
+            else:
+                suit_len = 7
+                full_cards = [cd for cd in self.reference_deck 
+                              if cd.suit == suits[suits.index(chosen_suit)] 
+                              and cd not in rules.trumps]
+                cur_cards = [cd for cd in cur_deck_hand
+                             if cd.suit == suits[suits.index(chosen_suit)]
+                             and cd not in rules.trumps]
+                full_cards.extend([0] * 4)
 
+        print("Cards of suit already played" + str(cur_deck_hand));
+        print("Cur cards" + str(cur_cards))
+        highest_card = rules.winning_card(cur_cards)
+        
         # Describes the remaining cards of the suit to play.
         # The indices correspond to the cards in the following way:
         #
@@ -657,6 +687,8 @@ class BotPlayer(Player):
             output = self.encode_card_rank(played_card)
         
         # Uncomment to debug feature variables
+        print("Hand: " + str(self.hand))
+        print("Trumps is " + str(rules.trump_suit))
         print("Highest card (" + str(suit) + "): " + str(highest_card))
         print("Previous plays: " + str(previous_plays))
         print("Going first: " + str(first))
@@ -664,7 +696,6 @@ class BotPlayer(Player):
         print("Has opponent played: " + str(played_opp))
         print("Has friend played: " + str(played_frd))
         print("Is winning: " + str(is_winning))
-        print("Hand: " + str(self.hand))
         print("Winning card: (" + str(suit) + ") " + str(win_card))
         print("Has card: (" + str(suit) + ") " + str(has_card))
         print("Beat opp: (" + str(suit) + ") " + str(beat_opp))
