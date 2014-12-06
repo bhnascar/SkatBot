@@ -11,12 +11,32 @@ from player import *
 from globals import *
 from networking import *
 
-def accept_players(server_socket, hands, num_bots):
+def accept_players(server_socket, hands, player_args):
     """
     Accepts three players for this game of Skat. Deals out
     their hands. Returns a dictionary that maps player IDs
     to Player objects.
     """
+    # Count bots
+    if '-b' in player_args:
+        index = player_args.index('-b');
+        num_bots = max(2, int(player_args[index + 1]))
+        mlab.start()
+    else:
+        num_bots = 0
+
+    # See if bot algorithm has been provided
+    suit_algo = 'Matlab/PythonInterface/PredictSuitSoftmax.m'
+    rank_algo = 'Matlab/PythonInterface/PredictRankSoftmax.m'
+    if '-sa' in player_args:
+        index = player_args.index('-sa');
+        suit_algo = player_args[index + 1]
+    if '-ra' in player_args:
+        index = player_args.index('-ra');
+        rank_algo = player_args[index + 1]
+
+    # Accept human players connecting from the Skat client
+    # program
     players = {}
     for i in range(0, 3 - num_bots):
         # Create player
@@ -29,12 +49,9 @@ def accept_players(server_socket, hands, num_bots):
     
     # Add bot players
     for i in range(3 - num_bots, 3):
-        suit_algo = 'Matlab/PythonInterface/PredictSuitSoftmax.m'
-        rank_algo = 'Matlab/PythonInterface/PredictRankSoftmax.m'
         players[i + 1] = BotPlayer(i + 1, hands[i], "Bot", 
                                    suit_algo = suit_algo,
                                    rank_algo = rank_algo)
-    
     return players
     
 def decide_declarer(players):
@@ -115,14 +132,6 @@ def main(argv):
 
     # Open log file
     file = open_log_file(argv)
-    
-    # Count bots
-    if '-b' in argv:
-        index = argv.index('-b');
-        num_bots = max(2, int(argv[index + 1]))
-        mlab.start()
-    else:
-        num_bots = 0
 
     # Generate hands
     deck = Card.shuffle_deck(Card.get_deck())
@@ -134,7 +143,7 @@ def main(argv):
     server_socket = open_socket(50007)
     
     # Accept players
-    players = accept_players(server_socket, hands, num_bots)
+    players = accept_players(server_socket, hands, argv)
     conns = [player.conn for player in players.values() if isinstance(player, HumanPlayer)]
     for player in players.values():
         file.write("(%d, %s, %s)\n" % 
