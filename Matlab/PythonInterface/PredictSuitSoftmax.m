@@ -6,7 +6,7 @@ function y = PredictSuitSoftmax(args)
 %   algorithm's best guess, the second one is its second choice, etc. ARGS is
 %   a 1x30 array.
 
-    load test.mat;
+    load parameters.mat;
     
     n_features = 30;
     x = zeros(1, n_features);
