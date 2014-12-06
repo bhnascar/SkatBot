@@ -29,7 +29,11 @@ def accept_players(server_socket, hands, num_bots):
     
     # Add bot players
     for i in range(3 - num_bots, 3):
-        players[i + 1] = BotPlayer(i + 1, hands[i], "Bot")
+        suit_algo = 'Matlab/PythonInterface/PredictSuitSoftmax.m'
+        rank_algo = 'Matlab/PythonInterface/PredictRankSoftmax.m'
+        players[i + 1] = BotPlayer(i + 1, hands[i], "Bot", 
+                                   suit_algo = suit_algo,
+                                   rank_algo = rank_algo)
     
     return players
     

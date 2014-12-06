@@ -176,13 +176,16 @@ class BotPlayer(Player):
     input and returns computer-predicted values instead.
     """
     
-    def __init__(self, pid, hand, name):
+    def __init__(self, pid, hand, name, suit_algo = None, rank_algo = None):
         """
         Initializes a computer player with an ID and hand.
         """
         super(BotPlayer, self).__init__(pid, hand)
         
         self.name = name
+
+        # What algorithm are we going to use to make plays?
+        self.algo = algo
         
         # Cards seen by this player so far
         # (Excludes cards on player's hand and
@@ -247,76 +250,43 @@ class BotPlayer(Player):
         # suggests an illegal card to play.
         valid_cards = [card for card in self.hand 
                        if rules.valid(card, self.hand, previous_plays)]
-        card = random.choice(valid_cards)
+        random_card = random.choice(valid_cards)
+        if not self.suit_algo or not self.rank_algo:
+            print(self.name + g" has no prediction algorithm. Playing randomly.")
+            return random_card
 
-        # Rotate suits so that the trump suit is at
-        # the beginning of the list
-        suits = [Suit.clubs, Suit.spades, Suit.hearts, Suit.diamonds]
-        i = suits.index(rules.trump_suit)        
-        suits = suits[i:] + suits[:i]
+        # Log hand
+        print(self.name + " has hand: " + str(self.hand))
 
-		# Get suit features
-        s_features = self.examine_suit(previous_plays, None, rules)
-
-        # If we have a suit features, make a suit prediction
-        s_result = None
-        if s_features:
-            print("Talking to Matlab for suit")
-
-            # Talk to Matlab
-            args = {}
-            for i in range(0, len(s_features)):
-                args['arg' + str(i + 1)] = s_features[i]
-            res = mlab.run('Matlab/PythonInterface/PredictSuitSoftmax.m', args)
-            s_result = res['result']
-            print("Matlab results were " + str(s_result))
-
-        # Figure out chosen suit (handle case where illegal suit was chosen)
-        chosen_suit = rules.trump_suit if card in rules.trumps else card.suit
-        if s_result:
-            for i in range(0, 4):
-                chosen_suit = suits[s_result[i]]
-                if chosen_suit == rules.trump_suit and rules.count_trumps(self.hand) > 0:
-                    break
-                elif rules.count_suit(chosen_suit, self.hand) > 0:
-                    break
-        print("Chose to play " + str(chosen_suit))
+        # First predict the best suit
+        chosen_suit = self.choose_suit(previous_plays, rules)
+        if not chosen_suit:
+            chosen_suit = rules.trump_suit if random_card in rules.trumps else random_card.suit
+        print("Chose to play suit " + str(chosen_suit) + "\n")
         
         # Get rank features (dependent on suit)
-        r_features = self.examine_rank(previous_plays, None, rules, chosen_suit = chosen_suit)
+        chosen_rank = self.choose_rank(previous_plays, rules, chosen_suit)
+        if not chosen_rank:
+            chosen_rank = random_card.rank
+        print("Chose to play rank " + str(chosen_rank) + "\n")
 
-        # If we have rank features, make a rank prediction
-        r_result = None
-        if r_features:
-            print("Talking to Matlab for rank")
-
-            # Talk to Matlab
-            args = {}
-            for i in range(0, len(r_features)):
-                args['arg' + str(i + 1)] = r_features[i]
-            res = mlab.run('Matlab/PythonInterface/PredictRankSoftmax.m', args)
-            r_result = res['result']
-            print("Matlab results were " + str(r_result))
-
-        # Figure out chosen card (handle case where illegal rank was chosen)
-        if r_result:
-            for i in range(0, 11):
-                chosen_rank = r_result[i]
-                print("Chose to play " + self.decode_card_rank(chosen_rank))
-                if chosen_rank >= 7:
-                    abbrev = self.decode_card_rank(chosen_rank)
-                else:
-                    abbrev = repr(chosen_suit) + self.decode_card_rank(chosen_rank)
-                card = Card.from_abbrev(abbrev)
-                print("Selected card " + str(card))
-                if card in self.hand:
-                    break
-            self.hand.remove(card)
-            return card
+        # Inflate card
+        if chosen_rank >= 7:
+            abbrev = self.decode_card_rank(chosen_rank)
         else:
-            # Play the randomly selected card
-            self.hand.remove(card)
-            return card
+            abbrev = repr(chosen_suit) + self.decode_card_rank(chosen_rank)
+        chosen_card = Card.from_abbrev(abbrev)
+        print("Selected card " + str(chosen_card))
+
+        # Play, with error checking
+        if rules.valid(chosen_card, self.hand, previous_plays):
+            self.hand.remove(chosen_card)
+            return chosen_card
+        else:
+            print("ILLEGAL MOVE: " + str(chosen_card))
+            print("Falling back on random card: " + str(random_card))
+            self.hand.remove(random_card)
+            return random_card
     
     def encode_card_rank(self, card):
         """
@@ -363,7 +333,74 @@ class BotPlayer(Player):
         }[rank]
         
         return output
-            
+    
+    def choose_suit(self, previous_plays, rules):
+        """
+        Chooses a suit to play. Helper function for get_play.
+        """
+        # Rotate suits so that the trump suit is at
+        # the beginning of the list
+        suits = [Suit.clubs, Suit.spades, Suit.hearts, Suit.diamonds]
+        i = suits.index(rules.trump_suit)        
+        suits = suits[i:] + suits[:i]
+
+        # Get suit features
+        s_features = self.examine_suit(previous_plays, None, rules)
+
+        # If we have a suit feature, make a suit prediction
+        if s_features:
+            print("Talking to Matlab for suit")
+
+            # Talk to Matlab
+            args = {}
+            for i in range(0, len(s_features)):
+                args['arg' + str(i + 1)] = s_features[i]
+            s_result = mlab.run(self.suit_algo, args)['result']
+            print("Matlab results were " + str(s_result))
+
+            # Figure out chosen suit (handle case where illegal suit was chosen)
+            if s_result:
+                for i in range(0, len(s_result)):
+                    suit = suits[s_result[i]]
+                    if suit == rules.trump_suit and rules.count_trumps(self.hand) > 0:
+                        return suit
+                    elif rules.count_suit(suit, self.hand) > 0:
+                        return suit
+        return None
+
+    def choose_rank(self, previous_plays, rules, chosen_suit):
+        """
+        Chooses a rank to play, conditioned on the chosen suit.
+        Helper function for get_play.
+        """
+        # Get rank features (dependent on suit)
+        r_features = self.examine_rank(previous_plays, None, rules, chosen_suit = chosen_suit)
+
+        # Reference list of possible ranks for the chosen suit.
+        if suit == rules.trump_suit:
+            possible_ranks = [card.rank for card in self.hand if card in rules.trumps]
+        else:
+            possible_ranks = [card.rank for card in self.hand if card.suit == suit]
+
+        # If we have a rank feature, make a rank prediction
+        r_result = None
+        if r_features:
+            print("Talking to Matlab for rank")
+
+            # Talk to Matlab
+            args = {}
+            for i in range(0, len(r_features)):
+                args['arg' + str(i + 1)] = r_features[i]
+            r_result = mlab.run(self.rank_algo, args)['result']
+            print("Matlab results were " + str(r_result))
+
+            # Figure out chosen rank (handle case where illegal rank was chosen)
+            if r_result:
+                for i in range(0, len(r_result)):
+                    rank = r_result[i]
+                    if chosen_rank in possible_ranks:
+                        return rank
+        return random.choice(possible_ranks)
        
     def examine_suit(self, previous_plays, played_card, rules):
         """
