@@ -243,6 +243,8 @@ class BotPlayer(Player):
         This is what happens when you have a multi-person project
         and are too lazy to rewrite Matlab stuff with numpy...
         """
+        print("lala")
+        print("lala")
         valid_cards = [card for card in self.hand 
                        if rules.valid(card, self.hand, previous_plays)]
         card = random.choice(valid_cards)
@@ -265,7 +267,9 @@ class BotPlayer(Player):
 		# Get rank features
         r_features = self.examine_rank(previous_plays, None, rules, chosen_suit = card.suit)
         if (r_features):
+            print("foo1")
             print(str(r_features)[1:-1])
+            print("foo2")
 
             # Talk to Matlab
             args = {}
@@ -565,8 +569,7 @@ class BotPlayer(Player):
             cur_cards = [cd for cd in cur_deck_hand
                          if cd.suit == suits[suits.index(suit)]
                          and cd not in rules.trumps]
-            if len(full_cards) != 7:
-                full_cards.extend([0] * 4)
+            full_cards.extend([0] * 4)
                 
         highest_card = rules.winning_card(cur_cards)
 

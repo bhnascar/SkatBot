@@ -14,8 +14,7 @@ function y = PredictRankSVM(args)
     for i = 1:numel(fields)
         x(i) = args.(['arg', int2str(i)]);
     end            
-    %x = x(2:n_features);
-    x(1,1) = 1;
-    y_dummy = 1;
-    y = svmpredict(y_dummy, x, model_rank, '-q');
+    x = x(2:n_features);
+    
+    y = svmpredict(1, x, model_rank, '-q');
 end
