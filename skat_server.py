@@ -26,8 +26,8 @@ def accept_players(server_socket, hands, player_args):
         num_bots = 0
 
     # See if bot algorithm has been provided
-    suit_algo = 'Matlab/PythonInterface/PredictSuitSoftmax.m'
-    rank_algo = 'Matlab/PythonInterface/PredictRankSoftmax.m'
+    suit_algo = None
+    rank_algo = None
     if '-sa' in player_args:
         index = player_args.index('-sa');
         suit_algo = player_args[index + 1]
