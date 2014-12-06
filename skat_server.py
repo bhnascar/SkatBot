@@ -86,7 +86,7 @@ def open_log_file(file_args):
 
     # Write a new file in the user-given directory
     elif '-l' in file_args:
-        index = file_args.index('l');
+        index = file_args.index('-l');
         log_folder = str(file_args[index + 1])
         if not os.path.exists(log_folder):
             os.makedirs(log_folder)
