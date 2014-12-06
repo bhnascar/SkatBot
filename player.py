@@ -243,42 +243,72 @@ class BotPlayer(Player):
         This is what happens when you have a multi-person project
         and are too lazy to rewrite Matlab stuff with numpy...
         """
-        print("lala")
-        print("lala")
         valid_cards = [card for card in self.hand 
                        if rules.valid(card, self.hand, previous_plays)]
         card = random.choice(valid_cards)
-        self.hand.remove(card)
+
+        # Rotate suits so that the trump suit is at
+        # the beginning of the list
+        suits = [Suit.clubs, Suit.spades, Suit.hearts, Suit.diamonds]
+        i = suits.index(rules.trump_suit)        
+        suits = suits[i:] + suits[:i]
 
 		# Get suit features
         s_features = self.examine_suit(previous_plays, None, rules)
-        if (s_features):
+        s_result = None
+        if s_features:
             print("\n" + str(s_features)[1:-1])
 
             # Talk to Matlab
             args = {}
             for i in range(0, len(s_features)):
                 args['arg' + str(i + 1)] = s_features[i]
-            print('Foobar')
             res = mlab.run('Matlab/PythonInterface/PredictSuitSoftmax.m', args)
-            print('Baz')
-            print(res['result'])
+            s_result = res['result']
 
-		# Get rank features
-        r_features = self.examine_rank(previous_plays, None, rules, chosen_suit = card.suit)
-        if (r_features):
-            print("foo1")
+        # Figure out chosen suit (handle case where illegal suit was chosen)
+        chosen_suit = card.suit
+        if s_result:
+            for i in range(0, 4):
+                chosen_suit = suits[s_result[i]]
+                if chosen_suit == rules.trump_suit:
+                    if rules.count_trumps(self.hand) > 0:
+                        break
+                else:
+                    if rules.count_suit(chosen_suit, self.hand) > 0:
+                        break
+
+		# Get rank features (dependent on suit)
+        r_features = self.examine_rank(previous_plays, None, rules, chosen_suit = chosen_suit)
+        r_result = None
+        if r_features:
             print(str(r_features)[1:-1])
-            print("foo2")
 
             # Talk to Matlab
             args = {}
             for i in range(0, len(r_features)):
                 args['arg' + str(i + 1)] = r_features[i]
-            res = mlab.run('Matlab/PythonInterface/PredictRankSVM.m', args)
-            print(res['result'])
+            res = mlab.run('Matlab/PythonInterface/PredictRankSoftmax.m', args)
+            r_result = res['result']
 
-        return card
+        # Figure out chosen card (handle case where illegal card was chosen)
+        if r_result:
+            for i in range(0, 11):
+                chosen_rank = r_result[i]
+                if chosen_rank >= 7:
+                    abbrev = self.decode_card_rank(chosen_rank)
+                else:
+                    abbrev = chosen_suit + self.decode_card_rank(chosen_rank)
+                card = Card.from_abbrev(abbrev)
+                if card in self.hand:
+                    break
+        else:
+            valid_cards = [card for card in self.hand 
+                           if rules.valid(card, self.hand, previous_plays)
+                           and card.suit == chosen_suit]
+            card = random.choice(valid_cards)
+            self.hand.remove(card)
+            return card
     
     def encode_card_rank(self, card):
         """
@@ -305,6 +335,27 @@ class BotPlayer(Player):
             }[card.suit]
             
         return output
+
+    def decode_card_rank(self, rank):
+        """
+        Decodes the rank from the Matlab representation.
+        """
+        output = {
+            0: '7',
+            1: '8',
+            2: '9',
+            3: 'Q',
+            4: 'K',
+            5: '10',
+            6: 'A',
+            7: 'dB',
+            8: 'hB',
+            9: 'sB',
+            10:'cB'
+        }[rank]
+        
+        return output
+            
        
     def examine_suit(self, previous_plays, played_card, rules):
         """
