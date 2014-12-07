@@ -105,6 +105,8 @@ class Matlab(object):
         # Hacky fix for backslashes in Windows paths messing up JSON decoding (read as invalid escape)
         result = result.replace('\\', '\\\\')
 
-        return json.loads(result) if result else ''
+        if result != None:
+            return json.loads(result)
+        return ''
 
 

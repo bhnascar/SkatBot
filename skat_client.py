@@ -103,8 +103,10 @@ def main(argv):
     print("\nReceived hand:\n" + Card.hand_to_str(hand))
     
     # Playing?
-    playing = input("\nAre you playing? (y/n)\n")
+    playing = input("\nAre you playing? (y/n/sb/rb)\n")
     send_str(server_socket, playing)
+    if playing == "sb" or playing == "rb":
+        return 0
     print(recv_str(server_socket))
     
     # If playing...

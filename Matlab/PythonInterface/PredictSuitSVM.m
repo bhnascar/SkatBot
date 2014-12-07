@@ -21,7 +21,7 @@ function y = PredictSuitSVM(args)
     p = exp(theta_suit'*(x'));
     p = p./sum(exp(theta_suit'*(x')));
     [~, y] = sort(p, 'descend');
-    y4 = y(1);
+    y4 = y;
     
     % SVM
     x = x(2:n_features);    	
@@ -29,6 +29,6 @@ function y = PredictSuitSVM(args)
     y2 = svmpredict(1, x, model_suit2, '-q');
     y3 = svmpredict(1, x, model_suit3, '-q');
     
-    y = [y1 y2 y3 y4] - 1;
+    y = y4 - 1;
 end
 

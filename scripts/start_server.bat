@@ -8,10 +8,11 @@ cd ..
 
 REM Invoke Skat script
 REM "-d" flag for debug (write to debug.txt instead of a log file)
+REM "-l" flag for log file folder
 REM "-b 2" flag for two bots
 REM "-sa Matlab/PythonInterface/PredictSuitSoftmax.m" flag to specify suit prediction algorithm (script)
 REM "-ra Matlab/PythonInterface/PredictRankSoftmax.m" flag to specify rank prediction algorithm (script)
-python skat_server.py -d -b 2 -sa Matlab/PythonInterface/PredictSuitSVM.m -ra Matlab/PythonInterface/PredictRankSVM.m %*
+python skat_server.py -l anova -sa Matlab/PythonInterface/PredictSuitSVM.m -ra Matlab/PythonInterface/PredictRankSVM.m %*
 
 REM Keep cmd window open after script finishes
 pause

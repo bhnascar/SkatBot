@@ -21,7 +21,6 @@ def accept_players(server_socket, hands, player_args):
     if '-b' in player_args:
         index = player_args.index('-b');
         num_bots = max(2, int(player_args[index + 1]))
-        mlab.start()
     else:
         num_bots = 0
 
@@ -54,17 +53,44 @@ def accept_players(server_socket, hands, player_args):
                                    rank_algo = rank_algo)
     return players
     
-def decide_declarer(players):
+def decide_declarer(players, player_args):
     """
     Determine who will declare the game. Right now this has
     to be decided verbally and each player will have to send
     their response through the client program. The declarer
     is simply whoever responds "y" (yes).
+
+    If a human player responds with "sb" through the client,
+    they will be replaced by a smart bot which uses the card
+    prediction algorithm invoked with the server program.
+
+    If a human player responds with "rb" through the client,
+    they will be replaced by a random bot which picks a
+    random legal card to play.
     """
+    # See if bot algorithm has been provided
+    suit_algo = None
+    rank_algo = None
+    if '-sa' in player_args:
+        index = player_args.index('-sa');
+        suit_algo = player_args[index + 1]
+    if '-ra' in player_args:
+        index = player_args.index('-ra');
+        rank_algo = player_args[index + 1]
+    
     declarer = None
     for player in players.values():
         response = player.get_bet()
-        declarer = player if response == "y" else declarer
+        if response == "y":
+            declarer = player
+        elif response == "sb": # Smart bot
+            players[player.pid] = BotPlayer(player.pid, player.hand,
+                                            "SmartBot" + str(player.pid), 
+                                            suit_algo = suit_algo,
+                                            rank_algo = rank_algo)
+        elif response == "rb": # Random bot
+            players[player.pid] = BotPlayer(player.pid, player.hand,
+                                            "DumbBot" + str(player.pid))
     return declarer
 
 def decide_game(declarer, skat):
@@ -144,18 +170,18 @@ def main(argv):
     
     # Accept players
     players = accept_players(server_socket, hands, argv)
-    conns = [player.conn for player in players.values() if isinstance(player, HumanPlayer)]
-    for player in players.values():
-        file.write("(%d, %s, %s)\n" % 
-                    (player.pid, player.name, Card.hand_to_repr(player.hand)))
     
     # Who's playing?
-    declarer = decide_declarer(players)
+    declarer = decide_declarer(players, argv)
     if not declarer:
         file.close()
         server_socket.close()
         mlab.stop()
         return 1
+    for player in players.values():
+        file.write("(%d, %s, %s)\n" % 
+                    (player.pid, player.name, Card.hand_to_repr(player.hand)))
+    conns = [player.conn for player in players.values() if isinstance(player, HumanPlayer)]
     broadcast_str(conns, declarer.name + " is playing!", log = True)
     
     # What are we playing?
@@ -236,6 +262,7 @@ def main(argv):
 
 if __name__ == "__main__":
     try:
+        mlab.start()
         sys.exit(main(sys.argv))
     except Exception:
         # Always stop the Matlab server, especially if we crash

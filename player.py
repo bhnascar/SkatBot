@@ -459,8 +459,10 @@ class BotPlayer(Player):
             
         # Only one suit left
         # (This also catches the case of only one card left)
-        if (len(set([card.suit for card in self.hand])) == 1 or
-            rules.count_trumps(self.hand) == len(self.hand)):
+        if (rules.count_trumps(self.hand) == len(self.hand)):
+            return None
+        elif (len(set([card.suit for card in self.hand])) == 1 and
+              rules.count_trumps(self.hand) == 0):
             return None
 
         # Rotate suits so that the trump suit is at
