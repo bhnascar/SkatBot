@@ -264,13 +264,13 @@ class BotPlayer(Player):
 
         # First predict the best suit
         chosen_suit = self.choose_suit(previous_plays, rules)
-        if not chosen_suit:
+        if chosen_suit == None:
             chosen_suit = rules.trump_suit if random_card in rules.trumps else random_card.suit
         print("Chose to play suit " + str(chosen_suit))
         
         # Get rank features (dependent on suit)
         chosen_rank = self.choose_rank(previous_plays, rules, chosen_suit)
-        if not chosen_rank:
+        if chosen_rank == None:
             valid_cards_of_chosen_suit = [card for card in valid_cards
                                           if card.suit == chosen_suit]
             if len(valid_cards_of_chosen_suit) == 1:
@@ -389,7 +389,9 @@ class BotPlayer(Player):
         if chosen_suit == rules.trump_suit:
             possible_ranks = [self.encode_card_rank(card) for card in self.hand if card in rules.trumps]
         else:
-            possible_ranks = [self.encode_card_rank(card) for card in self.hand if card.suit == chosen_suit]
+            possible_ranks = [self.encode_card_rank(card) for card in self.hand
+                              if card.suit == chosen_suit
+                              and card not in rules.trumps]
 
         # If we have a rank feature, make a rank prediction
         r_result = None
@@ -447,9 +449,9 @@ class BotPlayer(Player):
         if len(previous_plays) > 0:
             
             # First person played trumps and we have trumps
-            if (previous_plays[0].card in rules.trumps and 
-                rules.count_trumps(self.hand) > 0):
-                return None
+            if (previous_plays[0].card in rules.trumps):
+                if (rules.count_trumps(self.hand) > 0):
+                    return None
                 
             # First person played a suit and we have cards of that suit
             elif rules.count_suit(previous_plays[0].card.suit, self.hand) > 0:
@@ -457,7 +459,8 @@ class BotPlayer(Player):
             
         # Only one suit left
         # (This also catches the case of only one card left)
-        if len(set([card.suit for card in self.hand])) == 1:
+        if (len(set([card.suit for card in self.hand])) == 1 or
+            rules.count_trumps(self.hand) == len(self.hand)):
             return None
 
         # Rotate suits so that the trump suit is at

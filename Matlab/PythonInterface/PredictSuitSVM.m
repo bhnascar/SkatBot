@@ -5,6 +5,7 @@ function y = PredictSuitSVM(args)
 %   a single number between 0 and 3, indicating which suit should be
 %   played.
 
+    load softmax_parameters.mat;
     load svm_parameters.mat;
     
     n_features = 30;
@@ -13,13 +14,21 @@ function y = PredictSuitSVM(args)
     fields = fieldnames(args);
     for i = 1:numel(fields)
         x(i) = args.(['arg', int2str(i)]);
-    end            
-    x = x(2:n_features);
-    	
+    end
+    
+    % Softmax
+    x(1,1) = 1;     
+    p = exp(theta_suit'*(x'));
+    p = p./sum(exp(theta_suit'*(x')));
+    [~, y] = sort(p, 'descend');
+    y4 = y(1);
+    
+    % SVM
+    x = x(2:n_features);    	
     y1 = svmpredict(1, x, model_suit1, '-q');
     y2 = svmpredict(1, x, model_suit2, '-q');
-    y1 = y1-1;
-    y2 = y2-1;
-    y = [y1 y2];
+    y3 = svmpredict(1, x, model_suit3, '-q');
+    
+    y = [y1 y2 y3 y4] - 1;
 end
 
