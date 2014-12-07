@@ -5,7 +5,7 @@ function y = PredictSuitSVM(args)
 %   a single number between 0 and 3, indicating which suit should be
 %   played.
 
-    load test.mat;
+    load svm_parameters.mat;
     
     n_features = 30;
     x = zeros(1, n_features);
@@ -16,6 +16,10 @@ function y = PredictSuitSVM(args)
     end            
     x = x(2:n_features);
     	
-    y = svmpredict(1, x, model_suit, '-q');
+    y1 = svmpredict(1, x, model_suit1, '-q');
+    y2 = svmpredict(1, x, model_suit2, '-q');
+    y1 = y1-1;
+    y2 = y2-1;
+    y = [y1 y2];
 end
 

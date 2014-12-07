@@ -5,7 +5,7 @@ function y = PredictRankSVM(args)
 %   a single number that indicates which card should be played. x is a 1 x
 %   42 array of features.
 
-    load test.mat;
+    load svm_parameters.mat;
     
     n_features = 42;
     x = zeros(1, n_features);
@@ -16,5 +16,9 @@ function y = PredictRankSVM(args)
     end            
     x = x(2:n_features);
     
-    y = svmpredict(1, x, model_rank, '-q');
+    y1 = svmpredict(1, x, model_rank1, '-q');
+    y2 = svmpredict(1, x, model_rank2, '-q');
+    y1 = y1-1;
+    y2 = y2-1;
+    y = [y1 y2];
 end
