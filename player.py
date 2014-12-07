@@ -184,8 +184,9 @@ class BotPlayer(Player):
         
         self.name = name
 
-        # What algorithm are we going to use to make plays?
-        self.algo = algo
+        # What algorithms are we going to use to make plays?
+        self.suit_algo = suit_algo
+        self.rank_algo = rank_algo
         
         # Cards seen by this player so far
         # (Excludes cards on player's hand and
@@ -256,19 +257,27 @@ class BotPlayer(Player):
             return random_card
 
         # Log hand
-        print(self.name + " has hand: " + str(self.hand))
+        print("\n"+ self.name + " has hand: ")
+        for card in self.hand:
+            print(card, end = " ")
+        print()
 
         # First predict the best suit
         chosen_suit = self.choose_suit(previous_plays, rules)
         if not chosen_suit:
             chosen_suit = rules.trump_suit if random_card in rules.trumps else random_card.suit
-        print("Chose to play suit " + str(chosen_suit) + "\n")
+        print("Chose to play suit " + str(chosen_suit))
         
         # Get rank features (dependent on suit)
         chosen_rank = self.choose_rank(previous_plays, rules, chosen_suit)
         if not chosen_rank:
-            chosen_rank = random_card.rank
-        print("Chose to play rank " + str(chosen_rank) + "\n")
+            valid_cards_of_chosen_suit = [card for card in valid_cards
+                                          if card.suit == chosen_suit]
+            if len(valid_cards_of_chosen_suit) == 1:
+                chosen_rank = valid_cards_of_chosen_suit[0].rank
+            else:
+                chosen_rank = random_card.rank
+        print("Chose to play rank " + str(chosen_rank))
 
         # Inflate card
         if chosen_rank >= 7:
@@ -377,10 +386,10 @@ class BotPlayer(Player):
         r_features = self.examine_rank(previous_plays, None, rules, chosen_suit = chosen_suit)
 
         # Reference list of possible ranks for the chosen suit.
-        if suit == rules.trump_suit:
-            possible_ranks = [card.rank for card in self.hand if card in rules.trumps]
+        if chosen_suit == rules.trump_suit:
+            possible_ranks = [self.encode_card_rank(card) for card in self.hand if card in rules.trumps]
         else:
-            possible_ranks = [card.rank for card in self.hand if card.suit == suit]
+            possible_ranks = [self.encode_card_rank(card) for card in self.hand if card.suit == chosen_suit]
 
         # If we have a rank feature, make a rank prediction
         r_result = None
@@ -396,10 +405,12 @@ class BotPlayer(Player):
 
             # Figure out chosen rank (handle case where illegal rank was chosen)
             if r_result:
+                print("Possible ranks: " + str(possible_ranks))
                 for i in range(0, len(r_result)):
-                    rank = r_result[i]
+                    chosen_rank = r_result[i]
+                    print("Chosen rank: " + str(chosen_rank))
                     if chosen_rank in possible_ranks:
-                        return rank
+                        return chosen_rank
         return random.choice(possible_ranks)
        
     def examine_suit(self, previous_plays, played_card, rules):

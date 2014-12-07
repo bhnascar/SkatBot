@@ -191,6 +191,7 @@ def main(argv):
             # Broadcast state of round
             broadcast_str(conns, players[pid].name + " played ", log = True)
             broadcast_msg(conns, pickle.dumps(card))
+            print(str(card) + "\n")
             
             # Choose next player
             pid = (pid + 1) if (pid + 1) < 4 else 1
