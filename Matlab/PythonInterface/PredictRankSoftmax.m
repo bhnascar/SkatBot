@@ -6,7 +6,7 @@ function y = PredictRankSoftmax(args)
 %   algorithm's best guess, the second one is its second choice, etc. ARGS is
 %   a 1x42 feature vector
 
-    load parameters.mat;
+    load softmax_parameters.mat;
     
     n_features = 42;
     x = zeros(1, n_features);
