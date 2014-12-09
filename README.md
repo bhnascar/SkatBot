@@ -25,8 +25,8 @@ The default parameters are:
 ```
 "-d" flag for debug (write to debug.txt instead of a log file)
 "-b 2" flag to play against two bots instead of two human players
-"-sa Matlab/PythonInterface/PredictSuitSoftmax.m" flag to specify suit prediction algorithm (script)
-"-ra Matlab/PythonInterface/PredictRankSoftmax.m" flag to specify rank prediction algorithm (script)
+"-sa Matlab/PythonInterface/PredictSuitSoftmax.m" flag to specify suit prediction algorithm
+"-ra Matlab/PythonInterface/PredictRankSoftmax.m" flag to specify rank prediction algorithm
 ```
 
 Other notes
