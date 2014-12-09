@@ -1,5 +1,0 @@
-(1, boss, d7 dA h8 hK s7 s8 s9 sQ s10 cA)
-(2, SmartBot2, d9 dQ dK h7 c9 cQ dB hB sB cB)
-(3, SmartBot3, d8 d10 h9 hQ h10 hA sK sA c7 cK)
-(1, c, d7 dA h8 hK s7 s8 s9 sQ s10 cA)
-[(1, cA), (2, dB), (3, c7)]
