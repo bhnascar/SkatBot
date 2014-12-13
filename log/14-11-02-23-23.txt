@@ -1,5 +1,5 @@
 (1, boss, h9 hA s8 sK s10 sA c7 c8 c10 sB)
-(2, PissFor99Cents, d7 d9 dQ dK hK sQ c9 cQ dB cB)
+(2, tim, d7 d9 dQ dK hK sQ c9 cQ dB cB)
 (3, pedro5, d10 dA h7 h8 hQ h10 s7 s9 cK cA)
 (1, s, d8 hA sK s10 sA c7 c8 c10 hB sB)
 [(1, hA), (2, hK), (3, h7)]

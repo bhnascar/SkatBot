@@ -1,5 +1,5 @@
 (1, pedro, dQ dK d10 hA s7 s8 sQ c7 cQ c10)
-(2, inthishardtimeofmidtermsandprojectsitishardtoremmberthatsomehtingswillalwaysremiantrueforexamplethatyourmomisfatandpedroisapheggit, d7 d9 dA h8 hQ h10 sA cK dB sB)
+(2, tim, d7 d9 dA h8 hQ h10 sA cK dB sB)
 (3, boss, d8 h7 h9 hK s9 s10 c8 cA hB cB)
 (3, s, h7 h9 hK s9 sK s10 c8 cA hB cB)
 [(1, hA), (2, h10), (3, h7)]

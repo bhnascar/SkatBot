@@ -1,4 +1,4 @@
-(1, Balls, dA h8 h9 h10 s8 s9 sQ sA c8 sB)
+(1, tim, dA h8 h9 h10 s8 s9 sQ sA c8 sB)
 (2, boss, d7 dK h7 hK hA s7 c9 cK cA hB)
 (3, pedro4, d9 dQ d10 hQ sK c7 cQ c10 dB cB)
 (1, s, d8 dA h8 h9 s8 s9 sQ s10 sA sB)

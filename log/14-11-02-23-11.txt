@@ -1,4 +1,4 @@
-(1, pedroisapheggit, d9 d10 dA h7 s10 c7 c9 cK hB sB)
+(1, tim, d9 d10 dA h7 s10 c7 c9 cK hB sB)
 (2, boss, d7 hK hA s7 s8 s9 c8 cQ cA dB)
 (3, pedro, d8 dQ dK h8 h9 h10 sQ sK sA c10)
 (2, h, hQ hK hA s7 s8 s9 cQ cA dB cB)

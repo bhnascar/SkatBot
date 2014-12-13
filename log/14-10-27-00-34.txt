@@ -1,4 +1,4 @@
-(1, YourMomIsGayExceptNotReallyBecauseIStillHaveSexWithHer, d8 d9 h7 h8 h9 h10 s8 sA c9 cB)
+(1, tim, d8 d9 h7 h8 h9 h10 s8 sA c9 cB)
 (2, YouSuckTim, d7 dK d10 hQ s7 sQ c7 cK c10 hB)
 (3, pmilani, dA hK hA sK s10 c8 cQ cA dB sB)
 (3, s, dA hA s9 sK s10 c8 cQ cA dB sB)
