@@ -1,11 +1,11 @@
-SkatBot: CS229 Final Project
+SkatBot
 ============================
+Final project for CS229. For a detailed description, please see [our project writeup] (http://cs229.stanford.edu/proj2014/Ivan%20Leung,%20Pedro%20Milani,%20Ben-han%20Sung,%20SkatBot.pdf).
 
 Dependencies
 ------------
-Python 3.4.2 (https://www.python.org/download/releases/3.4.2/)
-
-Matlab R2011a or newer
+* Python 3.4.2 (https://www.python.org/download/releases/3.4.2/)
+* Matlab R2011a or newer
 
 Setup
 -----
